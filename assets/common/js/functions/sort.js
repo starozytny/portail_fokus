@@ -91,6 +91,10 @@ function compareNumSociety(a, b){
     return comparison(a.numSociety, b.numSociety);
 }
 
+function compareLastName(a, b){
+    return compareWithoutAccent(a.lastName, b.lastName);
+}
+
 module.exports = {
     compareUsername,
     compareLastname,
@@ -106,4 +110,5 @@ module.exports = {
     compareRankThenLabel,
     compareLabel,
     compareNumSociety,
+    compareLastName,
 }

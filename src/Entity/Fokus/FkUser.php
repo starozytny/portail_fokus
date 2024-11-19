@@ -190,6 +190,14 @@ class FkUser
         return $this;
     }
 
+    #[Groups(['fk_user_list'])]
+    public function getRightsString(): string
+    {
+        $values = ["Utilisateur", "Administrateur", "Restreint"];
+
+        return $values[$this->rights];
+    }
+
     public function getSocietyName(): ?string
     {
         return $this->societyName;

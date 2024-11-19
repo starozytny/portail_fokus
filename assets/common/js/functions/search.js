@@ -34,9 +34,20 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "fokus_user":
+            if(searchContainsWith(v.username, search)
+                || searchStartWith(v.email, search)
+                || searchContainsWith(v.firstName, search)
+                || searchContainsWith(v.lastName, search)
+                || searchContainsWith(v.societyName, search)
+                || searchStartWith(v.societyCode, search)
+            ){
+                return v;
+            }
+            break;
         case "administration_clients":
             if(searchContainsWith(v.name, search)
-                || searchContainsWith(v.numSociety, search)
+                || searchStartWith(v.numSociety, search)
             ){
                 return v;
             }

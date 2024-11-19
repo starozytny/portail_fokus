@@ -18,7 +18,7 @@ let sorters = [
 	{ value: 0, identifiant: 'sorter-nom', label: 'Nom' },
 	{ value: 1, identifiant: 'sorter-ema', label: 'Email' },
 ]
-let sortersFunction = [Sort.compareLastname, Sort.compareEmail];
+let sortersFunction = [Sort.compareLastName, Sort.compareEmail];
 
 const SESSION_SORTER = "project.sorter.fk_users";
 const SESSION_PERPAGE = "project.perpage.fk_users";
@@ -28,7 +28,7 @@ export class Users extends Component {
 	constructor (props) {
 		super(props);
 
-        let [sorter, nbSorter] = List.getSessionSorter(SESSION_SORTER, Sort.compareCode, sortersFunction)
+        let [sorter, nbSorter] = List.getSessionSorter(SESSION_SORTER, Sort.compareLastName, sortersFunction)
 
 		this.state = {
             perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
@@ -59,7 +59,7 @@ export class Users extends Component {
 
 	handleSearch = (search) => {
 		const { perPage, sorter, dataImmuable, filters } = this.state;
-		List.search(this, 'user', search, dataImmuable, perPage, sorter, true, filters, this.handleFilters)
+		List.search(this, 'fokus_user', search, dataImmuable, perPage, sorter, true, filters, this.handleFilters)
 	}
 
 	handleFilters = (filters, nData = null) => {
@@ -104,7 +104,7 @@ export class Users extends Component {
 				: <>
 					<div className="mb-2 flex flex-row">
 						<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
-						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas identifiant, nom ou prénom.." />
+						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas identifiant, nom ou prénom, société.." />
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage} sorters={sorters}
