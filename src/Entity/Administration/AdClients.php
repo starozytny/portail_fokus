@@ -5,53 +5,69 @@ namespace App\Entity\Administration;
 use App\Repository\Administration\AdClientsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AdClientsRepository::class)]
 #[ORM\Table(name: 'clients')]
 class AdClients
 {
+    const LIST = ['client_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['client_list'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $society = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['client_list'])]
     private ?int $credits = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['client_list'])]
     private ?int $totalCredits = null;
 
     #[ORM\Column]
+    #[Groups(['client_list'])]
     private ?int $refill = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['client_list'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['client_list'])]
     private ?string $addr1 = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['client_list'])]
     private ?string $addr2 = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Groups(['client_list'])]
     private ?string $zipcode = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['client_list'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 48)]
+    #[Groups(['client_list'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 15)]
+    #[Groups(['client_list'])]
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['client_list'])]
     private ?string $logo = null;
 
     #[ORM\Column(length: 4)]
+    #[Groups(['client_list'])]
     private ?string $numSociety = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
@@ -228,5 +244,11 @@ class AdClients
         $this->isLogilink = $isLogilink;
 
         return $this;
+    }
+
+    #[Groups(['client_list'])]
+    public function getManager(): string
+    {
+        return "fokus" . $this->numSociety;
     }
 }
