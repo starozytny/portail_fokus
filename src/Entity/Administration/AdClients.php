@@ -71,6 +71,7 @@ class AdClients
     private ?string $numSociety = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['client_list'])]
     private ?int $isLogilink = 0;
 
     public function getId(): ?int

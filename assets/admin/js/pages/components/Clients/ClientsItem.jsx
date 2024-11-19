@@ -40,6 +40,7 @@ export function ClientsItem ({ elem, highlight, onModal })
 					<div>{elem.credits}/{elem.totalCredits}</div>
 				</div>
 				<div className="col-4 actions">
+					{elem.isLogilink ? "Gérance" : ""}
 				</div>
 			</div>
 		</div>
