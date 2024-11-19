@@ -5,44 +5,57 @@ namespace App\Entity\Fokus;
 use App\Repository\Fokus\FkUserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkUserRepository::class)]
 #[ORM\Table(name: 'users')]
 class FkUser
 {
+    const LIST = ['fk_user_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_user_list'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['fk_user_list'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['fk_user_list'])]
     private ?int $rights = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['fk_user_list'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['fk_user_list'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 64, nullable: true)]
+    #[Groups(['fk_user_list'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['fk_user_list'])]
     private ?bool $isBlocked = true;
 
     #[ORM\Column(length: 4, nullable: true)]
+    #[Groups(['fk_user_list'])]
     private ?string $userTag = null;
 
     #[ORM\Column]
+    #[Groups(['fk_user_list'])]
     private ?int $external = 1;
 
     #[ORM\Column(length: 4, nullable: true)]
+    #[Groups(['fk_user_list'])]
     private ?string $externalTag = null;
 
     public function getId(): ?int

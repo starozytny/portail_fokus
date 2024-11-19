@@ -5,24 +5,26 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
-import { ClientsList } from "@adminPages/Administration/Clients/ClientsList";
+import { UsersList } from "@adminPages/Fokus/Users/UsersList";
 
 import { Search } from "@tailwindComponents/Elements/Search";
+import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
-const URL_GET_DATA = "intern_api_administration_clients_list";
+const URL_GET_DATA = "intern_api_fokus_users_list";
 
 let sorters = [
-	{ value: 0, label: 'Code', identifiant: 'sorter-code' },
-	{ value: 1, label: 'Nom', identifiant: 'sorter-nom' },
+	{ value: 0, identifiant: 'sorter-nom', label: 'Nom' },
+	{ value: 1, identifiant: 'sorter-ema', label: 'Email' },
 ]
-let sortersFunction = [Sort.compareCode, Sort.compareName];
+let sortersFunction = [Sort.compareLastname, Sort.compareEmail];
 
-const SESSION_SORTER = "project.sorter.ad_clients";
-const SESSION_PERPAGE = "project.perpage.ad_clients";
+const SESSION_SORTER = "project.sorter.fk_users";
+const SESSION_PERPAGE = "project.perpage.fk_users";
+const SESSION_FILTERS = "project.filters.fk_users";
 
-export class Clients extends Component {
+export class Users extends Component {
 	constructor (props) {
 		super(props);
 
@@ -34,6 +36,7 @@ export class Clients extends Component {
 			sorter: sorter,
 			nbSorter: nbSorter,
 			loadingData: true,
+            filters: List.getSessionFilters(SESSION_FILTERS, [], props.highlight),
 			element: null
 		}
 
@@ -45,10 +48,9 @@ export class Clients extends Component {
 	}
 
 	handleGetData = () => {
-		const { highlight } = this.props;
 		const { perPage, sorter, filters } = this.state;
 
-		List.getData(this, Routing.generate(URL_GET_DATA), perPage, sorter, highlight, filters, this.handleFilters);
+		List.getData(this, Routing.generate(URL_GET_DATA), perPage, sorter, this.props.highlight, filters, this.handleFilters);
 	}
 
 	handleUpdateData = (currentData) => {
@@ -56,8 +58,13 @@ export class Clients extends Component {
 	}
 
 	handleSearch = (search) => {
-		const { perPage, sorter, dataImmuable } = this.state;
-		List.search(this, 'society', search, dataImmuable, perPage, sorter)
+		const { perPage, sorter, dataImmuable, filters } = this.state;
+		List.search(this, 'user', search, dataImmuable, perPage, sorter, true, filters, this.handleFilters)
+	}
+
+	handleFilters = (filters, nData = null) => {
+		const { dataImmuable, perPage, sorter } = this.state;
+		return List.filter(this, 'highRoleCode', nData ? nData : dataImmuable, filters, perPage, sorter, SESSION_FILTERS);
 	}
 
 	handleUpdateList = (element, context) => {
@@ -83,21 +90,28 @@ export class Clients extends Component {
 
 	render () {
 		const { highlight } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage, nbSorter } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage, filters, nbSorter } = this.state;
+
+		let filtersItems = [
+			{ value: 0, label: "Utilisateur", id: "f-user" },
+			{ value: 1, label: "Développeur", id: "f-dev" },
+			{ value: 2, label: "Administrateur", id: "f-admin" },
+		]
 
 		return <>
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2">
-                        <Search onSearch={this.handleSearch} placeholder="Rechercher par nom ou code.." />
+					<div className="mb-2 flex flex-row">
+						<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
+						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas identifiant, nom ou prénom.." />
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage} sorters={sorters}
 										 onClick={this.handlePaginationClick} nbSorter={nbSorter}
 										 onPerPage={this.handlePerPage} onSorter={this.handleSorter} />
 
-					<ClientsList data={currentData} highlight={parseInt(highlight)} />
+					<UsersList data={currentData} highlight={parseInt(highlight)} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
