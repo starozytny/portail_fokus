@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { ClientsItem } from "@adminPages/Clients/ClientsItem";
 
-export function ClientsList ({ data, highlight, onModal }) {
+export function ClientsList ({ data, highlight }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-clients">
@@ -22,7 +22,7 @@ export function ClientsList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <ClientsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />;
+                        return <ClientsItem key={elem.id} elem={elem} highlight={highlight} />;
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
@@ -35,6 +35,5 @@ export function ClientsList ({ data, highlight, onModal }) {
 
 ClientsList.propTypes = {
     data: PropTypes.array.isRequired,
-    onModal: PropTypes.func.isRequired,
     highlight: PropTypes.number,
 }

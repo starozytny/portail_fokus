@@ -81,11 +81,6 @@ export class Clients extends Component {
 		List.changeSorter(this, this.state.data, this.state.perPage, sortersFunction, nb, SESSION_SORTER);
 	}
 
-	handleModal = (identifiant, elem) => {
-		this[identifiant].current.handleClick();
-		this.setState({ element: elem })
-	}
-
 	render () {
 		const { highlight } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, nbSorter } = this.state;
@@ -102,7 +97,7 @@ export class Clients extends Component {
 										 onClick={this.handlePaginationClick} nbSorter={nbSorter}
 										 onPerPage={this.handlePerPage} onSorter={this.handleSorter} />
 
-					<ClientsList data={currentData} highlight={parseInt(highlight)} onModal={this.handleModal} />
+					<ClientsList data={currentData} highlight={parseInt(highlight)} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />

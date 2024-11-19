@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
-export function ClientsItem ({ elem, highlight, onModal })
+export function ClientsItem ({ elem, highlight })
 {
 	const refItem = useRef(null);
 
@@ -49,6 +49,5 @@ export function ClientsItem ({ elem, highlight, onModal })
 
 ClientsItem.propTypes = {
 	elem: PropTypes.object.isRequired,
-	onModal: PropTypes.func.isRequired,
 	highlight: PropTypes.number,
 }
