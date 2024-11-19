@@ -1,0 +1,9 @@
+{% extends 'admin/pages/clients/template.html.twig' %}
+
+{% set page_title %}Clients{% endset %}
+
+{% block main_content %}
+    <div id="clients_list" data-highlight="{{ app.request.query.get('h') }}">
+        {% include "layout/components/tailwind/loaders/loader.html.twig" %}
+    </div>
+{% endblock %}
