@@ -11,6 +11,8 @@ export function UsersItem ({ elem, highlight })
 
     let nHighlight = useHighlight(highlight, elem.id, refItem);
 
+    console.log(elem);
+
     return <div className={`item${setHighlightClass(nHighlight)} border-t hover:bg-slate-50`} ref={refItem}>
         <div className="item-content">
             <div className="item-infos">
@@ -21,20 +23,20 @@ export function UsersItem ({ elem, highlight })
                         </div>
                     </div>
                     <div className="leading-4">
-                        <div className={"font-medium mb-1" + (elem.isBlocked ? " blocked" : "")}>
+                        <div className={"font-medium mb-1" + (!elem.isBlocked ? " blocked" : "")}>
                             <span>{elem.lastName} {elem.firstName}</span>
-                            {elem.isBlocked ? <span className="icon-disabled" title="Bloqué" /> : null}
+                            {!elem.isBlocked ? <span className="icon-disabled" title="Bloqué" /> : null}
                         </div>
-                        {/*<div className="text-gray-600">{elem.society.code} - {elem.society.name}</div>*/}
+                        <div className="text-gray-600">{elem.societyCode} - {elem.societyName}</div>
                     </div>
                 </div>
                 <div className="col-2 leading-5">
-                    <div className={elem.isBlocked ? "blocked" : ""}>{elem.username}</div>
+                    <div className={!elem.isBlocked ? "blocked" : ""}>{elem.username}</div>
                     <div className="text-gray-600 text-sm">{elem.email}</div>
                 </div>
                 <div className="col-3">
-                    <Badge type={elem.isBlocked ? "red" : "blue"}>
-                        {elem.userTag} {elem.isBlocked ? <span className="icon-disabled pl-1" title="Bloqué" /> : ""}
+                    <Badge type={!elem.isBlocked ? "red" : "blue"}>
+                        {elem.userTag} {!elem.isBlocked ? <span className="icon-disabled pl-1" title="Bloqué" /> : ""}
                     </Badge>
                 </div>
                 <div className="col-4 actions">

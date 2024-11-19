@@ -28,6 +28,10 @@ class UserController extends AbstractController
 
             if($em){
                 $users = $em->getRepository(FkUser::class)->findAll();
+                foreach($users as $user) {
+                    $user->setSocietyCode($client->getNumSociety());
+                    $user->setSocietyName($client->getName());
+                }
                 $data = array_merge($data, $users);
             }
         }

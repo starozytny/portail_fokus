@@ -58,6 +58,13 @@ class FkUser
     #[Groups(['fk_user_list'])]
     private ?string $externalTag = null;
 
+    // propriétés non persistés
+    #[Groups(['fk_user_list'])]
+    private ?string $societyName = null;
+
+    #[Groups(['fk_user_list'])]
+    private ?string $societyCode = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -179,6 +186,30 @@ class FkUser
     public function setExternalTag(?string $externalTag): static
     {
         $this->externalTag = $externalTag;
+
+        return $this;
+    }
+
+    public function getSocietyName(): ?string
+    {
+        return $this->societyName;
+    }
+
+    public function setSocietyName(?string $value): static
+    {
+        $this->societyName = $value;
+
+        return $this;
+    }
+
+    public function getSocietyCode(): ?string
+    {
+        return $this->societyCode;
+    }
+
+    public function setSocietyCode(?string $value): static
+    {
+        $this->societyCode = $value;
 
         return $this;
     }
