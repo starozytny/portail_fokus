@@ -17,7 +17,7 @@ let sorters = [
 	{ value: 0, label: 'Code', identifiant: 'sorter-code' },
 	{ value: 1, label: 'Nom', identifiant: 'sorter-nom' },
 ]
-let sortersFunction = [Sort.compareCode, Sort.compareName];
+let sortersFunction = [Sort.compareNumSociety, Sort.compareName];
 
 const SESSION_SORTER = "project.sorter.ad_clients";
 const SESSION_PERPAGE = "project.perpage.ad_clients";
@@ -26,7 +26,7 @@ export class Clients extends Component {
 	constructor (props) {
 		super(props);
 
-        let [sorter, nbSorter] = List.getSessionSorter(SESSION_SORTER, Sort.compareCode, sortersFunction)
+        let [sorter, nbSorter] = List.getSessionSorter(SESSION_SORTER, Sort.compareNumSociety, sortersFunction)
 
 		this.state = {
             perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
@@ -57,7 +57,7 @@ export class Clients extends Component {
 
 	handleSearch = (search) => {
 		const { perPage, sorter, dataImmuable } = this.state;
-		List.search(this, 'society', search, dataImmuable, perPage, sorter)
+		List.search(this, 'administration_clients', search, dataImmuable, perPage, sorter)
 	}
 
 	handleUpdateList = (element, context) => {

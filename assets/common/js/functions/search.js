@@ -34,6 +34,13 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "administration_clients":
+            if(searchContainsWith(v.name, search)
+                || searchContainsWith(v.numSociety, search)
+            ){
+                return v;
+            }
+            break;
         case "society":
             if(searchContainsWith(v.name, search)
                 || searchContainsWith(v.code, search)

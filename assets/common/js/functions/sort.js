@@ -87,6 +87,10 @@ function comparison (objA, objB){
     return objA < objB ? -1 : 1;
 }
 
+function compareNumSociety(a, b){
+    return comparison(a.numSociety, b.numSociety);
+}
+
 module.exports = {
     compareUsername,
     compareLastname,
@@ -101,4 +105,5 @@ module.exports = {
     compareCode,
     compareRankThenLabel,
     compareLabel,
+    compareNumSociety,
 }
