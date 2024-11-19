@@ -1,0 +1,15 @@
+{% extends 'admin/layout/layout.html.twig' %}
+
+{% set breadcrumbs = [
+    { icon: 'credit-card', text: "Clients"  }
+] %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('admin_administration_clients') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('admin_administration_clients') }}
+{% endblock %}

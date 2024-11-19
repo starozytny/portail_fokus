@@ -5,7 +5,7 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
-import { ClientsList } from "@adminPages/Clients/ClientsList";
+import { ClientsList } from "@adminPages/Administration/Clients/ClientsList";
 
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";

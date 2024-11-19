@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Alert } from "@tailwindComponents/Elements/Alert";
 
-import { ClientsItem } from "@adminPages/Clients/ClientsItem";
+import { ClientsItem } from "@adminPages/Administration/Clients/ClientsItem";
 
 export function ClientsList ({ data, highlight }) {
     return <div className="list my-4">
