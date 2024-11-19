@@ -22,7 +22,7 @@ export function UsersList ({ data, highlight }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <UsersItem key={elem.id} elem={elem} highlight={highlight} />;
+                        return <UsersItem key={elem.societyCode + elem.id} elem={elem} highlight={highlight} />;
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

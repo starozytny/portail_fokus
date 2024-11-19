@@ -64,7 +64,7 @@ export class Users extends Component {
 
 	handleFilters = (filters, nData = null) => {
 		const { dataImmuable, perPage, sorter } = this.state;
-		return List.filter(this, 'highRoleCode', nData ? nData : dataImmuable, filters, perPage, sorter, SESSION_FILTERS);
+		return List.filter(this, 'rights', nData ? nData : dataImmuable, filters, perPage, sorter, SESSION_FILTERS);
 	}
 
 	handleUpdateList = (element, context) => {
@@ -94,8 +94,8 @@ export class Users extends Component {
 
 		let filtersItems = [
 			{ value: 0, label: "Utilisateur", id: "f-user" },
-			{ value: 1, label: "Développeur", id: "f-dev" },
-			{ value: 2, label: "Administrateur", id: "f-admin" },
+			{ value: 1, label: "Administrateur", id: "f-admin" },
+			{ value: 2, label: "Restreint", id: "f-restreint" },
 		]
 
 		return <>
