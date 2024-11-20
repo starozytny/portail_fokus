@@ -11,7 +11,7 @@ function getElements (identifiant)
 function openM (body, modal, modalContent)
 {
 	body.style.overflow = "hidden";
-	modal.style.zIndex = "10";
+	modal.style.zIndex = "40";
 	modal.style.opacity = "1";
 	modalContent.style.opacity = "1";
 	modalContent.style.translateY = "0";

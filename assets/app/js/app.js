@@ -10,6 +10,7 @@ import Menu from "@tailwindFunctions/menu";
 
 import { ContactFormulaire } from "@appFolder/pages/components/Contact/ContactForm";
 import { Cookies, CookiesGlobalResponse } from "@tailwindComponents/Modules/Cookies/Cookies";
+import { Forget } from "@appFolder/pages/components/Security/Forget";
 
 Routing.setRoutingData(routes);
 
@@ -21,15 +22,20 @@ if(el){
     createRoot(el).render(<ContactFormulaire />)
 }
 
-let ck = document.getElementById("cookies");
-if(ck){
-    createRoot(ck).render(<Cookies {...ck.dataset} />)
+let forget = document.getElementById("forget");
+if(forget){
+    createRoot(forget).render(<Forget />)
 }
 
-let cookiesGlobalResponse = document.getElementById("cookies-global-response");
-if (cookiesGlobalResponse) {
-    createRoot(cookiesGlobalResponse).render(<CookiesGlobalResponse {...cookiesGlobalResponse.dataset} />)
-}
+// let ck = document.getElementById("cookies");
+// if(ck){
+//     createRoot(ck).render(<Cookies {...ck.dataset} />)
+// }
+//
+// let cookiesGlobalResponse = document.getElementById("cookies-global-response");
+// if (cookiesGlobalResponse) {
+//     createRoot(cookiesGlobalResponse).render(<CookiesGlobalResponse {...cookiesGlobalResponse.dataset} />)
+// }
 
 function inputPassword () {
     let inputShow = document.querySelector('.input-show');

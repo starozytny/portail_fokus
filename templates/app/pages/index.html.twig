@@ -1,23 +1,33 @@
 {% extends 'app/layout/layout.html.twig' %}
 
-{% block title %}Page d'accueil{% endblock %}
+{% block title %}Fokus, application et logiciel d'état des lieux en ligne{% endblock %}
 
-{% set main_class = "sm:min-h-[calc(100vh-100px-64px)] xl:min-h-[calc(100vh-100px-80px)]" %}
+{% set html_class = "bg-white" %}
+{% set nav_class = "lg:fixed xl:top-0 lg:left-0 lg:w-full" %}
+{% set main_class = "sm:min-h-[calc(100vh-100px-100px)] lg:min-h-[calc(100vh-100px)]" %}
 
 {% block main_content %}
-    <div class="px-6 lg:px-8 sm:min-h-[calc(100vh-100px-64px)] xl:min-h-[calc(100vh-100px-80px)]">
-        <div class="mx-auto max-w-2xl py-32 sm:py-48">
-            <div class="hidden sm:mb-8 sm:flex sm:justify-center">
-                <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                    Announcing our next round of funding. <a href="#" class="font-semibold text-indigo-600"><span class="absolute inset-0" aria-hidden="true"></span>Read more <span aria-hidden="true">&rarr;</span></a>
+    <div class="px-6 lg:min-h-[calc(100vh-100px)] lg:px-0">
+        <div class="lg:grid lg:grid-cols-2">
+            <div class="hidden lg:relative lg:max-h-[calc(100vh-100px)] lg:block lg:overflow-hidden">
+                <img src="{{ asset('build/app/images/homepage.jpg') }}" alt="illustration homepage" class="w-full h-full object-cover">
+                <div class="absolute bottom-8 left-8 text-gray-300">
+                    <div class="font-medium">Fokus application et logiciel d'état des lieux en ligne</div>
+                    <div>Créé par Logilink</div>
                 </div>
             </div>
-            <div class="text-center">
-                <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Data to enrich your online business</h1>
-                <p class="mt-6 text-lg leading-8 text-gray-600">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.</p>
-                <div class="mt-10 flex items-center justify-center gap-x-6">
-                    <a href="#" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get started</a>
-                    <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Learn more <span aria-hidden="true">→</span></a>
+            <div class="w-full mx-auto pt-16 pb-24 sm:py-48 lg:py-0 lg:flex lg:items-center lg:justify-center">
+                <div class="w-full px-6">
+                    <h1 class="text-4xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">
+                        Espace Fokus <span class="text-color1">.</span>
+                    </h1>
+                    <p class="mt-4 text-center text-gray-600 mx-auto max-w-sm">
+                        Développé pour tablettes Android, Fokus a été élaboré en étroite collaboration avec des
+                        professionnels de l’immobilier.
+                    </p>
+                    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                        {% include 'app/pages/security/components/login_form.html.twig' %}
+                    </div>
                 </div>
             </div>
         </div>
