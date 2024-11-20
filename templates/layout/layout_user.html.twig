@@ -11,39 +11,27 @@
     {% include "layout/components/page-loader.html.twig" %}
 
     <div class="grid lg:min-h-full lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        <nav class="bg-gray-800 lg:min-h-full">
+        <nav class="bg-color3 lg:min-h-full">
             <div>
                 <div class="relative flex flex-row items-center justify-between gap-4 p-4 lg:flex-col lg:gap-6">
-                    <a href="{{ path('admin_homepage') }}" class="flex flex-shrink-0 items-center">
+                    <a href="{{ path('admin_homepage') }}" class="flex flex-shrink-0 items-center gap-4">
                         <img class="h-12 w-auto rounded-md shadow" src="{{ asset('build/admin/images/logo.png') }}" alt="Logilink">
+                        <p class="font-semibold text-white">Fokus</p>
                     </a>
-                    <div class="flex flex-row items-center gap-4 lg:flex-col-reverse">
+                    <div class="flex flex-row items-center gap-4 lg:w-full lg:flex-col-reverse">
                         <div class="flex gap-2">
-                            <a href="{{ path('admin_settings_update') }}"
-                               class="{{ app.request.get('_route') in ['admin_settings_update'] ? "bg-gray-900" : "bg-gray-800 hover:bg-gray-700" }} relative inline-flex justify-center rounded-md text-lg px-2 py-2 shadow-sm bg-gray-800 text-gray-900 ring-1 ring-inset ring-gray-700"
-                            >
-                                <span class="icon-settings text-gray-300"></span>
-                                <span class="tooltip bg-gray-300 py-1 px-2 rounded absolute -top-7 right-0 text-xs hidden">Paramètres</span>
-                            </a>
-                            <div id="notifications">
-                                <div class="relative inline-flex justify-center rounded-md text-lg px-2 py-2 shadow-sm bg-gray-800 text-gray-900 hover:bg-gray-700 ring-1 ring-inset ring-gray-700">
-                                    <span class="icon-chart-3 inline-block text-gray-300 animate-spin"></span>
-                                </div>
-                            </div>
                             <a href="{{ path('app_logout') }}"
-                               class="relative inline-flex justify-center rounded-md text-lg px-2 py-2 shadow-sm bg-gray-800 text-gray-900 hover:bg-gray-700 ring-1 ring-inset ring-gray-700"
+                               class="relative inline-flex justify-center rounded-md text-lg px-2 py-2 text-gray-900 "
                             >
                                 <span class="icon-logout text-gray-300"></span>
-                                <span class="tooltip bg-gray-300 py-1 px-2 rounded absolute -top-7 right-0 text-xs hidden" style="width: 98px">Se déconnecter</span>
+                                <span class="text-sm text-gray-300 pl-2">Se déconnecter</span>
                             </a>
                         </div>
-                        <div class="relative flex flex-col items-center gap-4 rounded-full text-sm">
-                            <div class="h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center font-semibold">
-                                <div>
-                                    {{ app.user.userTag }}
-                                </div>
+                        <div class="hidden lg:w-full lg:flex lg:items-center lg:gap-4 lg:text-sm lg:border lg:border-color2/10 lg:bg-gray-700/60 lg:px-3 lg:py-2.5 lg:rounded-md">
+                            <div class="h-12 w-12 rounded-md bg-gray-500 flex items-center justify-center font-semibold">
+                                <div>{{ app.user.userTag }}</div>
                             </div>
-                            <div class="hidden text-center text-slate-50 lg:block">
+                            <div class="text-slate-50">
                                 <div>{{ app.user.userIdentifier }}</div>
                                 <div>{{ app.user.email }}</div>
                             </div>
@@ -61,10 +49,10 @@
                 </div>
             </div>
             <div id="nav-content" class="hidden flex-col justify-between pb-4 h-screen max-h-[88vh] sm:flex-row lg:flex lg:flex-col lg:max-h-full lg:pb-0 lg:h-[70vh]">
-                <div class="bg-gray-800 flex flex-col gap-1 w-full px-4 pt-4">
+                <div class="bg-color3 flex flex-col gap-1 w-full px-4 pt-4">
                     {% for item in menu %}
                         <a href="{{ item.path }}"
-                           class="{{- app.request.get('_route') in item.matchRoute ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} rounded-md px-3 py-2 font-medium"
+                           class="{{- app.request.get('_route') in item.matchRoute ? "bg-color2/60 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} rounded-md px-3 py-2 font-medium"
                            aria-current="page"
                         >
                             <span class="icon-{{ item.icon }} inline-block translate-y-0.5"></span>
@@ -92,7 +80,7 @@
                 </div>
             </div>
 
-            {% include "admin/layout/components/page_title.html.twig" %}
+            {% include "layout/components/user/page_title.html.twig" %}
 
             <div class="mx-auto max-w-screen-qhd px-4 py-8 min-h-screen sm:px-6 lg:px-8">
                 {% block main_content %}{% endblock %}
