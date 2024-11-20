@@ -28,6 +28,8 @@ class PropertyController extends AbstractController
         $em = $fokusService->getEntityNameManager($client->getManager());
         $properties = $em->getRepository(FkProperty::class)->findAll();
 
+        dump($properties);
+
         return $apiResponse->apiJsonResponse($properties, FkProperty::LIST);
     }
 }

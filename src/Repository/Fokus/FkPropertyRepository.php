@@ -4,17 +4,18 @@ namespace App\Repository\Fokus;
 
 use App\Entity\Fokus\FkProperty;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<FkProperty>
+ * @extends EntityRepository<FkProperty>
  */
-class FkPropertyRepository extends ServiceEntityRepository
+class FkPropertyRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, FkProperty::class);
-    }
+//    public function __construct(ManagerRegistry $registry)
+//    {
+//        parent::__construct($registry, FkProperty::class);
+//    }
 
     //    /**
     //     * @return FkProperty[] Returns an array of FkProperty objects

@@ -45,6 +45,21 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "fokus_property":
+            if(searchContainsWith(v.addr1, search)
+                || searchStartWith(v.uid + "", search)
+                || searchStartWith(v.lastInventoryUid + "", search)
+                || searchContainsWith(v.addr2, search)
+                || searchContainsWith(v.addr3, search)
+                || searchContainsWith(v.zipcode, search)
+                || searchContainsWith(v.city, search)
+                || searchStartWith(v.reference + "", search)
+                || searchContainsWith(v.currentTenant, search)
+                || searchContainsWith(v.owner, search)
+            ){
+                return v;
+            }
+            break;
         case "administration_clients":
             if(searchContainsWith(v.name, search)
                 || searchStartWith(v.numSociety, search)
