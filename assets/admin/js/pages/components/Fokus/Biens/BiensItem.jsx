@@ -3,25 +3,35 @@ import PropTypes from 'prop-types';
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
-import { ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
+import { ButtonIcon, ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
-export function BiensItem ({ elem, highlight })
+export function BiensItem ({ elem, isAssignation, highlight, onModal })
 {
     const refItem = useRef(null);
 
     let nHighlight = useHighlight(highlight, elem.id, refItem);
 
-    let styleItemDropdown = "w-full inline-block px-2 py-1.5 cursor-pointer hover:bg-gray-100";
+    let menu = [];
+    if(!isAssignation){
+        let styleItemDropdown = "w-full inline-block px-2 py-1.5 cursor-pointer hover:bg-gray-100";
 
-    let menu = [
-    ]
-    console.log(elem);
+        menu = [
+            { data: <a className={styleItemDropdown} onClick={() => onModal("lastInventory", elem)}>
+                    <span className="icon-refresh" />
+                    <span className="pl-1">Assigner un dernier EDL</span>
+                </a> },
+        ]
+    }
 
     return <div className={`item${setHighlightClass(nHighlight)} border-t hover:bg-slate-50`} ref={refItem}>
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1">
-                    <div className="font-medium">{elem.addr1} {elem.addr2} {elem.addr3}</div>
+                    <div className="font-medium">
+                        <div>{elem.addr1}</div>
+                        <div>{elem.addr2}</div>
+                        <div>{elem.addr3}</div>
+                    </div>
                     <div>{elem.zipcode} {elem.city}</div>
                 </div>
                 <div className="col-2">
@@ -35,7 +45,10 @@ export function BiensItem ({ elem, highlight })
                     <div className="text-sm">{elem.lastInventoryUid}</div>
                 </div>
                 <div className="col-4 actions">
-                    <ButtonIconDropdown icon="more" items={menu} />
+                    {isAssignation
+                        ? <ButtonIcon type="default" icon="copy" tooltipWidth={152}>Récupérer ce dernier EDL</ButtonIcon>
+                        : <ButtonIconDropdown icon="more" items={menu} />
+                    }
                 </div>
             </div>
         </div>

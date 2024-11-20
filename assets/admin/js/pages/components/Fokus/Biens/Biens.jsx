@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
@@ -7,6 +8,7 @@ import List from "@commonFunctions/list";
 
 import { BiensList } from "@adminPages/Fokus/Biens/BiensList";
 
+import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
@@ -19,7 +21,7 @@ export class Biens extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-            perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
+            perPage: List.getSessionPerpage(SESSION_PERPAGE, props.isAssignation ? 5 : 20),
 			currentPage: 0,
 			sorter: Sort.compareAddr1,
 			loadingData: true,
@@ -27,6 +29,7 @@ export class Biens extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.lastInventory = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -34,10 +37,14 @@ export class Biens extends Component {
 	}
 
 	handleGetData = () => {
-		const { clientId, highlight } = this.props;
+		const { clientId, highlight, donnees, isAssignation } = this.props;
 		const { perPage, sorter } = this.state;
 
-		List.getData(this, Routing.generate(URL_GET_DATA, {clientId: clientId}), perPage, sorter, highlight);
+		if(isAssignation){
+			List.setData(this, donnees, perPage, sorter, highlight);
+		}else{
+			List.getData(this, Routing.generate(URL_GET_DATA, {clientId: clientId}), perPage, sorter, highlight);
+		}
 	}
 
 	handleUpdateData = (currentData) => {
@@ -66,9 +73,14 @@ export class Biens extends Component {
 		List.changePerPage(this, this.state.data, perPage, this.state.sorter, SESSION_PERPAGE);
 	}
 
+	handleModal = (identifiant, elem) => {
+		this[identifiant].current.handleClick();
+		this.setState({ element: elem })
+	}
+
 	render () {
-		const { highlight } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
+		const { clientId, highlight, isAssignation } = this.props;
+		const { data, dataImmuable, currentData, element, loadingData, perPage, currentPage } = this.state;
 
 		return <>
 			{loadingData
@@ -82,10 +94,21 @@ export class Biens extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage}/>
 
-					<BiensList data={currentData} highlight={parseInt(highlight)} />
+					<BiensList data={currentData} isAssignation={isAssignation} highlight={parseInt(highlight)}
+							   onModal={this.handleModal} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+					{isAssignation
+						? null
+						: createPortal(<Modal ref={this.lastInventory} identifiant="lastInventory" maxWidth={1280} margin={1}
+											  title={`Assigner le dernier EDL à ${element ? element.reference : ""}`}
+											  content={<Biens clientId={clientId} donnees={JSON.stringify(dataImmuable)} isAssignation={true} />}
+											  footer={null} />
+							, document.body)
+
+					}
 				</>
 			}
 		</>

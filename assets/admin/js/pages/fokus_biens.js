@@ -6,5 +6,5 @@ import { Biens } from "@adminPages/Fokus/Biens/Biens";
 
 let el = document.getElementById("biens_list");
 if(el){
-    createRoot(el).render(<Biens {...el.dataset} />)
+    createRoot(el).render(<Biens {...el.dataset} isAssignation={false} />)
 }

@@ -26,6 +26,25 @@ function getData (self, url, perPage, sorter, highlight = null, filters = null, 
     ;
 }
 
+function setData (self, donnees, perPage, sorter, highlight = null, filters = null, filterFunction, nameHighlight = "id")
+{
+    let data = JSON.parse(donnees);
+    let dataImmuable = JSON.parse(donnees);
+
+    if(filters) {
+        data = filterFunction(filters, dataImmuable);
+    }
+
+    if(sorter) data.sort(sorter);
+    if(sorter) dataImmuable.sort(sorter);
+
+    let [currentData, currentPage] = setCurrentPage(highlight, data, perPage, nameHighlight);
+
+    self.setState({ data: data, dataImmuable: dataImmuable, currentData: currentData, currentPage: currentPage, loadingData: false })
+
+    return data;
+}
+
 function setCurrentPage (highlight, data, perPage, nameHighlight)
 {
     let offset = 0, currentPage = 0;
@@ -172,37 +191,6 @@ function updateDataMuta (element, context, data, sorter, nameProperty = "id") {
     return nData;
 }
 
-function update (context, data, element, nameProperty = "id") {
-    let newData = [];
-
-    switch (context) {
-        case "delete_group":
-            data.forEach(el => {
-                if (!element.includes(el[nameProperty])) {
-                    newData.push(el);
-                }
-            })
-            break;
-        case "delete":
-            newData = data.filter(el => el[nameProperty] !== element[nameProperty]);
-            break;
-        case "update":
-            data.forEach(el => {
-                if (el[nameProperty] === element[nameProperty]) {
-                    el = element;
-                }
-                newData.push(el);
-            })
-            break;
-        default:
-            newData = data ? data : [];
-            newData.push(element);
-            break;
-    }
-
-    return newData;
-}
-
 function updateData (element, context, data, sorter) {
     let newData = update(context, data, element);
     if(sorter){
@@ -267,6 +255,7 @@ function getSessionFilters (sessionName, filters, highlight) {
 
 module.exports = {
     getData,
+    setData,
     search,
     filter,
     filterCustom,
