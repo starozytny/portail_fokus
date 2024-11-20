@@ -13,7 +13,7 @@
     <div class="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
         {% for elem in clients %}
             <div class="bg-white p-4 rounded-md border hover:border-gray-400 cursor-pointer transition-colors"
-                 onclick="location.href = '{{ path('admin_fokus_biens_list', {code: elem.numSociety}) }}'"
+                 onclick="location.href = '{{ path('admin_fokus_properties_list', {numSociety: elem.numSociety}) }}'"
             >
                 <div class="w-32 h-24 rounded-md overflow-hidden">
                     {% if elem.logo %}

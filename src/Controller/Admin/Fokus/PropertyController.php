@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/fokus/biens', name: 'admin_fokus_biens_')]
+#[Route('/admin/fokus/biens', name: 'admin_fokus_properties_')]
 class PropertyController extends AbstractController
 {
     #[Route('/', name: 'index')]
@@ -21,14 +21,12 @@ class PropertyController extends AbstractController
         return $this->render('admin/pages/fokus/biens/index.html.twig', ['clients' => $clients]);
     }
 
-    #[Route('/{code}', name: 'list')]
-    public function list($code, FokusService $fokusService): Response
+    #[Route('/{numSociety}', name: 'list')]
+    public function list($numSociety, FokusService $fokusService): Response
     {
         $emA = $fokusService->getAdministrationEntityManager();
 
-        $client = $emA->getRepository(AdClients::class)->findOneBy(['numSociety' => $code]);
-
-        $em = $fokusService->getEntityNameManager($client->getManager());
+        $client = $emA->getRepository(AdClients::class)->findOneBy(['numSociety' => $numSociety]);
 
         return $this->render('admin/pages/fokus/biens/list.html.twig', ['client' => $client]);
     }

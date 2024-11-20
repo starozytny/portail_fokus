@@ -3,5 +3,10 @@
 {% set page_title %}Liste des biens de {{ client.name }}{% endset %}
 
 {% block main_content %}
-
+    <div id="biens_list"
+         data-client-id="{{ client.id }}"
+         data-highlight="{{ app.request.query.get('h') }}"
+    >
+        {% include "layout/components/tailwind/loaders/loader.html.twig" %}
+    </div>
 {% endblock %}
