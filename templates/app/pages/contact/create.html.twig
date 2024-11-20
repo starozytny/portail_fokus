@@ -3,7 +3,20 @@
 {% set page_title %}Demande de contact{% endset %}
 
 {% block main_content %}
-    <div id="contacts_create">
-        {% include "layout/components/tailwind/loaders/loader.html.twig" %}
+    <div class="flex flex-col gap-12">
+        <div class="mx-auto">
+            <h1 class="text-4xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">Nous contacter</h1>
+            <p class="mt-4 text-center text-gray-600 mx-auto max-w-screen-lg">
+                Fokus est une application et logiciel en ligne dédié aux états des lieux créé
+                par <a href="https://logilink.fr" target="_blank" class="text-blue-500 underline">Logilink.fr</a>.
+                <br><br>
+                Contactez-nous via le formulaire ci-dessous ou par téléphone
+                au <a href="tel:0491994443" class="font-medium hover:underline">04 91 99 44 43</a> pour plus d'informations.
+            </p>
+        </div>
+        <div id="contacts_create" class="mx-auto max-w-screen-lg bg-white p-4 lg:p-8 rounded-md border">
+            {% include "layout/components/tailwind/loaders/loader.html.twig" %}
+        </div>
     </div>
+
 {% endblock %}
