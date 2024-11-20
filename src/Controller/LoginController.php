@@ -39,8 +39,10 @@ class LoginController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         if ($user) {
-            $user->setLastLoginAt(new \DateTime());
-            $registry->getManager()->flush();
+            if($user instanceof User){
+                $user->setLastLoginAt(new \DateTime());
+                $registry->getManager()->flush();
+            }
 
             if($this->isGranted('ROLE_ADMIN')) return $this->redirectToRoute('admin_homepage');
             if($this->isGranted('ROLE_USER')) return $this->redirectToRoute('user_homepage');

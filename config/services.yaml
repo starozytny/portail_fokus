@@ -32,3 +32,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Security\FokusUserProvider:
+        arguments:
+            $entityManagers:
+                - '@doctrine.orm.default_entity_manager'
+                - '@doctrine.orm.fokus003_entity_manager'
+                - '@doctrine.orm.fokus008_entity_manager'
+                - '@doctrine.orm.fokus998_entity_manager'
+
+    App\Security\FokusPasswordHasher:
+        arguments:
+            $salt: '%env(PASSWORD_SALT)%'

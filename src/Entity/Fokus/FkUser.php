@@ -5,11 +5,14 @@ namespace App\Entity\Fokus;
 use App\Repository\Fokus\FkUserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkUserRepository::class)]
 #[ORM\Table(name: 'users')]
-class FkUser
+class FkUser implements UserInterface, PasswordAuthenticatedUserInterface, PasswordHasherAwareInterface
 {
     const LIST = ['fk_user_list'];
 
@@ -220,5 +223,26 @@ class FkUser
         $this->societyCode = $value;
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->username;
+    }
+
+    public function getPasswordHasherName(): ?string
+    {
+        return 'harsh';
     }
 }
