@@ -45,6 +45,10 @@ Encore
         from: './assets/admin/images',
         to: 'admin/images/[path][name].[ext]',
     })
+    .copyFiles({
+        from: './assets/user/fonts',
+        to: 'admin/fonts/[path][name].[ext]',
+    })
 
     .configureFilenames({
         css: !Encore.isProduction() ? 'css/[name].css' : 'css/[name].[contenthash:8].css',
@@ -76,6 +80,8 @@ Encore
 
     .addEntry('admin_fokus_users', './assets/admin/js/pages/fokus_users.js')
     .addEntry('admin_fokus_biens', './assets/admin/js/pages/fokus_biens.js')
+
+    .addEntry('user_app', './assets/user/js/app.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

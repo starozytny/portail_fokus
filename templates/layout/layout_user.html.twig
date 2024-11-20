@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('admin_app') }}
+    {{ encore_entry_link_tags('user_app') }}
 {% endblock %}
 
 {% block body %}
@@ -19,9 +19,9 @@
                         <p class="font-semibold text-white">Fokus</p>
                     </a>
                     <div class="flex flex-row items-center gap-4 lg:w-full lg:flex-col-reverse">
-                        <div class="flex gap-2">
+                        <div class="flex gap-2 lg:hidden">
                             <a href="{{ path('app_logout') }}"
-                               class="relative inline-flex justify-center rounded-md text-lg px-2 py-2 text-gray-900 "
+                               class="relative inline-flex justify-center rounded-md text-lg px-2 py-2 shadow-sm bg-color2/60 text-gray-900 hover:bg-color2/80 ring-1 ring-inset ring-color2"
                             >
                                 <span class="icon-logout text-gray-300"></span>
                                 <span class="text-sm text-gray-300 pl-2">Se déconnecter</span>
@@ -50,6 +50,7 @@
             </div>
             <div id="nav-content" class="hidden flex-col justify-between pb-4 h-screen max-h-[88vh] sm:flex-row lg:flex lg:flex-col lg:max-h-full lg:pb-0 lg:h-[70vh]">
                 <div class="bg-color3 flex flex-col gap-1 w-full px-4 pt-4">
+                    <div class="font-semibold text-white">Menu</div>
                     {% for item in menu %}
                         <a href="{{ item.path }}"
                            class="{{- app.request.get('_route') in item.matchRoute ? "bg-color2/60 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} rounded-md px-3 py-2 font-medium"
@@ -93,5 +94,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('admin_app') }}
+    {{ encore_entry_script_tags('user_app') }}
 {% endblock %}

@@ -1,0 +1,10 @@
+@use "vars/fonts";
+@use "vars/vars";
+
+@use "components/loader";
+@use "components/pagination";
+@use "components/list";
+
+html{
+  @include vars.fontRegular();
+}
