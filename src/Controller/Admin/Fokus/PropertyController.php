@@ -16,7 +16,7 @@ class PropertyController extends AbstractController
     {
         $em = $fokusService->getAdministrationEntityManager();
 
-        $clients = $em->getRepository(AdClients::class)->findAll();
+        $clients = $em->getRepository(AdClients::class)->findBy([], ['numSociety' => 'ASC']);
 
         return $this->render('admin/pages/fokus/biens/index.html.twig', ['clients' => $clients]);
     }
