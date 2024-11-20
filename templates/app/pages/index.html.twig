@@ -11,9 +11,17 @@
         <div class="lg:grid lg:grid-cols-2">
             <div class="hidden lg:relative lg:max-h-[calc(100vh-100px)] lg:block lg:overflow-hidden">
                 <img src="{{ asset('build/app/images/homepage.jpg') }}" alt="illustration homepage" class="w-full h-full object-cover">
-                <div class="absolute bottom-8 left-8 text-gray-300">
-                    <div class="font-medium">Fokus application et logiciel d'état des lieux en ligne</div>
-                    <div>Créé par Logilink</div>
+                <div class="absolute bottom-8 left-8 text-gray-100">
+                    <div class="font-medium text-xl">Fokus</div>
+                    <div class="ft-special text-sm bg-gray-600/60 inline-block rounded-md px-4 py-0.5">Application et logiciel</div>
+                    <p class="mt-2 md:max-w-80 text-sm">
+                        Établissez, gérez et sauvegardez vos états des lieux dans un environnement fiable et sécurisé.
+                    </p>
+                    <div class="mt-4">
+                        <a href="{{ path('app_contact') }}" class="group text-sm font-semibold leading-6 text-blue-500 ft-special">
+                            Nous contacter <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-1">→</span>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="w-full mx-auto pt-16 pb-24 sm:py-48 lg:py-0 lg:flex lg:items-center lg:justify-center">
