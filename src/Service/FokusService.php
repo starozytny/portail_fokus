@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use App\Entity\Administration\AdClients;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use InvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FokusService
 {
@@ -23,5 +25,17 @@ class FokusService
     public function getAdministrationEntityManager(): ObjectManager
     {
         return $this->registry->getManager("administration");
+    }
+
+    public function getAdClient($clientId)
+    {
+        $em = $this->getAdministrationEntityManager();
+
+        $client = $em->getRepository(AdClients::class)->findOneBy(['id' => $clientId]);
+        if(!$client){
+            throw new NotFoundHttpException("Client $clientId not found");
+        }
+
+        return $client;
     }
 }

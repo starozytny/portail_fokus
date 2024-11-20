@@ -5,7 +5,7 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
 import { ButtonIcon, ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
-export function BiensItem ({ elem, isAssignation, highlight, onModal })
+export function BiensItem ({ elem, element, isAssignation, highlight, onModal })
 {
     const refItem = useRef(null);
 
@@ -16,7 +16,7 @@ export function BiensItem ({ elem, isAssignation, highlight, onModal })
         let styleItemDropdown = "w-full inline-block px-2 py-1.5 cursor-pointer hover:bg-gray-100";
 
         menu = [
-            { data: <a className={styleItemDropdown} onClick={() => onModal("lastInventory", elem)}>
+            { data: <a className={styleItemDropdown} onClick={() => onModal("lastInventory", elem, null)}>
                     <span className="icon-refresh" />
                     <span className="pl-1">Assigner un dernier EDL</span>
                 </a> },
@@ -46,7 +46,9 @@ export function BiensItem ({ elem, isAssignation, highlight, onModal })
                 </div>
                 <div className="col-4 actions">
                     {isAssignation
-                        ? <ButtonIcon type="default" icon="copy" tooltipWidth={152}>Récupérer ce dernier EDL</ButtonIcon>
+                        ? <ButtonIcon type="default" icon="copy" tooltipWidth={152} onClick={() => onModal("confirmAssign", element, elem)}>
+                            Récupérer ce dernier EDL
+                        </ButtonIcon>
                         : <ButtonIconDropdown icon="more" items={menu} />
                     }
                 </div>

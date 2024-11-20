@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { BiensItem } from "@adminPages/Fokus/Biens/BiensItem";
 
-export function BiensList ({ data, isAssignation, highlight, onModal }) {
+export function BiensList ({ data, element, isAssignation, highlight, onModal }) {
     return <div className="list my-4">
         <div className={`list-table ${isAssignation ? "bg-gray-100" : "bg-white"} rounded-md shadow`}>
             <div className="items items-properties">
@@ -22,7 +22,12 @@ export function BiensList ({ data, isAssignation, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <BiensItem key={elem.id} elem={elem} isAssignation={isAssignation} highlight={highlight} onModal={onModal} />;
+                        return !element || (element && elem.id !== element.id)
+                            ? <BiensItem key={elem.id} elem={elem} element={element}
+                                         isAssignation={isAssignation} highlight={highlight}
+                                         onModal={onModal}  />
+                            : null
+                        ;
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

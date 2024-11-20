@@ -21,7 +21,7 @@ class PropertyController extends AbstractController
         return $this->render('admin/pages/fokus/biens/index.html.twig', ['clients' => $clients]);
     }
 
-    #[Route('/{numSociety}', name: 'list')]
+    #[Route('/{numSociety}', name: 'list', options: ['expose' => true])]
     public function list($numSociety, FokusService $fokusService): Response
     {
         $emA = $fokusService->getAdministrationEntityManager();
