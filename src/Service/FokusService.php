@@ -27,13 +27,25 @@ class FokusService
         return $this->registry->getManager("administration");
     }
 
-    public function getAdClient($clientId)
+    public function getAdClientByClientId($clientId)
     {
         $em = $this->getAdministrationEntityManager();
 
         $client = $em->getRepository(AdClients::class)->findOneBy(['id' => $clientId]);
         if(!$client){
             throw new NotFoundHttpException("Client $clientId not found");
+        }
+
+        return $client;
+    }
+
+    public function getAdClientByNumSociety($numSociety)
+    {
+        $em = $this->getAdministrationEntityManager();
+
+        $client = $em->getRepository(AdClients::class)->findOneBy(['numSociety' => $numSociety]);
+        if(!$client){
+            throw new NotFoundHttpException("Client $numSociety not found");
         }
 
         return $client;

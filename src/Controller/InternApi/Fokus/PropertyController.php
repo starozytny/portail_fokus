@@ -18,7 +18,7 @@ class PropertyController extends AbstractController
     #[Route('/list/{clientId}', name: 'list', options: ['expose' => true], methods: 'GET')]
     public function list($clientId, FokusService $fokusService, ApiResponse $apiResponse): Response
     {
-        $client = $fokusService->getAdClient($clientId);
+        $client = $fokusService->getAdClientByClientId($clientId);
 
         $em = $fokusService->getEntityNameManager($client->getManager());
         $properties = $em->getRepository(FkProperty::class)->findAll();
@@ -29,7 +29,7 @@ class PropertyController extends AbstractController
     #[Route('/property/{clientId}/assign-edl', name: 'assign', options: ['expose' => true], methods: 'PUT')]
     public function assign(Request $request, $clientId, FokusService $fokusService, ApiResponse $apiResponse): Response
     {
-        $client = $fokusService->getAdClient($clientId);
+        $client = $fokusService->getAdClientByClientId($clientId);
         $data = json_decode($request->getContent());
 
         $em = $fokusService->getEntityNameManager($client->getManager());

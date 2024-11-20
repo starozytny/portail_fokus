@@ -1,5 +1,5 @@
 <header class="bg-white shadow">
-    <div class="mx-auto max-w-screen-qhd px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-screen-qhd px-4 py-6 flex justify-between gap-4 sm:px-6 lg:px-8">
         <div class="flex flex-col justify-between gap-4 sm:flex-row">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ page_title }}</h1>
@@ -9,6 +9,10 @@
                 {{ page_actions is defined ? page_actions : "" }}
             </div>
         </div>
+        <div>
+            <div id="credits" data-num-society="{{ app.request.session.get('numSociety') }}" class="text-sm font-medium">
+                <span class="icon-chart-3"></span> crédits restants
+            </div>
+        </div>
     </div>
-
 </header>
