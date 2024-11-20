@@ -71,8 +71,11 @@ Encore
     .addEntry('admin_agenda', './assets/admin/js/pages/agenda.js')
     .addEntry('admin_storage', './assets/admin/js/pages/storage.js')
     .addEntry('admin_mails', './assets/admin/js/pages/mails.js')
+
     .addEntry('admin_administration_clients', './assets/admin/js/pages/administration_clients.js')
+
     .addEntry('admin_fokus_users', './assets/admin/js/pages/fokus_users.js')
+    .addEntry('admin_fokus_biens', './assets/admin/js/pages/fokus_biens.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
