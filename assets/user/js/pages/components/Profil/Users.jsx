@@ -11,6 +11,7 @@ import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+import { Button } from "@tailwindComponents/Elements/Button";
 
 const URL_GET_DATA = "intern_api_fokus_users_list";
 
@@ -99,22 +100,32 @@ export class Users extends Component {
 		]
 
 		return <>
+			<div className="flex flex-col gap-4 mb-4 border-b pb-4 md:flex-row md:justify-between">
+				<div className="text-xl font-semibold">
+					Liste des utilisateurs
+				</div>
+				<div>
+					<Button type="blue" iconLeft="add">Ajouter un utilisateur</Button>
+				</div>
+			</div>
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2 flex flex-row">
-						<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
-						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas identifiant, nom ou prénom.." />
+					<div>
+						<div className="mb-2 flex flex-row">
+							<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
+							<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas identifiant, nom ou prénom.." />
+						</div>
+
+						<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage} sorters={sorters}
+											 onClick={this.handlePaginationClick} nbSorter={nbSorter}
+											 onPerPage={this.handlePerPage} onSorter={this.handleSorter} />
+
+						<UsersList data={currentData} highlight={parseInt(highlight)} />
+
+						<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
+									perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 					</div>
-
-					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage} sorters={sorters}
-										 onClick={this.handlePaginationClick} nbSorter={nbSorter}
-										 onPerPage={this.handlePerPage} onSorter={this.handleSorter} />
-
-					<UsersList data={currentData} highlight={parseInt(highlight)} />
-
-					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
-								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 				</>
 			}
 		</>

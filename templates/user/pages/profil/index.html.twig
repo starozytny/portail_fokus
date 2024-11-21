@@ -35,11 +35,11 @@
             </div>
 
             {% if app.user.rights == 1 %}
-                <div class="bg-white p-4 rounded-md shadow">
+                <div id="profil_users" class="bg-white p-4 rounded-md shadow">
                     <div class="text-xl font-semibold mb-4 border-b pb-4">
                         Liste des utilisateurs
                     </div>
-                    <div id="profil_users">
+                    <div>
                         {% include "layout/components/tailwind/loaders/loader.html.twig" %}
                     </div>
                 </div>

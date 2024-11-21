@@ -15,7 +15,7 @@ export function UsersItem ({ elem, highlight })
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1 flex flex-row gap-4">
-                    <div className="w-16 h-16 rounded-md overflow-hidden">
+                    <div className="hidden xl:block w-16 h-16 rounded-md overflow-hidden">
                         <div className="h-full w-full rounded-md bg-gray-300 flex items-center justify-center font-semibold">
                             {elem.userTag}
                         </div>
