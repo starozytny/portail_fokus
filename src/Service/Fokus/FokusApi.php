@@ -4,7 +4,6 @@ namespace App\Service\Fokus;
 
 use App\Entity\Fokus\FkUser;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -13,47 +12,51 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class FokusApi
 {
-    private SessionInterface $session;
-
     public function __construct(private readonly string $ciphering,
                                 private readonly string $cipheringIv,
                                 private readonly string $cipheringPassphrase,
                                 private readonly string $apiFokusUrl,
                                 private readonly HttpClientInterface $client,
                                 private readonly RequestStack $requestStack,
-    ){
-        $this->session = $this->requestStack->getSession();
-    }
+    ){}
 
     public function setSessionData ($username, $password): void
     {
+        $session = $this->requestStack->getSession();
+
         $numSoc = str_split($username, 3);
         $passwordEncrypted = $this->encryption($password);
 
-        $this->session->set('numSociety', $numSoc[0]);
-        $this->session->set('username', $username);
-        $this->session->set('userpass', $passwordEncrypted);
+        $session->set('numSociety', $numSoc[0]);
+        $session->set('username', $username);
+        $session->set('userpass', $passwordEncrypted);
     }
 
     public function getSessionData(): array
     {
+        $session = $this->requestStack->getSession();
+
         return [
-            $this->session->get('numSociety'),
-            $this->session->get('username'),
-            $this->decryption($this->session->get('userpass'))
+            $session->get('numSociety'),
+            $session->get('username'),
+            $this->decryption($session->get('userpass'))
         ];
     }
 
     public function destroySessionData(): void
     {
-        $this->session->set('numSociety', null);
-        $this->session->set('username', null);
-        $this->session->set('userpass', null);
+        $session = $this->requestStack->getSession();
+
+        $session->set('numSociety', null);
+        $session->set('username', null);
+        $session->set('userpass', null);
     }
 
     public function getManagerBySession(): string
     {
-        return "fokus" . $this->session->get('numSociety');
+        $session = $this->requestStack->getSession();
+
+        return "fokus" . $session->get('numSociety');
     }
 
     private function encryption($data): bool|string
