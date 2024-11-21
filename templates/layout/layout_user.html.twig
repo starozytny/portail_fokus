@@ -11,7 +11,11 @@
     {% include "layout/components/page-loader.html.twig" %}
 
     <div class="grid lg:min-h-full lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        <nav class="bg-color3 lg:min-h-full">
+        <nav class="relative lg:min-h-full">
+            <div>
+                <img src="{{ asset('build/app/images/homepage.jpg') }}" alt="bg" class="w-full h-full object-cover absolute top-0 left-0 -z-10">
+                <div class="bg-gradient-to-t from-color2 to-color0/95 w-full h-full absolute top-0 left-0 -z-10"></div>
+            </div>
             <div>
                 <div class="relative flex flex-row items-center justify-between gap-4 p-4 lg:flex-col lg:gap-6">
                     <a href="{{ path('admin_homepage') }}" class="flex flex-shrink-0 items-center gap-4">
@@ -49,7 +53,7 @@
                 </div>
             </div>
             <div id="nav-content" class="hidden flex-col justify-between pb-4 h-screen max-h-[88vh] sm:flex-row lg:flex lg:flex-col lg:max-h-full lg:pb-0 lg:h-[70vh]">
-                <div class="bg-color3 flex flex-col gap-1 w-full px-4 pt-4">
+                <div class="flex flex-col gap-1 w-full px-4 pt-4">
                     <div class="font-semibold text-white">Menu</div>
                     {% for item in menu %}
                         <a href="{{ item.path }}"
