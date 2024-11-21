@@ -104,7 +104,7 @@ export class Users extends Component {
 				: <>
 					<div className="mb-2 flex flex-row">
 						<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
-						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas identifiant, nom ou prénom, société.." />
+						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas identifiant, nom ou prénom.." />
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage} sorters={sorters}

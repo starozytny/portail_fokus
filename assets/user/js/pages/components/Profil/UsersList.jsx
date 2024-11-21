@@ -15,13 +15,14 @@ export function UsersList ({ data, highlight }) {
                             <div className="col-1">Utilisateur</div>
                             <div className="col-2">Identifiant</div>
                             <div className="col-3">User tag</div>
+                            <div className="col-4 actions"></div>
                         </div>
                     </div>
                 </div>
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <UsersItem key={elem.societyCode + elem.id} elem={elem} highlight={highlight} />;
+                        return <UsersItem key={elem.id} elem={elem} highlight={highlight} />;
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

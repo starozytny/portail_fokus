@@ -36,6 +36,8 @@ export function UsersItem ({ elem, highlight })
                         {elem.rightsString} {!elem.isBlocked ? <span className="icon-disabled pl-1" title="Bloqué" /> : ""}
                     </Badge>
                 </div>
+                <div className="col-4 actions">
+                </div>
             </div>
         </div>
     </div>
