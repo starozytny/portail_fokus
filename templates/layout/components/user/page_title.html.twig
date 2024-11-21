@@ -5,9 +5,6 @@
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ page_title }}</h1>
                 <div class="max-w-2xl">{{ page_subtitle is defined ? page_subtitle : "" }}</div>
             </div>
-            <div>
-                {{ page_actions is defined ? page_actions : "" }}
-            </div>
         </div>
         <div>
             <div id="credits" data-num-society="{{ app.request.session.get('numSociety') }}" class="text-sm font-medium">
