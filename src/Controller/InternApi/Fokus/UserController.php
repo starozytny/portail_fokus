@@ -18,9 +18,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/intern/api/fokus/users', name: 'intern_api_fokus_users_')]
 class UserController extends AbstractController
 {
-    #[Route('/list', name: 'list', options: ['expose' => true], methods: 'GET')]
+    #[Route('/list-all', name: 'list_all', options: ['expose' => true], methods: 'GET')]
     #[IsGranted('ROLE_ADMIN')]
-    public function list(FokusService $fokusService, ApiResponse $apiResponse): Response
+    public function listAll(FokusService $fokusService, ApiResponse $apiResponse): Response
     {
         $emA = $fokusService->getAdministrationEntityManager();
 
@@ -39,6 +39,16 @@ class UserController extends AbstractController
                 $data = array_merge($data, $users);
             }
         }
+
+        return $apiResponse->apiJsonResponse($data, FkUser::LIST);
+    }
+
+    #[Route('/list', name: 'list', options: ['expose' => true], methods: 'GET')]
+    public function list(FokusService $fokusService, ApiResponse $apiResponse, FokusApi $fokusApi): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $data = $em->getRepository(FkUser::class)->findAll();
 
         return $apiResponse->apiJsonResponse($data, FkUser::LIST);
     }

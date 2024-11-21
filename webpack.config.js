@@ -25,6 +25,8 @@ Encore
         '@commonFunctions': path.resolve(__dirname, './assets/common/js/functions'),
         '@commonHooks': path.resolve(__dirname, './assets/common/js/hooks'),
         '@appFolder': path.resolve(__dirname, './assets/app/js'),
+        '@userComponents': path.resolve(__dirname, './assets/user/js/components'),
+        '@userPages': path.resolve(__dirname, './assets/user/js/pages/components'),
         '@adminPages': path.resolve(__dirname, './assets/admin/js/pages/components'),
         '@nodeModulesFolder': path.resolve(__dirname, './node_modules'),
     })

@@ -135,7 +135,7 @@ class Form extends Component {
 					</div>
 				</div>
 				{context === "update"
-					? <div className="text-sm">
+					? <div className="text-xs">
 						<Alert type="gray">Laissez les champs vide si vous ne souhaitez pas modifier le mot de passe.</Alert>
 					</div>
 					: null
