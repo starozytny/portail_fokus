@@ -2,15 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Fokus\FkUser;
 use App\Entity\Main\User;
 use App\Repository\Main\UserRepository;
 use App\Service\Expiration;
+use App\Service\Fokus\FokusApi;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -36,7 +35,7 @@ class LoginController extends AbstractController
     }
 
     #[Route('/connected', name: 'app_logged')]
-    public function logged(Request $request, ManagerRegistry $registry): RedirectResponse
+    public function logged(ManagerRegistry $registry, FokusApi $fokusApi): RedirectResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -44,11 +43,8 @@ class LoginController extends AbstractController
             if($user instanceof User){
                 $user->setLastLoginAt(new \DateTime());
                 $registry->getManager()->flush();
-            }else if($user instanceof FkUser){
-                $session = $request->getSession();
 
-                $numSoc = str_split($user->getUsername(), 3);
-                $session->set('numSociety', $numSoc[0]);
+                $fokusApi->destroySessionData();
             }
 
             if($this->isGranted('ROLE_ADMIN')) return $this->redirectToRoute('admin_homepage');

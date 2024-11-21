@@ -4,7 +4,7 @@ namespace App\Controller\InternApi\Fokus;
 
 use App\Entity\Fokus\FkProperty;
 use App\Service\ApiResponse;
-use App\Service\FokusService;
+use App\Service\Fokus\FokusService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

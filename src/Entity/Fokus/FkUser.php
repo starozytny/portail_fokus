@@ -15,15 +15,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FkUser implements UserInterface, PasswordAuthenticatedUserInterface, PasswordHasherAwareInterface
 {
     const LIST = ['fk_user_list'];
+    const FORM = ['fk_user_form'];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fk_user_list'])]
+    #[Groups(['fk_user_list', 'fk_user_form'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 80)]
-    #[Groups(['fk_user_list'])]
+    #[Groups(['fk_user_list', 'fk_user_form'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
@@ -34,15 +35,15 @@ class FkUser implements UserInterface, PasswordAuthenticatedUserInterface, Passw
     private ?int $rights = null;
 
     #[ORM\Column(length: 80)]
-    #[Groups(['fk_user_list'])]
+    #[Groups(['fk_user_list', 'fk_user_form'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 80)]
-    #[Groups(['fk_user_list'])]
+    #[Groups(['fk_user_list', 'fk_user_form'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 64, nullable: true)]
-    #[Groups(['fk_user_list'])]
+    #[Groups(['fk_user_list', 'fk_user_form'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -50,7 +51,7 @@ class FkUser implements UserInterface, PasswordAuthenticatedUserInterface, Passw
     private ?bool $isBlocked = true;
 
     #[ORM\Column(length: 4, nullable: true)]
-    #[Groups(['fk_user_list'])]
+    #[Groups(['fk_user_list', 'fk_user_form'])]
     private ?string $userTag = null;
 
     #[ORM\Column]

@@ -4,7 +4,7 @@ namespace App\Controller\InternApi\Administration;
 
 use App\Entity\Administration\AdClients;
 use App\Service\ApiResponse;
-use App\Service\FokusService;
+use App\Service\Fokus\FokusService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

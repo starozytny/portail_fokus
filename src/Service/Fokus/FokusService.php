@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Fokus;
 
 use App\Entity\Administration\AdClients;
+use App\Entity\Fokus\FkUser;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use InvalidArgumentException;

@@ -44,3 +44,10 @@ services:
     App\Security\FokusPasswordHasher:
         arguments:
             $salt: '%env(PASSWORD_SALT)%'
+
+    App\Service\Fokus\FokusApi:
+        arguments:
+            $ciphering: '%env(CIPHERING)%'
+            $cipheringIv: '%env(CIPHERING_IV)%'
+            $cipheringPassphrase: '%env(CIPHERING_PASSPHRASE)%'
+            $apiFokusUrl: '%env(API_FOKUS_URL)%'

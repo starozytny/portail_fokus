@@ -82,6 +82,7 @@ Encore
     .addEntry('admin_fokus_biens', './assets/admin/js/pages/fokus_biens.js')
 
     .addEntry('user_app', './assets/user/js/app.js')
+    .addEntry('user_profil', './assets/user/js/pages/profil.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

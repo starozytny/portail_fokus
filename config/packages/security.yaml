@@ -18,10 +18,8 @@ security:
         main:
             lazy: true
             provider: fokus_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
+            custom_authenticators:
+                - App\Security\FokusAuthenticator
             logout:
                 path: app_logout
 

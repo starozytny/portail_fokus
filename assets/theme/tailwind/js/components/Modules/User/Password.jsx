@@ -2,8 +2,8 @@ import React from "react";
 
 import { Input } from "@tailwindComponents/Elements/Fields";
 
-export function Password ({ password, password2, params }) {
-    return <div className="grid gap-4 sm:grid-cols-3">
+export function Password ({ password, password2, params, isInline = false }) {
+    return <div className={isInline ? "flex flex-col gap-4" : "grid gap-4 sm:grid-cols-3"}>
         <div>
             <p className="text-gray-600 text-sm mb-1">Règles de création pour le mot de passe :</p>
             <Rules password={password} password2={password2} />
