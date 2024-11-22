@@ -32,14 +32,20 @@ export function BiensItem ({ elem, highlight, onModal })
                 <div className="col-3 text-sm text-gray-600">
                     {elem.building && <div>Bâtiment : {elem.building}</div>}
                     {elem.type && <div>Type : {elem.type}</div>}
-                    {elem.door && <div>Porte : {elem.door}</div>}
                     {elem.isFurnished && parseInt(elem.isFurnished) !== 0 && <div>Meublé</div>}
+
+                    {elem.door || (elem.floor !== "" && elem.floor !== "0")
+                        ? <div className="flex gap-4">
+                            {elem.door && <div>Porte : {elem.door}</div>}
+                            {elem.floor !== "" && elem.floor !== "0" && <div>Étage : {elem.floor}</div>}
+                        </div>
+                        : null
+                    }
                     {parseInt(elem.surface) > 0 && <div>{elem.surface} m²</div>}
                     {parseInt(elem.rooms) !== 0 && <div>{elem.rooms} {parseInt(elem.rooms) > 1 ? "pièces" : "pièce"}</div>}
-                    {elem.floor !== "" && elem.floor !== "0" && <div>Étage : {elem.floor}</div>}
                 </div>
                 <div className="col-4 actions">
-                    <ButtonIcon type="default" icon="receipt" onClick={() => onModal('update', elem)}>Voir les Edls</ButtonIcon>
+                    <ButtonIcon type="default" icon="receipt" onClick={() => onModal('update', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
                     <ButtonIcon type="default" icon="pencil" onClick={() => onModal('update', elem)}>Modifier</ButtonIcon>
                 </div>
             </div>
