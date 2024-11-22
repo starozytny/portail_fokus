@@ -2,13 +2,13 @@
 
 namespace App\Entity\Fokus;
 
-use App\Repository\Fokus\FkInventoriesRepository;
+use App\Repository\Fokus\FkInventoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FkInventoriesRepository::class)]
+#[ORM\Entity(repositoryClass: FkInventoryRepository::class)]
 #[ORM\Table(name: 'inventories')]
-class FkInventories
+class FkInventory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

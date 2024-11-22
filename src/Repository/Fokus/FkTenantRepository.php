@@ -2,21 +2,21 @@
 
 namespace App\Repository\Fokus;
 
-use App\Entity\Fokus\FkInventories;
+use App\Entity\Fokus\FkTenant;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * @extends EntityRepository<FkInventories>
+ * @extends EntityRepository<FkTenant>
  */
-class FkInventoriesRepository extends EntityRepository
+class FkTenantRepository extends EntityRepository
 {
 //    public function __construct(ManagerRegistry $registry)
 //    {
-//        parent::__construct($registry, FkInventories::class);
+//        parent::__construct($registry, FkTenant::class);
 //    }
 
     //    /**
-    //     * @return FkInventories[] Returns an array of FkInventories objects
+    //     * @return FkTenant[] Returns an array of FkTenant objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -30,7 +30,7 @@ class FkInventoriesRepository extends EntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?FkInventories
+    //    public function findOneBySomeField($value): ?FkTenant
     //    {
     //        return $this->createQueryBuilder('f')
     //            ->andWhere('f.exampleField = :val')

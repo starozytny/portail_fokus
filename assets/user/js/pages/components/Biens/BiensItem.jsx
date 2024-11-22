@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
-import { Button, ButtonIcon } from "@tailwindComponents/Elements/Button";
+import { ButtonIcon } from "@tailwindComponents/Elements/Button";
 
 export function BiensItem ({ elem, highlight, onModal })
 {
