@@ -7,7 +7,8 @@ import { Users } from "@userPages/Profil/Users";
 
 let el = document.getElementById("profil_update");
 if(el){
-	createRoot(el).render(<ProfilFormulaire context="update" element={JSON.parse(el.dataset.element)} />)
+	createRoot(el).render(<ProfilFormulaire context="update" element={JSON.parse(el.dataset.element)}
+											withModal={false} identifiant={null} />)
 }
 
 let users = document.getElementById("profil_users");

@@ -5,7 +5,7 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
 import { Badge } from "@tailwindComponents/Elements/Badge";
 
-export function UsersItem ({ elem, highlight })
+export function UsersItem ({ elem, highlight, onModal })
 {
     const refItem = useRef(null);
 

@@ -10,11 +10,12 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 import { Button } from "@tailwindComponents/Elements/Button";
 import { Password } from "@tailwindComponents/Modules/User/Password";
 import { Input, InputView } from "@tailwindComponents/Elements/Fields";
+import { CloseModalBtn } from "@tailwindComponents/Elements/Modal";
 
 const URL_CREATE_ELEMENT = "intern_api_fokus_users_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_users_update";
 
-export function ProfilFormulaire ({ context, element }) {
+export function ProfilFormulaire ({ context, element, withModal, identifiant }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {
@@ -24,11 +25,14 @@ export function ProfilFormulaire ({ context, element }) {
 	return  <Form
         context={context}
         url={url}
-        username={element ? Formulaire.setValue(element.username) : ""}
+        username={element ? Formulaire.setValue(element.username) : "998"}
 		firstName={element ? Formulaire.setValue(element.firstName) : ""}
         lastName={element ? Formulaire.setValue(element.lastName) : ""}
         email={element ? Formulaire.setValue(element.email) : ""}
-        userTag={element ? Formulaire.setValue(element.userTag) : null}
+        userTag={element ? Formulaire.setValue(element.userTag) : ""}
+
+		withModal={withModal}
+		identifiant={identifiant}
     />
 }
 
@@ -56,7 +60,8 @@ class Form extends Component {
 			if(value.length > 3) value = this.state[name];
 		}
 		if(name === "username"){
-			if(value.length > 5) value = this.state[name];
+			if(value.length < 3) value = this.state[name];
+			if(value.length > 8) value = this.state[name];
 		}
 
 		this.setState({ [name]: value })
@@ -72,10 +77,12 @@ class Form extends Component {
 
 		let paramsToValidate = [
 			{ type: "text", id: 'username', value: username },
+			{ type: "uniqueLength", id: 'username', value: username, size: 8 },
 			{ type: "text", id: 'first_name', value: first_name },
 			{ type: "text", id: 'last_name', value: last_name },
 			{ type: "email", id: 'email', value: email },
 			{ type: "array", id: 'user_tag', value: user_tag },
+			{ type: "uniqueLength", id: 'user_tag', value: user_tag, size: 3 },
 		];
 
 		if (context === "create") {
@@ -105,22 +112,22 @@ class Form extends Component {
 	}
 
 	render () {
-		const { context } = this.props;
+		const { context, withModal, identifiant } = this.props;
 		const { errors, username, first_name, last_name, email, password, password2, user_tag } = this.state;
 
-		let params0 = { errors: errors, onChange: this.handleChange }
+		let params0 = { errors: errors, onChange: this.handleChange };
 
-		return <form onSubmit={this.handleSubmit}>
+		let formView = <>
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col gap-4 xl:flex-row">
 					<div className="w-full">
 						{context === "create"
-							? <Input valeur={username} identifiant="username" {...params0}>Identifiant</Input>
+							? <Input valeur={username} identifiant="username" {...params0}>Identifiant <span className="text-xs">(8 caractères)</span></Input>
 							: <InputView valeur={username} identifiant="username">Identifiant</InputView>
 						}
 					</div>
 					<div className="w-full">
-						<Input valeur={user_tag} identifiant="user_tag" {...params0}>Tag</Input>
+						<Input valeur={user_tag} identifiant="user_tag" {...params0}>Tag <span className="text-xs">(3 caractères)</span></Input>
 					</div>
 				</div>
 				<div>
@@ -144,6 +151,26 @@ class Form extends Component {
 					<Password password={password} password2={password2} params={params0} isInline={true} />
 				</div>
 			</div>
+		</>
+
+		if (withModal) {
+			return <>
+				<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
+					{formView}
+				</div>
+
+				<div className="bg-gray-50 px-4 py-3 flex flex-row justify-end gap-2 sm:px-6 border-t">
+					<CloseModalBtn identifiant={identifiant} />
+					<Button type="blue" onClick={this.handleSubmit}>
+						{context === "create" ? "Enregistrer" : "Enregistrer les modifications"}
+					</Button>
+				</div>
+			</>
+		}
+
+		return <form onSubmit={this.handleSubmit}>
+
+			{formView}
 
 			<div className="mt-4 flex justify-end gap-2">
 				<Button type="blue" isSubmit={true}>

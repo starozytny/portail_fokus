@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { UsersItem } from "@userPages/Profil/UsersItem";
 
-export function UsersList ({ data, highlight }) {
+export function UsersList ({ data, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table">
             <div className="items items-users">
@@ -22,7 +22,7 @@ export function UsersList ({ data, highlight }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <UsersItem key={elem.id} elem={elem} highlight={highlight} />;
+                        return <UsersItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />;
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

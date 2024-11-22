@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
@@ -7,11 +8,15 @@ import List from "@commonFunctions/list";
 
 import { UsersList } from "@userPages/Profil/UsersList";
 
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import { Button } from "@tailwindComponents/Elements/Button";
+import { Alert } from "@tailwindComponents/Elements/Alert";
+import { Input } from "@tailwindComponents/Elements/Fields";
+import { Modal } from "@tailwindComponents/Elements/Modal";
+import { ProfilFormulaire } from "@userPages/Profil/ProfilForm";
 
 const URL_GET_DATA = "intern_api_fokus_users_list";
 
@@ -42,6 +47,7 @@ export class Users extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.form = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -89,6 +95,11 @@ export class Users extends Component {
 		List.changeSorter(this, this.state.data, this.state.perPage, sortersFunction, nb, SESSION_SORTER);
 	}
 
+	handleModal = (identifiant, elem) => {
+		this.setState({ element: elem });
+		this[identifiant].current.handleClick();
+	}
+
 	render () {
 		const { highlight } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters, nbSorter } = this.state;
@@ -105,7 +116,9 @@ export class Users extends Component {
 					Liste des utilisateurs
 				</div>
 				<div>
-					<Button type="blue" iconLeft="add">Ajouter un utilisateur</Button>
+					<Button type="blue" iconLeft="add" onClick={() => this.handleModal('form', null)}>
+						Ajouter un utilisateur
+					</Button>
 				</div>
 			</div>
 			{loadingData
@@ -121,11 +134,18 @@ export class Users extends Component {
 											 onClick={this.handlePaginationClick} nbSorter={nbSorter}
 											 onPerPage={this.handlePerPage} onSorter={this.handleSorter} />
 
-						<UsersList data={currentData} highlight={parseInt(highlight)} />
+						<UsersList data={currentData} highlight={parseInt(highlight)} onModal={this.handleModal} />
 
 						<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 									perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 					</div>
+
+					{createPortal(<Modal ref={this.form} identifiant='form-user' maxWidth={568} margin={1}
+										 title={element ? `Modifier ${element.username}` : "Ajouter un utilisateur"}
+										 isForm={true}
+										 content={<ProfilFormulaire context={element ? "update" : "create"} element={element ? JSON.stringify(element) : null}
+																	withModal={true} identifiant="form-user" />}
+					/>, document.body)}
 				</>
 			}
 		</>
