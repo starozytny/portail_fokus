@@ -18,7 +18,7 @@ import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pa
 import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 
 const URL_GET_DATA = "intern_api_fokus_users_list";
-const URL_DELETE_ELEMENT = "admin_users_delete";
+const URL_DELETE_ELEMENT = "intern_api_fokus_users_delete";
 
 let sorters = [
 	{ value: 0, identifiant: 'sorter-nom', label: 'Nom' },

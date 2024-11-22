@@ -3,18 +3,17 @@
 namespace App\Repository\Fokus;
 
 use App\Entity\Fokus\FkInventories;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityRepository;
 
 /**
- * @extends ServiceEntityRepository<FkInventories>
+ * @extends EntityRepository<FkInventories>
  */
-class FkInventoriesRepository extends ServiceEntityRepository
+class FkInventoriesRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, FkInventories::class);
-    }
+//    public function __construct(ManagerRegistry $registry)
+//    {
+//        parent::__construct($registry, FkInventories::class);
+//    }
 
     //    /**
     //     * @return FkInventories[] Returns an array of FkInventories objects

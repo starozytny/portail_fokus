@@ -3,6 +3,7 @@
 namespace App\Controller\InternApi\Fokus;
 
 use App\Entity\Administration\AdClients;
+use App\Entity\Fokus\FkInventories;
 use App\Entity\Fokus\FkUser;
 use App\Service\ApiResponse;
 use App\Service\Data\DataFokus;
@@ -133,6 +134,11 @@ class UserController extends AbstractController
 
         if ($obj === $this->getUser()) {
             return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas vous supprimer.');
+        }
+
+        $inventory = $em->getRepository(FkInventories::class)->findBy(['userId' => $obj->getId()]);
+        if($inventory){
+            return $apiResponse->apiJsonResponseBadRequest('Des états des lieux sont associés à cet utilisateur. Vous ne pouvez pas le supprimer.');
         }
 
         $result = $fokusApi->userDelete($obj);
