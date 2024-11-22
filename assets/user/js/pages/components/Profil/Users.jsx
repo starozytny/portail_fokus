@@ -55,8 +55,6 @@ export class Users extends Component {
 	handleGetData = () => {
 		const { perPage, sorter, filters } = this.state;
 
-		console.log(this.props);
-
 		List.getData(this, Routing.generate(URL_GET_DATA), perPage, sorter, this.props.highlight, filters, this.handleFilters);
 	}
 
