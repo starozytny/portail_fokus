@@ -72,4 +72,33 @@ class SanitizeData
 
         return $return;
     }
+
+    public function cleanForFokus($value, $return = null): string
+    {
+        if($value != "" && $value != null){
+            $value = trim($value);
+            return $this->removeCarac($value);
+        }
+
+        return $return;
+    }
+
+    public function cleanFullFokus($value, $return = null): string
+    {
+        if($value != "" && $value != null){
+            $value = trim($value);
+            $value = $this->removeCarac($value);
+            return htmlspecialchars($value);
+        }
+
+        return $return;
+    }
+
+    private function removeCarac($value): string
+    {
+        $value = str_replace('\'', '', $value);
+        $value = str_replace('"', ' ', $value);
+        $value = str_replace("'", ' ', $value);
+        return str_replace('#', '-', $value);
+    }
 }

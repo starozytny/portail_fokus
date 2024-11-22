@@ -4,8 +4,8 @@ namespace App\Controller\InternApi\Fokus;
 
 use App\Entity\Administration\AdClients;
 use App\Entity\Fokus\FkUser;
-use App\Entity\Main\User;
 use App\Service\ApiResponse;
+use App\Service\Data\DataFokus;
 use App\Service\Fokus\FokusApi;
 use App\Service\Fokus\FokusService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,36 +53,71 @@ class UserController extends AbstractController
         return $apiResponse->apiJsonResponse($data, FkUser::LIST);
     }
 
-    public function submitForm($type, FkUser $obj, Request $request, ApiResponse $apiResponse, FokusApi $fokusApi): JsonResponse
+    public function submitForm($type, FkUser $obj, Request $request, ApiResponse $apiResponse,
+                               FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): JsonResponse
     {
+        /** @var FkUser $user */
+        $user = $this->getUser();
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
         $data = json_decode($request->getContent());
+
         if ($data === null) {
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        // TODO
+        $dataToSend = $dataFokus->setDataUser($obj, $data);
 
         if($type == "create") {
+            $existe = $em->getRepository(FkUser::class)->findOneBy(['username' => $dataToSend['username']]);
+            if($existe && $existe->getId() !== $dataToSend['id']) {
+                return $apiResponse->apiJsonResponseValidationFailed([[
+                    'name' => 'username',
+                    'message' => "Cet utilisateur existe déjà."
+                ]]);
+            }
 
+            $result = $fokusApi->userCreate($dataToSend);
         } else {
-            $result = $fokusApi->userUpdate($obj, $data);
+            $result = $fokusApi->userUpdate($dataToSend, $obj);
         }
 
-        return $apiResponse->apiJsonResponse($obj, User::LIST);
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('[U0001] Une erreur est survenue.');
+        }
+
+        if($user->getId() == $dataToSend['id']) {
+            $sessionData = $fokusApi->getSessionData();
+            $fokusApi->setSessionData($dataToSend['username'], $dataToSend['password'] ?: $sessionData[2]);
+        }
+
+
+        if($type == "update" && $dataToSend['password'] != ""){
+            $result = $fokusApi->userUpdatePassword(['password' => $dataToSend['password']], $obj);
+            if($result === false){
+                return $apiResponse->apiJsonResponseBadRequest('[U0002] Une erreur est survenue. Le mot de passe n\'a pas pu être mis à jour.');
+            }
+        }
+
+        $obj = $em->getRepository(FkUser::class)->findOneBy(['username' => $dataToSend['username']]);
+
+        $this->addFlash('info', 'Données mises à jour.');
+        return $apiResponse->apiJsonResponse($obj, FkUser::LIST);
     }
 
     #[Route('/create', name: 'create', options: ['expose' => true], methods: 'POST')]
-    public function create(Request $request, ApiResponse $apiResponse, FokusApi $fokusApi): Response
+    public function create(Request $request, ApiResponse $apiResponse,
+                           FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): Response
     {
-        return $this->submitForm("create", new FkUser(), $request, $apiResponse, $fokusApi);
+        return $this->submitForm("create", new FkUser(), $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
     }
 
     #[Route('/update/{id}', name: 'update', options: ['expose' => true], methods: 'PUT')]
-    public function update(Request $request, $id, FokusService $fokusService, ApiResponse $apiResponse, FokusApi $fokusApi): Response
+    public function update(Request $request, $id, ApiResponse $apiResponse,
+                           FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): Response
     {
         $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
 
         $obj = $em->getRepository(FkUser::class)->find($id);
-        return $this->submitForm("update", $obj, $request, $apiResponse, $fokusApi);
+        return $this->submitForm("update", $obj, $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
     }
 }

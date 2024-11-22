@@ -7,16 +7,14 @@ import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
 import { UsersList } from "@userPages/Profil/UsersList";
+import { ProfilFormulaire } from "@userPages/Profil/ProfilForm";
 
+import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import { Alert } from "@tailwindComponents/Elements/Alert";
-import { Input } from "@tailwindComponents/Elements/Fields";
-import { Modal } from "@tailwindComponents/Elements/Modal";
-import { ProfilFormulaire } from "@userPages/Profil/ProfilForm";
 
 const URL_GET_DATA = "intern_api_fokus_users_list";
 
@@ -56,6 +54,8 @@ export class Users extends Component {
 
 	handleGetData = () => {
 		const { perPage, sorter, filters } = this.state;
+
+		console.log(this.props);
 
 		List.getData(this, Routing.generate(URL_GET_DATA), perPage, sorter, this.props.highlight, filters, this.handleFilters);
 	}

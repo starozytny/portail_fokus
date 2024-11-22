@@ -12,6 +12,7 @@ import { Password } from "@tailwindComponents/Modules/User/Password";
 import { Input, InputView } from "@tailwindComponents/Elements/Fields";
 import { CloseModalBtn } from "@tailwindComponents/Elements/Modal";
 
+const URL_INDEX_ELEMENTS = "user_profil_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_users_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_users_update";
 
@@ -26,8 +27,8 @@ export function ProfilFormulaire ({ context, element, withModal, identifiant }) 
         context={context}
         url={url}
         username={element ? Formulaire.setValue(element.username) : "998"}
-		firstName={element ? Formulaire.setValue(element.firstName) : ""}
-        lastName={element ? Formulaire.setValue(element.lastName) : ""}
+		firstname={element ? Formulaire.setValue(element.firstName) : ""}
+        lastname={element ? Formulaire.setValue(element.lastName) : ""}
         email={element ? Formulaire.setValue(element.email) : ""}
         userTag={element ? Formulaire.setValue(element.userTag) : ""}
 
@@ -42,10 +43,10 @@ class Form extends Component {
 
 		this.state = {
 			username: props.username,
-			first_name: props.firstName,
-			last_name: props.lastName,
+			firstname: props.firstname,
+			lastname: props.lastname,
 			email: props.email,
-			user_tag: props.userTag,
+			userTag: props.userTag,
 			password: '',
 			password2: '',
 			errors: [],
@@ -56,7 +57,7 @@ class Form extends Component {
 		let name = e.currentTarget.name;
 		let value = e.currentTarget.value;
 
-		if(name === "user_tag"){
+		if(name === "userTag"){
 			if(value.length > 3) value = this.state[name];
 		}
 		if(name === "username"){
@@ -71,18 +72,18 @@ class Form extends Component {
 		e.preventDefault();
 
 		const { context, url } = this.props;
-		const { username, first_name, last_name, password, password2, email, user_tag } = this.state;
+		const { username, firstname, lastname, password, password2, email, userTag } = this.state;
 
 		this.setState({ errors: [] });
 
 		let paramsToValidate = [
 			{ type: "text", id: 'username', value: username },
 			{ type: "uniqueLength", id: 'username', value: username, size: 8 },
-			{ type: "text", id: 'first_name', value: first_name },
-			{ type: "text", id: 'last_name', value: last_name },
+			{ type: "text", id: 'firstname', value: firstname },
+			{ type: "text", id: 'lastname', value: lastname },
 			{ type: "email", id: 'email', value: email },
-			{ type: "array", id: 'user_tag', value: user_tag },
-			{ type: "uniqueLength", id: 'user_tag', value: user_tag, size: 3 },
+			{ type: "array", id: 'userTag', value: userTag },
+			{ type: "uniqueLength", id: 'userTag', value: userTag, size: 3 },
 		];
 
 		if (context === "create") {
@@ -101,9 +102,11 @@ class Form extends Component {
 			Formulaire.loader(true);
 			axios({ method: context === "create" ? "POST" : "PUT", url: url, data: this.state })
 				.then(function (response) {
-					location.reload();
+					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
 				})
 				.catch(function (error) {
+					console.log(error)
+					console.log(error.response)
 					Formulaire.displayErrors(self, error);
 					Formulaire.loader(false);
 				})
@@ -113,7 +116,7 @@ class Form extends Component {
 
 	render () {
 		const { context, withModal, identifiant } = this.props;
-		const { errors, username, first_name, last_name, email, password, password2, user_tag } = this.state;
+		const { errors, username, firstname, lastname, email, password, password2, userTag } = this.state;
 
 		let params0 = { errors: errors, onChange: this.handleChange };
 
@@ -127,7 +130,7 @@ class Form extends Component {
 						}
 					</div>
 					<div className="w-full">
-						<Input valeur={user_tag} identifiant="user_tag" {...params0}>Tag <span className="text-xs">(3 caractères)</span></Input>
+						<Input valeur={userTag} identifiant="userTag" {...params0}>Tag <span className="text-xs">(3 caractères)</span></Input>
 					</div>
 				</div>
 				<div>
@@ -135,10 +138,10 @@ class Form extends Component {
 				</div>
 				<div className="flex flex-col gap-4 xl:flex-row">
 					<div className="w-full">
-						<Input identifiant="first_name" valeur={first_name} {...params0}>Prénom</Input>
+						<Input identifiant="firstname" valeur={firstname} {...params0}>Prénom</Input>
 					</div>
 					<div className="w-full">
-						<Input identifiant="last_name" valeur={last_name} {...params0}>Nom</Input>
+						<Input identifiant="lastname" valeur={lastname} {...params0}>Nom</Input>
 					</div>
 				</div>
 				{context === "update"

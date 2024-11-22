@@ -25,11 +25,14 @@ class FokusApi
         $session = $this->requestStack->getSession();
 
         $numSoc = str_split($username, 3);
-        $passwordEncrypted = $this->encryption($password);
 
         $session->set('numSociety', $numSoc[0]);
         $session->set('username', $username);
-        $session->set('userpass', $passwordEncrypted);
+
+        if($password != ""){
+            $passwordEncrypted = $this->encryption($password);
+            $session->set('userpass', $passwordEncrypted);
+        }
     }
 
     public function getSessionData(): array
@@ -93,8 +96,18 @@ class FokusApi
         }
     }
 
-    public function userUpdate(FkUser $obj, $data)
+    public function userCreate($data)
+    {
+        return $this->callApi("POST", "add_user/", $data);
+    }
+
+    public function userUpdate($data, FkUser $obj)
     {
         return $this->callApi("POST", "edit_user/" . $obj->getId(), $data);
+    }
+
+    public function userUpdatePassword($data, FkUser $obj)
+    {
+        return $this->callApi("POST", "edit_user_password/" . $obj->getUsername() . "-" . $obj->getId(), $data);
     }
 }

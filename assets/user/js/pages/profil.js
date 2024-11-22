@@ -13,5 +13,5 @@ if(el){
 
 let users = document.getElementById("profil_users");
 if(users){
-	createRoot(users).render(<Users {...el.dataset} />)
+	createRoot(users).render(<Users {...users.dataset} />)
 }
