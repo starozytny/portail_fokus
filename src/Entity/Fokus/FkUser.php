@@ -17,6 +17,10 @@ class FkUser implements UserInterface, PasswordAuthenticatedUserInterface, Passw
     const LIST = ['fk_user_list'];
     const FORM = ['fk_user_form'];
 
+    const RIGHTS_USER = 0;
+    const RIGHTS_RESTRICTED = 2;
+    const RIGHTS_ADMIN = 1;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

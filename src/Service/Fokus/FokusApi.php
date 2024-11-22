@@ -128,4 +128,9 @@ class FokusApi
     {
         return $this->callApiWithoutAuth("PUT", "edit_user_password/" . $obj->getUsername() . "-" . $obj->getId(), $data);
     }
+
+    public function userDelete(FkUser $obj)
+    {
+        return $this->callApi("GET", "delete_user/" . $obj->getId());
+    }
 }

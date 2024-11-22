@@ -15,8 +15,10 @@ import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 
 const URL_GET_DATA = "intern_api_fokus_users_list";
+const URL_DELETE_ELEMENT = "admin_users_delete";
 
 let sorters = [
 	{ value: 0, identifiant: 'sorter-nom', label: 'Nom' },
@@ -45,6 +47,7 @@ export class Users extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.delete = React.createRef();
 		this.form = React.createRef();
 	}
 
@@ -137,6 +140,12 @@ export class Users extends Component {
 						<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 									perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 					</div>
+
+					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+											   title="Supprimer cet utilisateur" msgSuccess="Utilisateur supprimé"
+											   onUpdateList={this.handleUpdateList}>
+						Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?
+					</ModalDelete>, document.body)}
 
 					{createPortal(<Modal ref={this.form} identifiant='form-user' maxWidth={568} margin={1}
 										 title={element ? `Modifier ${element.username}` : "Ajouter un utilisateur"}

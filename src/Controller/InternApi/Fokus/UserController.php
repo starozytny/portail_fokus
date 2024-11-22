@@ -82,13 +82,13 @@ class UserController extends AbstractController
         }
 
         if($result === false){
-            return $apiResponse->apiJsonResponseBadRequest('[U0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
         }
 
         if($type == "update" && $dataToSend['password'] != ""){
             $result = $fokusApi->userUpdatePassword(['password' => $dataToSend['password']], $obj);
             if($result === false){
-                return $apiResponse->apiJsonResponseBadRequest('[U0002] Une erreur est survenue. Le mot de passe n\'a pas pu être mis à jour.');
+                return $apiResponse->apiJsonResponseBadRequest('[UF0002] Une erreur est survenue. Le mot de passe n\'a pas pu être mis à jour.');
             }
         }
 
@@ -118,5 +118,29 @@ class UserController extends AbstractController
 
         $obj = $em->getRepository(FkUser::class)->find($id);
         return $this->submitForm("update", $obj, $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
+    }
+
+    #[Route('/delete/{id}', name: 'delete', options: ['expose' => true], methods: 'DELETE')]
+    public function delete($id, FokusService $fokusService, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkUser::class)->find($id);
+
+        if ($obj->getRights() === FkUser::RIGHTS_ADMIN) {
+            return $apiResponse->apiJsonResponseForbidden();
+        }
+
+        if ($obj === $this->getUser()) {
+            return $apiResponse->apiJsonResponseBadRequest('Vous ne pouvez pas vous supprimer.');
+        }
+
+        $result = $fokusApi->userDelete($obj);
+
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('[UD0003] Une erreur est survenue.');
+        }
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }
