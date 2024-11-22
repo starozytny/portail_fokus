@@ -111,7 +111,7 @@ export class Biens extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-row">
-						<Search onSearch={this.handleSearch} placeholder="Rechercher par uid, reference, addresse, code postal, ville, locataire, propriétaire.." />
+						<Search onSearch={this.handleSearch} placeholder="Rechercher par uid, reference, adresse, code postal, ville, locataire, propriétaire.." />
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
