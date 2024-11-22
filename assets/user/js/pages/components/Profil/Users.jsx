@@ -144,7 +144,7 @@ export class Users extends Component {
 					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
 											   title="Supprimer cet utilisateur" msgSuccess="Utilisateur supprimé"
 											   onUpdateList={this.handleUpdateList}>
-						Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?
+						Êtes-vous sûr de vouloir supprimer définitivement l'utilisateur <b>{element ? element.username : ""}</b> ?
 					</ModalDelete>, document.body)}
 
 					{createPortal(<Modal ref={this.form} identifiant='form-user' maxWidth={568} margin={1}
