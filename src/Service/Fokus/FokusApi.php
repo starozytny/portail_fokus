@@ -96,6 +96,24 @@ class FokusApi
         }
     }
 
+    private function callApiWithoutAuth($method, $path, $data=[], $decodeResponseToJson=true)
+    {
+        try {
+            $response = $this->client->request($method, $this->apiFokusUrl . $path , [
+                'json' => $data
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            if($statusCode !== 200){
+                return false;
+            }
+
+            return $decodeResponseToJson ? json_decode($response->getContent()) : $response->getContent();
+        } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
+            return false;
+        }
+    }
+
     public function userCreate($data)
     {
         return $this->callApi("POST", "add_user/", $data);
@@ -108,6 +126,6 @@ class FokusApi
 
     public function userUpdatePassword($data, FkUser $obj)
     {
-        return $this->callApi("POST", "edit_user_password/" . $obj->getUsername() . "-" . $obj->getId(), $data);
+        return $this->callApiWithoutAuth("PUT", "edit_user_password/" . $obj->getUsername() . "-" . $obj->getId(), $data);
     }
 }

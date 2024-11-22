@@ -85,17 +85,16 @@ class UserController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('[U0001] Une erreur est survenue.');
         }
 
-        if($user->getId() == $dataToSend['id']) {
-            $sessionData = $fokusApi->getSessionData();
-            $fokusApi->setSessionData($dataToSend['username'], $dataToSend['password'] ?: $sessionData[2]);
-        }
-
-
         if($type == "update" && $dataToSend['password'] != ""){
             $result = $fokusApi->userUpdatePassword(['password' => $dataToSend['password']], $obj);
             if($result === false){
                 return $apiResponse->apiJsonResponseBadRequest('[U0002] Une erreur est survenue. Le mot de passe n\'a pas pu être mis à jour.');
             }
+        }
+
+        if($user->getId() == $dataToSend['id']) {
+            $sessionData = $fokusApi->getSessionData();
+            $fokusApi->setSessionData($dataToSend['username'], $dataToSend['password'] ?: $sessionData[2]);
         }
 
         $obj = $em->getRepository(FkUser::class)->findOneBy(['username' => $dataToSend['username']]);

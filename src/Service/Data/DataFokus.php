@@ -22,7 +22,7 @@ class DataFokus
             'first_name' => $this->sanitizeData->cleanForFokus($data->firstname),
             'last_name' => $this->sanitizeData->cleanForFokus($data->lastname),
             'password' => $data->password,
-            'email' => $this->sanitizeData->cleanFullFokus($data->lastname),
+            'email' => $this->sanitizeData->cleanFullFokus($data->email),
             'user_tag' => mb_strtoupper($userTag)
         ];
     }
