@@ -5,23 +5,30 @@ namespace App\Entity\Fokus;
 use App\Repository\Fokus\FkModelRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkModelRepository::class)]
 #[ORM\Table(name: 'models')]
 class FkModel
 {
+    const LIST = ['fk_model_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_model_list'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_model_list'])]
     private ?int $userId = null;
 
     #[ORM\Column(length: 40)]
+    #[Groups(['fk_model_list'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['fk_model_list'])]
     private ?string $content = null;
 
     public function getId(): ?int

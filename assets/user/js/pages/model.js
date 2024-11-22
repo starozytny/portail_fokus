@@ -2,9 +2,9 @@ import "../../css/pages/model.scss"
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Tenants } from "@userPages/Tenants/Tenants";
+import { Models } from "@userPages/Models/Models";
 
-let el = document.getElementById("tenants_list");
+let el = document.getElementById("models_list");
 if(el){
-	createRoot(el).render(<Tenants {...el.dataset} />)
+	createRoot(el).render(<Models {...el.dataset} />)
 }
