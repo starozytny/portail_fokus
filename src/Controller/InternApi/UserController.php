@@ -2,12 +2,15 @@
 
 namespace App\Controller\InternApi;
 
+use App\Entity\Administration\AdClients;
+use App\Entity\Fokus\FkUser;
 use App\Entity\Main\Society;
 use App\Entity\Main\User;
 use App\Repository\Main\UserRepository;
 use App\Service\ApiResponse;
 use App\Service\Data\DataMain;
 use App\Service\FileUploader;
+use App\Service\Fokus\FokusService;
 use App\Service\MailerService;
 use App\Service\SanitizeData;
 use App\Service\SettingsService;
@@ -120,7 +123,8 @@ class UserController extends AbstractController
 
     #[Route('/password/forget', name: 'password_forget', options: ['expose' => true], methods: 'post')]
     public function forget(Request $request, UserRepository $repository, ApiResponse $apiResponse,
-                           SanitizeData $sanitizeData, MailerService $mailerService, SettingsService $settingsService): Response
+                           SanitizeData $sanitizeData, MailerService $mailerService, SettingsService $settingsService,
+                           FokusService $fokusService): Response
     {
         $data = json_decode($request->getContent());
 
@@ -130,10 +134,34 @@ class UserController extends AbstractController
 
         $user = $repository->findOneBy(['username' => $sanitizeData->trimData($data->fUsername)]);
         if (!$user) {
-            return $apiResponse->apiJsonResponseValidationFailed([[
-                'name' => 'fUsername',
-                'message' => "Cet utilisateur n'existe pas."
-            ]]);
+
+            $emA = $fokusService->getAdministrationEntityManager();
+
+            $clients = $emA->getRepository(AdClients::class)->findAll();
+            foreach ($clients as $client) {
+                if (!$user) {
+                    $emF = $fokusService->getEntityNameManager($client->getManager());
+
+                    if($emF){
+                        $user = $emF->getRepository(FkUser::class)->findOneBy(['username' => $sanitizeData->trimData($data->fUsername)]);
+                    }
+                }
+            }
+
+            if(!$user){
+                return $apiResponse->apiJsonResponseValidationFailed([[
+                    'name' => 'fUsername',
+                    'message' => "Cet utilisateur n'existe pas."
+                ]]);
+            }else{
+                //
+                // TODO create table in Main for password FkUser
+                //
+                return $apiResponse->apiJsonResponseValidationFailed([[
+                    'name' => 'fUsername',
+                    'message' => "Cet utilisateur n'existe pas."
+                ]]);
+            }
         }
 
         if ($user->getLostAt()) {
