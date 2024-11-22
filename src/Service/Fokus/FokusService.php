@@ -3,7 +3,6 @@
 namespace App\Service\Fokus;
 
 use App\Entity\Administration\AdClients;
-use App\Entity\Fokus\FkUser;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use InvalidArgumentException;
@@ -26,18 +25,6 @@ class FokusService
     public function getAdministrationEntityManager(): ObjectManager
     {
         return $this->registry->getManager("administration");
-    }
-
-    public function getAdClientByClientId($clientId)
-    {
-        $em = $this->getAdministrationEntityManager();
-
-        $client = $em->getRepository(AdClients::class)->findOneBy(['id' => $clientId]);
-        if(!$client){
-            throw new NotFoundHttpException("Client $clientId not found");
-        }
-
-        return $client;
     }
 
     public function getAdClientByNumSociety($numSociety)

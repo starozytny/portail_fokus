@@ -4,9 +4,14 @@
 
 {% set menu = [
     {
-        name: "Dashboard", icon: "home",
+        name: "Dashboard", icon: "calendar",
         path: path('user_homepage'),
         matchRoute: ['user_homepage']
+    },
+    {
+        name: "Liste des biens", icon: "layer",
+        path: path('user_properties_index'),
+        matchRoute: ['user_properties_index']
     },
     {
         name: "Se déconnecter", icon: "logout",

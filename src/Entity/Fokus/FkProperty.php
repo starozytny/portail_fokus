@@ -51,21 +51,27 @@ class FkProperty
     private ?string $city = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_property_list'])]
     private ?int $rooms = 0;
 
     #[ORM\Column(length: 24, nullable: true)]
+    #[Groups(['fk_property_list'])]
     private ?string $type = null;
 
     #[ORM\Column(length: 24, nullable: true)]
+    #[Groups(['fk_property_list'])]
     private ?string $floor = null;
 
     #[ORM\Column]
+    #[Groups(['fk_property_list'])]
     private ?float $surface = 0;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['fk_property_list'])]
     private ?string $door = "";
 
     #[ORM\Column(length: 40)]
+    #[Groups(['fk_property_list'])]
     private ?string $building = "";
 
     #[ORM\Column(length: 32, nullable: true)]
@@ -73,6 +79,7 @@ class FkProperty
     private ?string $owner = null;
 
     #[ORM\Column]
+    #[Groups(['fk_property_list'])]
     private ?bool $isFurnished = true;
 
     #[ORM\Column]
@@ -80,6 +87,7 @@ class FkProperty
     private ?float $lastInventoryUid = 0;
 
     #[ORM\Column]
+    #[Groups(['fk_property_list'])]
     private ?int $isImported = 1;
 
     #[ORM\Column(type: Types::TEXT)]

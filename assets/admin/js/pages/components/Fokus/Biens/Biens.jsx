@@ -11,10 +11,10 @@ import Formulaire from "@commonFunctions/formulaire";
 import { BiensList } from "@adminPages/Fokus/Biens/BiensList";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import { Button } from "@tailwindComponents/Elements/Button";
 
 const URL_INDEX_ELEMENTS = "admin_fokus_properties_list";
 const URL_GET_DATA = "intern_api_fokus_properties_list";
@@ -44,13 +44,13 @@ export class Biens extends Component {
 	}
 
 	handleGetData = () => {
-		const { clientId, highlight, donnees, isAssignation } = this.props;
+		const { numSociety, highlight, donnees, isAssignation } = this.props;
 		const { perPage, sorter } = this.state;
 
 		if(isAssignation){
 			List.setData(this, donnees, perPage, sorter, highlight);
 		}else{
-			List.getData(this, Routing.generate(URL_GET_DATA, {clientId: clientId}), perPage, sorter, highlight);
+			List.getData(this, Routing.generate(URL_GET_DATA, {numSociety: numSociety}), perPage, sorter, highlight);
 		}
 	}
 
@@ -86,12 +86,12 @@ export class Biens extends Component {
 	}
 
 	handleAssign = () => {
-		const { element, numSociety, clientId } = this.props;
+		const { element, numSociety } = this.props;
 		const { assign } = this.state;
 
 		let self = this;
 		Formulaire.loader(true);
-		axios({ method: "PUT", url: Routing.generate(URL_ASSIGN_ELEMENT, {clientId: clientId}), data: {elemId: element.id, selectedId: assign.id} })
+		axios({ method: "PUT", url: Routing.generate(URL_ASSIGN_ELEMENT, {numSociety: numSociety}), data: {elemId: element.id, selectedId: assign.id} })
 			.then(function (response) {
 				location.href = Routing.generate(URL_INDEX_ELEMENTS, { numSociety: numSociety, h: element.id });
 			})
@@ -103,7 +103,7 @@ export class Biens extends Component {
 	}
 
 	render () {
-		const { numSociety, clientId, highlight, isAssignation } = this.props;
+		const { numSociety, highlight, isAssignation } = this.props;
 		const { data, dataImmuable, currentData, element, assign, loadingData, perPage, currentPage } = this.state;
 
 		return <>
@@ -139,7 +139,6 @@ export class Biens extends Component {
 						: createPortal(<Modal ref={this.lastInventory} identifiant="lastInventory" maxWidth={1280} margin={1}
 											  title={`Assigner le dernier EDL à ${element ? element.reference : ""}`}
 											  content={<Biens numSociety={numSociety}
-															  clientId={clientId}
 															  donnees={JSON.stringify(dataImmuable)}
 															  isAssignation={true}
 															  element={element}  />}

@@ -12,13 +12,12 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/intern/api/fokus/properties', name: 'intern_api_fokus_properties_')]
-#[IsGranted('ROLE_ADMIN')]
 class PropertyController extends AbstractController
 {
-    #[Route('/list/{clientId}', name: 'list', options: ['expose' => true], methods: 'GET')]
-    public function list($clientId, FokusService $fokusService, ApiResponse $apiResponse): Response
+    #[Route('/list/{numSociety}', name: 'list', options: ['expose' => true], methods: 'GET')]
+    public function list($numSociety, FokusService $fokusService, ApiResponse $apiResponse): Response
     {
-        $client = $fokusService->getAdClientByClientId($clientId);
+        $client = $fokusService->getAdClientByNumSociety($numSociety);
 
         $em = $fokusService->getEntityNameManager($client->getManager());
         $properties = $em->getRepository(FkProperty::class)->findAll();
@@ -26,10 +25,11 @@ class PropertyController extends AbstractController
         return $apiResponse->apiJsonResponse($properties, FkProperty::LIST);
     }
 
-    #[Route('/property/{clientId}/assign-edl', name: 'assign', options: ['expose' => true], methods: 'PUT')]
-    public function assign(Request $request, $clientId, FokusService $fokusService, ApiResponse $apiResponse): Response
+    #[Route('/property/{numSociety}/assign-edl', name: 'assign', options: ['expose' => true], methods: 'PUT')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function assign(Request $request, $numSociety, FokusService $fokusService, ApiResponse $apiResponse): Response
     {
-        $client = $fokusService->getAdClientByClientId($clientId);
+        $client = $fokusService->getAdClientByNumSociety($numSociety);
         $data = json_decode($request->getContent());
 
         $em = $fokusService->getEntityNameManager($client->getManager());
