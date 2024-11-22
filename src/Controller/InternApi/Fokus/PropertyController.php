@@ -20,9 +20,9 @@ class PropertyController extends AbstractController
         $client = $fokusService->getAdClientByNumSociety($numSociety);
 
         $em = $fokusService->getEntityNameManager($client->getManager());
-        $properties = $em->getRepository(FkProperty::class)->findAll();
+        $data = $em->getRepository(FkProperty::class)->findAll();
 
-        return $apiResponse->apiJsonResponse($properties, FkProperty::LIST);
+        return $apiResponse->apiJsonResponse($data, FkProperty::LIST);
     }
 
     #[Route('/property/{numSociety}/assign-edl', name: 'assign', options: ['expose' => true], methods: 'PUT')]

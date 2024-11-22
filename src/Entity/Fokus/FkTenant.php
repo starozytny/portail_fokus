@@ -5,50 +5,66 @@ namespace App\Entity\Fokus;
 use App\Repository\Fokus\FkTenantRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkTenantRepository::class)]
 #[ORM\Table(name: 'tenants')]
 class FkTenant
 {
+    const LIST = ['fk_tenant_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_tenant_list'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?float $uid = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 15, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $addr1 = null;
 
     #[ORM\Column(length: 40, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $addr2 = null;
 
     #[ORM\Column(length: 40, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $addr3 = null;
 
     #[ORM\Column(length: 5, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $zipcode = null;
 
     #[ORM\Column(length: 40, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 5, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?string $reference = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[Groups(['fk_tenant_list'])]
     private ?int $isImported = 0;
 
     public function getId(): ?int

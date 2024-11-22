@@ -60,6 +60,21 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "fokus_tenant":
+            if((v.addr1 && searchContainsWith(v.addr1, search))
+                || (v.addr2 && searchContainsWith(v.addr2, search))
+                || (v.addr3 && searchContainsWith(v.addr3, search))
+                || (v.zipcode && searchContainsWith(v.zipcode, search))
+                || (v.city && searchContainsWith(v.city, search))
+                || (v.reference && searchContainsWith(v.reference + "", search))
+                || (v.lastName && searchContainsWith(v.lastName, search))
+                || (v.firstName && searchContainsWith(v.firstName, search))
+                || (v.phone && searchContainsWith(v.phone, search))
+                || (v.email && searchContainsWith(v.email, search))
+            ){
+                return v;
+            }
+            break;
         case "administration_clients":
             if(searchContainsWith(v.name, search)
                 || searchStartWith(v.numSociety, search)

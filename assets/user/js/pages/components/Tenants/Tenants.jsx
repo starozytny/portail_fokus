@@ -5,23 +5,23 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
-import { BiensList } from "@userPages/Biens/BiensList";
+import { TenantsList } from "@userPages/Tenants/TenantsList";
 
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
-const URL_GET_DATA = "intern_api_fokus_properties_list";
+const URL_GET_DATA = "intern_api_fokus_tenants_list";
 
-const SESSION_PERPAGE = "project.perpage.fk_biens";
+const SESSION_PERPAGE = "project.perpage.fk_tenants";
 
-export class Biens extends Component {
+export class Tenants extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
             perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
 			currentPage: 0,
-			sorter: Sort.compareAddr1,
+			sorter: Sort.compareLastName,
 			loadingData: true,
 			element: null,
 		}
@@ -46,7 +46,7 @@ export class Biens extends Component {
 
 	handleSearch = (search) => {
 		const { perPage, sorter, dataImmuable } = this.state;
-		List.search(this, 'fokus_property', search, dataImmuable, perPage, sorter)
+		List.search(this, 'fokus_tenant', search, dataImmuable, perPage, sorter)
 	}
 
 	handleUpdateList = (element, context) => {
@@ -80,16 +80,16 @@ export class Biens extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-row">
-						<Search onSearch={this.handleSearch} placeholder="Rechercher par reference, adresse, code postal, ville, locataire, propriétaire.." />
+						<Search onSearch={this.handleSearch} placeholder="Rechercher par locataire, reference, adresse.." />
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage}/>
 
-					<BiensList data={currentData}
-							   highlight={parseInt(highlight)}
-							   onModal={this.handleModal} />
+					<TenantsList data={currentData}
+								 highlight={parseInt(highlight)}
+								 onModal={this.handleModal} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
