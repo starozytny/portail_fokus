@@ -1,0 +1,12 @@
+{% extends 'user/pages/bibliotheque/template.html.twig' %}
+
+{% set page_title %}Bibliothèque{% endset %}
+
+{% block main_content %}
+    <div id="bibli_list"
+         data-num-society="{{ app.request.session.get('numSociety') }}"
+         data-highlight="{{ app.request.query.get('h') }}"
+    >
+        {% include "layout/components/tailwind/loaders/loader.html.twig" %}
+    </div>
+{% endblock %}

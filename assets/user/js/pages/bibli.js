@@ -2,9 +2,9 @@ import "../../css/pages/bibli.scss"
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Tenants } from "@userPages/Tenants/Tenants";
+import { Bibliotheque } from "@userPages/Bibli/Bibliotheque";
 
-let el = document.getElementById("tenants_list");
+let el = document.getElementById("bibli_list");
 if(el){
-	createRoot(el).render(<Tenants {...el.dataset} />)
+	createRoot(el).render(<Bibliotheque {...el.dataset} />)
 }
