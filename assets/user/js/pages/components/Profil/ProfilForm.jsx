@@ -148,7 +148,7 @@ class Form extends Component {
 					: null
 				}
 				<div>
-					<Password password={password} password2={password2} params={params0} isInline={true} />
+					<Password password={password} password2={password2} params={params0} isInline={true} isFokus={true} />
 				</div>
 			</div>
 		</>

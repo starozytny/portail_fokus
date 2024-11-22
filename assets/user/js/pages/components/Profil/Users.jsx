@@ -143,8 +143,8 @@ export class Users extends Component {
 					{createPortal(<Modal ref={this.form} identifiant='form-user' maxWidth={568} margin={1}
 										 title={element ? `Modifier ${element.username}` : "Ajouter un utilisateur"}
 										 isForm={true}
-										 content={<ProfilFormulaire context={element ? "update" : "create"} element={element ? JSON.stringify(element) : null}
-																	withModal={true} identifiant="form-user" />}
+										 content={<ProfilFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	withModal={true} identifiant="form-user" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
 			}
