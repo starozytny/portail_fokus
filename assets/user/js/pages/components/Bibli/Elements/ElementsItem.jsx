@@ -37,6 +37,7 @@ export function ElementsItem ({ elem, categories, elementsNature, natures, highl
             <div className="item-infos">
                 <div className="col-1">
                     <div className="font-medium">{elem.name}</div>
+                    <div className="text-sm">{elem.gender === "f" || elem.gender === "fp" ? "F" : "H" } - {elem.gender === "fp" || elem.gender === "hp" ? "Pluriel" : "Singulier"}</div>
                 </div>
                 <div className="col-2 text-gray-600 text-sm">
                     <div>{categoryName} {categoryName !== "" ? "/" : ""} {elem.familyString.toLowerCase()}</div>
