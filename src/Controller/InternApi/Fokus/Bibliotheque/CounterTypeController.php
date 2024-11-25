@@ -20,6 +20,8 @@ class CounterTypeController extends AbstractController
         $em = $fokusService->getEntityNameManager($client->getManager());
         $data = $em->getRepository(FkCounterType::class)->findAll();
 
+        dump($data);
+
         return $apiResponse->apiJsonResponse($data, FkCounterType::LIST);
     }
 }

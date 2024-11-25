@@ -3,17 +3,17 @@ import React, { Component } from "react";
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
-import { RoomsList } from "@userPages/Bibli/Rooms/RoomsList";
+import { CountersList } from "@userPages/Bibli/Counters/CountersList";
 
 import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
-const SESSION_PERPAGE = "project.perpage.fk_rooms";
-const SESSION_FILTERS = "project.filters.fk_rooms";
+const SESSION_PERPAGE = "project.perpage.fk_counters";
+const SESSION_FILTERS = "project.filters.fk_counters";
 
-export class Rooms extends Component {
+export class Counters extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -98,9 +98,9 @@ export class Rooms extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage} />
 
-					<RoomsList data={currentData}
-							   highlight={parseInt(highlight)}
-							   onModal={this.handleModal} />
+					<CountersList data={currentData}
+								  highlight={parseInt(highlight)}
+								  onModal={this.handleModal} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />

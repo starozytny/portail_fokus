@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
-
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
@@ -11,8 +9,6 @@ import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-
-const URL_GET_DATA = "intern_api_fokus_bibli_keys_list";
 
 const SESSION_PERPAGE = "project.perpage.fk_keys";
 const SESSION_FILTERS = "project.filters.fk_keys";
@@ -37,10 +33,10 @@ export class Keys extends Component {
 	}
 
 	handleGetData = () => {
-		const { numSociety, highlight } = this.props;
+		const { donnees, highlight } = this.props;
 		const { perPage, sorter, filters } = this.state;
 
-		List.getData(this, Routing.generate(URL_GET_DATA, {numSociety: numSociety}), perPage, sorter, highlight, filters, this.handleFilters);
+		List.setData(this, donnees, perPage, sorter, highlight, filters, this.handleFilters);
 	}
 
 	handleUpdateData = (currentData) => {

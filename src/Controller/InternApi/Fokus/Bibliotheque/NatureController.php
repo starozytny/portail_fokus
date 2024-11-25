@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/intern/api/fokus/bibli/counters', name: 'intern_api_fokus_bibli_counters_')]
+#[Route('/intern/api/fokus/bibli/natures', name: 'intern_api_fokus_bibli_natures_')]
 class NatureController extends AbstractController
 {
     #[Route('/list/{numSociety}', name: 'list', options: ['expose' => true], methods: 'GET')]
