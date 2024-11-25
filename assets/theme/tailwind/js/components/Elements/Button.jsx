@@ -40,6 +40,7 @@ export function Button ({ type, width, iconLeft, iconRight, isSubmit, onClick, c
 		red: 'bg-red-600 text-slate-50 hover:bg-red-500',
 		blue: 'bg-blue-600 text-slate-50 hover:bg-blue-500 ring-1 ring-inset ring-blue-600',
 		default: 'bg-white text-gray-900 hover:bg-gray-50 ring-1 ring-inset ring-gray-300',
+		color3: 'bg-color3 text-slate-50 hover:bg-color3/90 ring-1 ring-inset ring-color3',
 	}
 
 	return <button type={isSubmit ? "submit" : "button"} onClick={onClick}

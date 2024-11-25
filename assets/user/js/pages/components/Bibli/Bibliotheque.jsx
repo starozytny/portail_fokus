@@ -42,7 +42,7 @@ export class Bibliotheque extends Component {
 		return <>
 			<div className="grid grid-cols-2 gap-2 md:grid-cols-6">
 				{menu.map(item => {
-					return <Button type={item.id === pageId ? "blue" : "default"} key={item.id}
+					return <Button type={item.id === pageId ? "color3" : "default"} key={item.id}
 								   onClick={() => this.handleChangePage(item.id)}>
 						{item.label}
 					</Button>
