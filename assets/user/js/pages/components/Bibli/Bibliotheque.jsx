@@ -74,13 +74,13 @@ export class Bibliotheque extends Component {
 		let content;
 		switch (pageId){
 			case 2:
-				content = <Counters {...paramsPage} donnees={countersType} />;
+				content = <Counters {...paramsPage} donnees={countersType} key={pageId} />;
 				break;
 			case 1:
-				content = <Keys {...paramsPage} donnees={keysType} />;
+				content = <Keys {...paramsPage} donnees={keysType} key={pageId} />;
 				break;
 			default:
-				content = <Rooms {...paramsPage} donnees={rooms} />;
+				content = <Rooms {...paramsPage} donnees={rooms} key={pageId} />;
 				break;
 		}
 

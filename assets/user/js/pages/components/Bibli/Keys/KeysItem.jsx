@@ -22,8 +22,8 @@ export function KeysItem ({ elem, highlight, onModal })
                     {elem.isNative || elem.isUsed
                         ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
                         : <>
-                            <ButtonIcon type="default" icon="pencil" onClick={() => onModal('update', elem)}>Modifier</ButtonIcon>
-                            <ButtonIcon type="default" icon="trash" onClick={() => onModal('update', elem)}>Supprimer</ButtonIcon>
+                            <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                            <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
                         </>
                     }
                 </div>
