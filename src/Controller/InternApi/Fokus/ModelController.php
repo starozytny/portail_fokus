@@ -4,7 +4,9 @@ namespace App\Controller\InternApi\Fokus;
 
 use App\Entity\Fokus\FkCategory;
 use App\Entity\Fokus\FkElement;
+use App\Entity\Fokus\FkElementNature;
 use App\Entity\Fokus\FkModel;
+use App\Entity\Fokus\FkNature;
 use App\Entity\Fokus\FkRoom;
 use App\Service\ApiResponse;
 use App\Service\Fokus\FokusService;
@@ -26,17 +28,23 @@ class ModelController extends AbstractController
         $rooms = $em->getRepository(FkRoom::class)->findAll();
         $categories = $em->getRepository(FkCategory::class)->findAll();
         $elements = $em->getRepository(FkElement::class)->findAll();
+        $elementsNatures = $em->getRepository(FkElementNature::class)->findAll();
+        $natures = $em->getRepository(FkNature::class)->findAll();
 
         $data = $serializer->serialize($data, 'json', ['groups' => FkModel::LIST]);
         $rooms = $serializer->serialize($rooms, 'json', ['groups' => FkRoom::LIST]);
         $categories = $serializer->serialize($categories, 'json', ['groups' => FkCategory::LIST]);
         $elements = $serializer->serialize($elements, 'json', ['groups' => FkElement::LIST]);
+        $elementsNatures = $serializer->serialize($elementsNatures, 'json', ['groups' => FkElementNature::LIST]);
+        $natures = $serializer->serialize($natures, 'json', ['groups' => FkNature::LIST]);
 
         return $apiResponse->apiJsonResponseCustom([
             'donnees' => $data,
             'rooms' => $rooms,
             'categories' => $categories,
-            'elements' => $elements
+            'elements' => $elements,
+            'elementsNatures' => $elementsNatures,
+            'natures' => $natures,
         ]);
     }
 }

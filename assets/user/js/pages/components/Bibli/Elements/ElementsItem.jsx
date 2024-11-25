@@ -5,8 +5,9 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
 import { Badge } from "@tailwindComponents/Elements/Badge";
 import { ButtonIcon } from "@tailwindComponents/Elements/Button";
+import { Selector } from "@tailwindComponents/Elements/Selector";
 
-export function ElementsItem ({ elem, categories, elementsNatures, natures, highlight, onModal })
+export function ElementsItem ({ elem, categories, elementsNatures, natures, highlight, onModal, elementsSelected, onSelector })
 {
     const refItem = useRef(null);
 
@@ -36,37 +37,45 @@ export function ElementsItem ({ elem, categories, elementsNatures, natures, high
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1">
-                    <div className="font-medium">{elem.name}</div>
-                    <div className="text-sm">{elem.gender === "f" || elem.gender === "fp" ? "F" : "M" } - {elem.gender === "fp" || elem.gender === "hp" ? "Pluriel" : "Singulier"}</div>
+                    <div className="flex flex-row gap-4">
+                        <Selector elem={elem} elements={elementsSelected} onSelectors={onSelector} typeCheck={1} />
+                        <div>
+                            <div className="font-medium">{elem.name}</div>
+                            <div className="text-sm">{elem.gender === "f" || elem.gender === "fp" ? "F" : "M"} - {elem.gender === "fp" || elem.gender === "hp" ? "Pluriel" : "Singulier"}</div>
+                        </div>
+                    </div>
                 </div>
                 <div className="col-2 text-gray-600 text-sm">
                     <div>{categoryName} {categoryName !== "" ? "/" : ""} {elem.familyString.toLowerCase()}</div>
-                </div>
-                <div className="col-3 text-gray-600 text-sm">
-                    {variants.map((va, index) => {
-                        return <div key={index}>{va}</div>
-                    })}
-                </div>
-                <div className="col-4 text-gray-600 text-sm">
-                    {elemNatures.map((eln, index) => {
-                        return <div key={index}>{eln}</div>
-                    })}
-                </div>
-                <div className="col-5 actions">
-                    {elem.isNative || elem.isUsed
-                        ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
-                        : <>
-                            <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
-                            <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
-                        </>
-                    }
+                    </div>
+                    <div className="col-3 text-gray-600 text-sm">
+                        {variants.map((va, index) => {
+                            return <div key={index}>{va}</div>
+                        })}
+                    </div>
+                    <div className="col-4 text-gray-600 text-sm">
+                        {elemNatures.map((eln, index) => {
+                            return <div key={index}>{eln}</div>
+                        })}
+                    </div>
+                    <div className="col-5 actions">
+                        {onSelector
+                            ? null
+                            : (elem.isNative || elem.isUsed
+                                    ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
+                                    : <>
+                                        <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                                        <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
+                                    </>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-}
+        }
 
-ElementsItem.propTypes = {
+        ElementsItem.propTypes = {
     elem: PropTypes.object.isRequired,
     highlight: PropTypes.number,
 }

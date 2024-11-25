@@ -6,9 +6,16 @@ export class Selector extends Component {
 
         let isChecked = false;
         props.elements.forEach(el => {
-            if(el.id === props.elem.id){
-                isChecked = true;
+            if(props.typeCheck === 1){
+                if(el === props.elem.id){
+                    isChecked = true;
+                }
+            }else{
+                if(el.id === props.elem.id){
+                    isChecked = true;
+                }
             }
+
         })
 
         this.state = {

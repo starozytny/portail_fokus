@@ -33,6 +33,8 @@ export class Models extends Component {
 			rooms: [],
 			categories: [],
 			elements: [],
+			elementsNatures: [],
+			natures: [],
 		}
 
 		this.pagination = React.createRef();
@@ -64,6 +66,8 @@ export class Models extends Component {
 					rooms: JSON.parse(response.data.rooms),
 					categories: JSON.parse(response.data.categories),
 					elements: JSON.parse(response.data.elements),
+					elementsNatures: JSON.parse(response.data.elementsNatures),
+					natures: JSON.parse(response.data.natures),
 					currentPage: currentPage,
 					loadingData: false })
 			})
@@ -104,7 +108,7 @@ export class Models extends Component {
 
 	render () {
 		const { highlight } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage, rooms, categories, elements } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage, rooms, categories, elements, elementsNatures, natures } = this.state;
 
 		let itemsElement = [];
 		if(element){
@@ -149,6 +153,7 @@ export class Models extends Component {
 										 isForm={true}
 										 content={<ModelFormulaire context={element ? "update" : "create"} element={element ? element : null}
 																   rooms={rooms} categories={categories} elements={elements}
+																   elementsNatures={elementsNatures} natures={natures}
 																   identifiant="form-model" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>

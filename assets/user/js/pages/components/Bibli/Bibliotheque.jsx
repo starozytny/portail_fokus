@@ -22,7 +22,7 @@ export class Bibliotheque extends Component {
 		super(props);
 
 		this.state = {
-			pageId: props.pageId ? parseInt(props.pageId) : 5,
+			pageId: props.pageId ? parseInt(props.pageId) : 0,
 			highlight: props.highlight,
 			loadingData: true,
 			rooms: "[]",

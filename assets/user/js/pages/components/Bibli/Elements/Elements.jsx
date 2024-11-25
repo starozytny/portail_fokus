@@ -24,7 +24,7 @@ export class Elements extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-            perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
+            perPage: List.getSessionPerpage(SESSION_PERPAGE, props.onSelector ? 5 : 20),
 			currentPage: 0,
 			sorter: Sort.compareName,
 			filters: List.getSessionFilters(SESSION_FILTERS, [], props.highlight),
@@ -85,7 +85,7 @@ export class Elements extends Component {
 	}
 
 	render () {
-		const { pageId, highlight, categories, elementsNatures, natures } = this.props;
+		const { pageId, highlight, categories, elementsNatures, natures, elementsSelected, onSelector } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -99,11 +99,14 @@ export class Elements extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
-						<div className="md:w-[258px]">
-							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
-								Ajouter un élément
-							</Button>
-						</div>
+						{onSelector
+							? null
+							: <div className="md:w-[258px]">
+								<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+									Ajouter un élément
+								</Button>
+							</div>
+						}
 						<div className="w-full flex flex-row">
 							<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
 							<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas intitulé.." />
@@ -118,8 +121,10 @@ export class Elements extends Component {
 								  categories={categories}
 								  elementsNatures={elementsNatures}
 								  natures={natures}
+								  elementsSelected={elementsSelected}
 								  highlight={parseInt(highlight)}
-								  onModal={this.handleModal} />
+								  onModal={this.handleModal}
+								  onSelector={onSelector} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />

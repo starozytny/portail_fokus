@@ -14,6 +14,7 @@ import { getDisplayDetails } from "@userPages/Models/Models";
 import { Input } from "@tailwindComponents/Elements/Fields";
 import { Button, ButtonIcon } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
+import { Elements } from "@userPages/Bibli/Elements/Elements";
 
 const URL_INDEX_ELEMENTS = "user_models_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_bibli_aspects_create";
@@ -30,7 +31,7 @@ function getNameRoom (rooms, id){
 	return name;
 }
 
-export function ModelFormulaire ({ context, element, identifiant, rooms, categories, elements }) {
+export function ModelFormulaire ({ context, element, identifiant, rooms, categories, elements, elementsNatures, natures }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {
@@ -47,6 +48,8 @@ export function ModelFormulaire ({ context, element, identifiant, rooms, categor
 		rooms={rooms}
 		categories={categories}
 		elements={elements}
+		elementsNatures={elementsNatures}
+		natures={natures}
     />
 }
 
@@ -58,15 +61,18 @@ class Form extends Component {
 			name: props.name,
 			content: props.content,
 			errors: [],
+			element: null
 		}
 
 		this.room = React.createRef();
+		this.elements = React.createRef();
 	}
 
 	handleChange = (e) => { this.setState({ [e.currentTarget.name]: e.currentTarget.value }) }
 
-	handleModal = (identifiant) => {
+	handleModal = (identifiant, elem) => {
 		this[identifiant].current.handleClick();
+		this.setState({ element: elem })
 	}
 
 	handleAddRoom = (roomId) => {
@@ -77,7 +83,6 @@ class Form extends Component {
 
 	handleRemoveRoom = (identifiant, isUid) => {
 		const { content } = this.state;
-
 
 		let nContent = [];
 		if(isUid){
@@ -120,8 +125,8 @@ class Form extends Component {
 	}
 
 	render () {
-		const { context, identifiant, rooms, categories, elements } = this.props;
-		const { errors, name, content } = this.state;
+		const { context, identifiant, rooms, categories, elements, elementsNatures, natures } = this.props;
+		const { element, errors, name, content } = this.state;
 
 		let params0 = { errors: errors, onChange: this.handleChange };
 
@@ -197,7 +202,7 @@ class Form extends Component {
 															{itemsElement}
 														</div>
 														<div className="col-3 actions">
-															<ButtonIcon type="default" icon="pencil">Modifier</ButtonIcon>
+															<ButtonIcon type="default" icon="pencil" onClick={() => this.handleModal('elements', elem)}>Modifier</ButtonIcon>
 															<ButtonIcon type="default" icon="trash"
 																		onClick={() => this.handleRemoveRoom(elem.uid ? elem.uid : elem.id, !!elem.uid)}>
 																Supprimer
@@ -223,10 +228,67 @@ class Form extends Component {
 				</Button>
 			</div>
 
-			{createPortal(<Modal ref={this.room} identifiant='model-room' maxWidth={568} margin={1} zIndex={41}
+			{createPortal(<Modal ref={this.room} identifiant='model-room' maxWidth={568} margin={2} zIndex={41}
 								 title="Sélectionner une/des pièce.s"
 								 content={<Rooms donnees={JSON.stringify(rooms)} roomsSelected={content} onAddRoom={this.handleAddRoom} />}
 			/>, document.body)}
+
+			{createPortal(<Modal ref={this.elements} identifiant='model-elements' maxWidth={1280} margin={2} zIndex={41}
+								 title={element ? `Modifier ${getNameRoom(rooms, element.id)}` : ""}
+								 content={element
+									 ? <Categories element={element} categories={categories} elements={elements}
+												   elementsNatures={elementsNatures} natures={natures} />
+									 : null
+								}
+			/>, document.body)}
 		</>
+	}
+}
+
+class Categories extends Component {
+	constructor (props) {
+		super(props);
+
+		this.state = {
+			catId: null
+		}
+	}
+
+	handleChangeCat = (id) => { this.setState({ catId: id }) }
+
+	handleSelector = () => {  }
+
+	render () {
+		const { element, categories, elements, elementsNatures, natures } = this.props;
+		const { catId } = this.state;
+
+		let elementsSelected = JSON.parse(element.elements);
+
+		let nElements = [];
+		if(catId){
+			elements.forEach(elem => {
+				if(elem.category === catId){
+					nElements.push(elem);
+				}
+			})
+		}
+
+		return <div>
+			<div className="grid grid-cols-2 gap-2 md:grid-cols-6">
+				{categories.map(item => {
+					return <Button type={item.id === catId ? "color3" : "default"} key={item.id}
+								   onClick={() => this.handleChangeCat(item.id)}>
+						{item.name}
+					</Button>
+				})}
+			</div>
+			<div className="mt-4">
+				{catId
+					? <Elements donnees={JSON.stringify(nElements)} categories={categories} elementsNatures={elementsNatures} natures={natures}
+								elementsSelected={elementsSelected} onSelector={this.handleSelector} key={catId} />
+					: null
+				}
+			</div>
+		</div>
 	}
 }
