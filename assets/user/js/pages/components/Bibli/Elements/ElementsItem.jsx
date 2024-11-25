@@ -6,7 +6,7 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 import { Badge } from "@tailwindComponents/Elements/Badge";
 import { ButtonIcon } from "@tailwindComponents/Elements/Button";
 
-export function ElementsItem ({ elem, categories, elementsNature, natures, highlight, onModal })
+export function ElementsItem ({ elem, categories, elementsNatures, natures, highlight, onModal })
 {
     const refItem = useRef(null);
 
@@ -22,7 +22,7 @@ export function ElementsItem ({ elem, categories, elementsNature, natures, highl
     let variants = elem.variants !== "" ? JSON.parse(elem.variants) : [];
 
     let elemNatures = [];
-    elementsNature.forEach(eln => {
+    elementsNatures.forEach(eln => {
         if(eln.elementId === elem.id){
             natures.forEach(nat => {
                 if(eln.natureId === nat.id){
@@ -37,7 +37,7 @@ export function ElementsItem ({ elem, categories, elementsNature, natures, highl
             <div className="item-infos">
                 <div className="col-1">
                     <div className="font-medium">{elem.name}</div>
-                    <div className="text-sm">{elem.gender === "f" || elem.gender === "fp" ? "F" : "H" } - {elem.gender === "fp" || elem.gender === "hp" ? "Pluriel" : "Singulier"}</div>
+                    <div className="text-sm">{elem.gender === "f" || elem.gender === "fp" ? "F" : "M" } - {elem.gender === "fp" || elem.gender === "hp" ? "Pluriel" : "Singulier"}</div>
                 </div>
                 <div className="col-2 text-gray-600 text-sm">
                     <div>{categoryName} {categoryName !== "" ? "/" : ""} {elem.familyString.toLowerCase()}</div>

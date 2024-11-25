@@ -33,7 +33,7 @@ class BibliController extends AbstractController
         $aspects = $em->getRepository(FkAspect::class)->findAll();
         $elements = $em->getRepository(FkElement::class)->findAll();
         $categories = $em->getRepository(FkCategory::class)->findAll();
-        $elementsNature = $em->getRepository(FkElementNature::class)->findAll();
+        $elementsNatures = $em->getRepository(FkElementNature::class)->findAll();
 
         $rooms = $serializer->serialize($rooms, 'json', ['groups' => FkRoom::LIST]);
         $keysType = $serializer->serialize($keysType, 'json', ['groups' => FkKeyType::LIST]);
@@ -42,7 +42,7 @@ class BibliController extends AbstractController
         $aspects = $serializer->serialize($aspects, 'json', ['groups' => FkAspect::LIST]);
         $elements = $serializer->serialize($elements, 'json', ['groups' => FkElement::LIST]);
         $categories = $serializer->serialize($categories, 'json', ['groups' => FkCategory::LIST]);
-        $elementsNature = $serializer->serialize($elementsNature, 'json', ['groups' => FkElementNature::LIST]);
+        $elementsNatures = $serializer->serialize($elementsNatures, 'json', ['groups' => FkElementNature::LIST]);
 
         return $apiResponse->apiJsonResponseCustom([
             'rooms' => $rooms,
@@ -52,7 +52,7 @@ class BibliController extends AbstractController
             'aspects' => $aspects,
             'elements' => $elements,
             'categories' => $categories,
-            'elementsNature' => $elementsNature,
+            'elementsNatures' => $elementsNatures,
         ]);
     }
 }

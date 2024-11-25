@@ -1,8 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 
-import parse from "html-react-parser";
-
 import Cleave from "cleave.js/react";
 
 import Sort from "@commonFunctions/sort";

@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { ElementsItem } from "@userPages/Bibli/Elements/ElementsItem";
 
-export function ElementsList ({ data, categories, elementsNature, natures, highlight, onModal }) {
+export function ElementsList ({ data, categories, elementsNatures, natures, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-elements">
@@ -24,7 +24,7 @@ export function ElementsList ({ data, categories, elementsNature, natures, highl
                 {data.length > 0
                     ? data.map((elem) => {
                         return <ElementsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal}
-                                             categories={categories} elementsNature={elementsNature} natures={natures} />
+                                             categories={categories} elementsNatures={elementsNatures} natures={natures} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

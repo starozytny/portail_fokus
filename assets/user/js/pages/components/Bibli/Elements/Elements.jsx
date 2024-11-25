@@ -85,7 +85,7 @@ export class Elements extends Component {
 	}
 
 	render () {
-		const { pageId, highlight, categories, elementsNature, natures } = this.props;
+		const { pageId, highlight, categories, elementsNatures, natures } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -116,7 +116,7 @@ export class Elements extends Component {
 
 					<ElementsList data={currentData}
 								  categories={categories}
-								  elementsNature={elementsNature}
+								  elementsNatures={elementsNatures}
 								  natures={natures}
 								  highlight={parseInt(highlight)}
 								  onModal={this.handleModal} />
@@ -130,10 +130,11 @@ export class Elements extends Component {
 						Êtes-vous sûr de vouloir supprimer définitivement cet élément : <b>{element ? element.name : ""}</b> ?
 					</ModalDelete>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-elements' maxWidth={568}
+					{createPortal(<Modal ref={this.form} identifiant='form-elements' maxWidth={568} margin={5}
 										 title={element ? `Modifier ${element.name}` : "Ajouter un élément"}
 										 isForm={true}
 										 content={<ElementFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	 categories={categories} elementsNatures={elementsNatures} natures={natures}
 																	 pageId={pageId} identifiant="form-elements" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
