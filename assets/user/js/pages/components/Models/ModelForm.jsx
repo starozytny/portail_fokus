@@ -75,6 +75,20 @@ class Form extends Component {
 		this.setState({ content: [...[{ uid: uid(), id: roomId, elements: '[3, 4, 5, 6, 7, 8, 16, 17, 18]' }], ...content] })
 	}
 
+	handleRemoveRoom = (identifiant, isUid) => {
+		const { content } = this.state;
+
+
+		let nContent = [];
+		if(isUid){
+			nContent = content.filter(elem => {return elem.uid !== identifiant});
+		}else{
+			nContent = content.filter(elem => {return elem.id !== identifiant});
+		}
+
+		this.setState({ content: nContent });
+	}
+
 	handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -184,7 +198,10 @@ class Form extends Component {
 														</div>
 														<div className="col-3 actions">
 															<ButtonIcon type="default" icon="pencil">Modifier</ButtonIcon>
-															<ButtonIcon type="default" icon="trash">Supprimer</ButtonIcon>
+															<ButtonIcon type="default" icon="trash"
+																		onClick={() => this.handleRemoveRoom(elem.uid ? elem.uid : elem.id, !!elem.uid)}>
+																Supprimer
+															</ButtonIcon>
 														</div>
 													</div>
 												</div>
