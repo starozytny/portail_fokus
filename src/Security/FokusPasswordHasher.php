@@ -28,6 +28,11 @@ class FokusPasswordHasher implements PasswordHasherInterface
             return false;
         }
 
+        $hashed = hash("sha512", $this->salt . $plainPassword);
+        if($hashed !== $hashedPassword) {
+            return false;
+        }
+
         return true;
     }
 
