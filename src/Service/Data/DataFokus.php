@@ -2,6 +2,7 @@
 
 namespace App\Service\Data;
 
+use App\Entity\Fokus\FkRoom;
 use App\Entity\Fokus\FkUser;
 use App\Service\SanitizeData;
 
@@ -24,6 +25,14 @@ class DataFokus
             'password' => $data->password,
             'email' => $this->sanitizeData->cleanFullFokus($data->email),
             'user_tag' => mb_strtoupper($userTag)
+        ];
+    }
+
+    public function setDataRoom(?FkRoom $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'name' => $this->sanitizeData->cleanForFokus($data->name),
         ];
     }
 }

@@ -114,6 +114,8 @@ class FokusApi
         }
     }
 
+    // ------- User
+
     public function userCreate($data)
     {
         return $this->callApi("POST", "add_user/", $data);
@@ -132,5 +134,22 @@ class FokusApi
     public function userDelete(FkUser $obj)
     {
         return $this->callApi("GET", "delete_user/" . $obj->getId());
+    }
+
+    // ------- Bibli
+
+    public function bibliCreate($entityName, $data)
+    {
+        return $this->callApi("POST", "library/add_" . $entityName . "/", $data);
+    }
+
+    public function bibliUpdate($entityName, $data, $id)
+    {
+        return $this->callApi("POST", "library/edit_" . $entityName . "/" . $id, $data);
+    }
+
+    public function bibliDelete($entityName, $id)
+    {
+        return $this->callApi("GET", "library/delete_" . $entityName . "/" . $id);
     }
 }

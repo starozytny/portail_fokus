@@ -1,14 +1,21 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
 import { RoomsList } from "@userPages/Bibli/Rooms/RoomsList";
+import { RoomFormulaire } from "@userPages/Bibli/Rooms/RoomForm";
 
+import { Modal } from "@tailwindComponents/Elements/Modal";
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
+import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+
+const URL_DELETE_ELEMENT = "intern_api_fokus_bibli_rooms_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_rooms";
 const SESSION_FILTERS = "project.filters.fk_rooms";
@@ -26,6 +33,8 @@ export class Rooms extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.delete = React.createRef();
+		this.form = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -77,7 +86,7 @@ export class Rooms extends Component {
 
 	render () {
 		const { highlight } = this.props;
-		const { data, currentData, loadingData, perPage, currentPage, filters } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
 			{ value: 0, id: "f-0", label: "Natif" },
@@ -89,9 +98,16 @@ export class Rooms extends Component {
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2 flex flex-row">
-						<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
-						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas intitulé.." />
+					<div className="mb-2 flex flex-col gap-4 md:flex-row">
+						<div className="md:w-[258px]">
+							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+								Ajouter une pièce
+							</Button>
+						</div>
+						<div className="w-full flex flex-row">
+							<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
+							<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas intitulé.." />
+						</div>
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
@@ -104,6 +120,20 @@ export class Rooms extends Component {
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+
+					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+											   title="Supprimer cette pièce" msgSuccess="Pièce supprimée."
+											   onUpdateList={this.handleUpdateList}>
+						Êtes-vous sûr de vouloir supprimer définitivement cette pièce : <b>{element ? element.name : ""}</b> ?
+					</ModalDelete>, document.body)}
+
+					{createPortal(<Modal ref={this.form} identifiant='form-rooms' maxWidth={568}
+										 title={element ? `Modifier ${element.name}` : "Ajouter une pièce"}
+										 isForm={true}
+										 content={<RoomFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																  identifiant="form-rooms" key={element ? element.id : 0} />}
+					/>, document.body)}
 				</>
 			}
 		</>
