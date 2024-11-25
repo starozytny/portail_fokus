@@ -108,53 +108,7 @@ export class Models extends Component {
 
 		let itemsElement = [];
 		if(element){
-			let elementContent = JSON.parse(element.content);
-
-			elementContent.forEach((elem, index) => {
-				let elementName = "";
-				rooms.forEach(r => {
-					if(r.id === elem.id){
-						elementName = r.name;
-					}
-				})
-
-				let elementCat = [];
-				categories.forEach(cat => {
-					let catData = [];
-					JSON.parse(elem.elements).forEach(elemId => {
-						let itemElement = null;
-						elements.forEach(el => {
-							if(el.id === elemId){
-								itemElement = el;
-							}
-						})
-
-						if(itemElement.category === cat.id){
-							catData.push(<div key={cat.id + "-" + itemElement.id}>- {itemElement.name}</div>)
-						}
-					})
-
-					if(catData.length !== 0){
-						elementCat.push({
-							'id': cat.id,
-							'name': cat.name,
-							'data': catData
-						});
-					}
-				})
-
-				itemsElement.push(<div className="bg-white border rounded-md" key={index}>
-					<div className="text-lg font-semibold border-b px-4 pt-2 pb-1 bg-color0 rounded-t-md text-white">{elementName}</div>
-					<div className="p-4 flex gap-2">
-						{elementCat.map(elCat => {
-							return <div className="w-full" key={elCat.id}>
-								<div className="font-medium">{elCat.name}</div>
-								<div className="pl-2 text-gray-600">{elCat.data}</div>
-							</div>
-						})}
-					</div>
-				</div>)
-			})
+			itemsElement = getDisplayDetails(element, rooms, categories, elements);
 		}
 
 		return <>
@@ -190,15 +144,68 @@ export class Models extends Component {
 										 </div>}
 					/>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-model' maxWidth={768} margin={5}
+					{createPortal(<Modal ref={this.form} identifiant='form-model' maxWidth={768} margin={1}
 										 title={element ? `Modifier ${element.name}` : "Ajouter un modèle"}
 										 isForm={true}
 										 content={<ModelFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																   rooms={rooms}
+																   rooms={rooms} categories={categories} elements={elements}
 																   identifiant="form-model" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
 			}
 		</>
 	}
+}
+
+function getDisplayDetails (element, rooms, categories, elements) {
+	let itemsElement = [];
+	let elementContent = JSON.parse(element.content);
+
+	elementContent.forEach((elem, index) => {
+		let elementName = "";
+		rooms.forEach(r => {
+			if(r.id === elem.id){
+				elementName = r.name;
+			}
+		})
+
+		let elementCat = [];
+		categories.forEach(cat => {
+			let catData = [];
+			JSON.parse(elem.elements).forEach(elemId => {
+				let itemElement = null;
+				elements.forEach(el => {
+					if(el.id === elemId){
+						itemElement = el;
+					}
+				})
+
+				if(itemElement.category === cat.id){
+					catData.push(<div key={cat.id + "-" + itemElement.id}>- {itemElement.name}</div>)
+				}
+			})
+
+			if(catData.length !== 0){
+				elementCat.push({
+					'id': cat.id,
+					'name': cat.name,
+					'data': catData
+				});
+			}
+		})
+
+		itemsElement.push(<div className="bg-white border rounded-md" key={index}>
+			<div className="text-lg font-semibold border-b px-4 pt-2 pb-1 bg-color0 rounded-t-md text-white">{elementName}</div>
+			<div className="p-4 flex gap-2">
+				{elementCat.map(elCat => {
+					return <div className="w-full" key={elCat.id}>
+						<div className="font-medium">{elCat.name}</div>
+						<div className="pl-2 text-gray-600">{elCat.data}</div>
+					</div>
+				})}
+			</div>
+		</div>)
+	})
+
+	return itemsElement;
 }

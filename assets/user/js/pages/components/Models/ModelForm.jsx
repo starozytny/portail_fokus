@@ -9,9 +9,10 @@ import Formulaire from "@commonFunctions/formulaire";
 import Validateur from "@commonFunctions/validateur"
 
 import { Rooms } from "@userPages/Bibli/Rooms/Rooms";
+import { getDisplayDetails } from "@userPages/Models/Models";
 
 import { Input } from "@tailwindComponents/Elements/Fields";
-import { Button } from "@tailwindComponents/Elements/Button";
+import { Button, ButtonIcon } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
 
 const URL_INDEX_ELEMENTS = "user_models_index";
@@ -29,31 +30,23 @@ function getNameRoom (rooms, id){
 	return name;
 }
 
-export function ModelFormulaire ({ context, element, identifiant, rooms }) {
+export function ModelFormulaire ({ context, element, identifiant, rooms, categories, elements }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
-	let content = [];
 	if (context === "update") {
 		url = Routing.generate(URL_UPDATE_ELEMENT, { id: element.id });
-
-		JSON.parse(element.content).forEach(item => {
-			content.push({
-				uid: uid(),
-				id: item.id,
-				name: getNameRoom(rooms, item.id),
-				elements: item.elements
-			})
-		})
 	}
 
 	return  <Form
         context={context}
         url={url}
         name={element ? Formulaire.setValue(element.name) : ""}
-		content={content}
+		content={element ? JSON.parse(element.content) : []}
 
 		identifiant={identifiant}
 		rooms={rooms}
+		categories={categories}
+		elements={elements}
     />
 }
 
@@ -77,12 +70,9 @@ class Form extends Component {
 	}
 
 	handleAddRoom = (roomId) => {
-		const { rooms } = this.props;
 		const { content } = this.state;
 
-		let nContent = content;
-		nContent.push({ uid: uid(), id: roomId, name: getNameRoom(rooms, roomId), elements: '[3, 4, 5, 6, 7, 8, 16, 17, 18]' });
-		this.setState({ content: nContent })
+		this.setState({ content: [...[{ uid: uid(), id: roomId, elements: '[3, 4, 5, 6, 7, 8, 16, 17, 18]' }], ...content] })
 	}
 
 	handleSubmit = (e) => {
@@ -116,7 +106,7 @@ class Form extends Component {
 	}
 
 	render () {
-		const { context, identifiant, rooms } = this.props;
+		const { context, identifiant, rooms, categories, elements } = this.props;
 		const { errors, name, content } = this.state;
 
 		let params0 = { errors: errors, onChange: this.handleChange };
@@ -129,6 +119,82 @@ class Form extends Component {
 					</div>
 					<div>
 						<Button type="default" onClick={() => this.handleModal('room')}>Sélectionner une/des pièce.s</Button>
+					</div>
+					<div>
+						{content.length !== 0
+							? <div className="list my-4">
+								<div className="list-table bg-white rounded-md shadow">
+									<div className="items items-models-rooms">
+										<div className="item item-header uppercase text-sm text-gray-600">
+											<div className="item-content">
+												<div className="item-infos">
+													<div className="col-1">Pièces</div>
+													<div className="col-2">Éléments</div>
+													<div className="col-3 actions" />
+												</div>
+											</div>
+										</div>
+
+										{content.map((elem, index) => {
+
+											let itemsElement = [];
+
+											let elementCat = [];
+											categories.forEach(cat => {
+												let catData = [];
+												JSON.parse(elem.elements).forEach(elemId => {
+													let itemElement = null;
+													elements.forEach(el => {
+														if(el.id === elemId){
+															itemElement = el;
+														}
+													})
+
+													if(itemElement.category === cat.id){
+														catData.push(<div key={cat.id + "-" + itemElement.id}>- {itemElement.name}</div>)
+													}
+												})
+
+												if(catData.length !== 0){
+													elementCat.push({
+														'id': cat.id,
+														'name': cat.name,
+														'data': catData
+													});
+												}
+											})
+
+											itemsElement.push(<div className="flex flex-col gap-2" key={index}>
+												{elementCat.map(elCat => {
+													return <div className="w-full" key={elCat.id}>
+														<div className="font-medium">{elCat.name} <span className="text-xs">({elCat.data.length})</span></div>
+														<div className="pl-2 text-gray-600">{elCat.data}</div>
+													</div>
+												})}
+											</div>)
+
+											return <div className="item border-t hover:bg-slate-50" key={index}>
+												<div className="item-content">
+													<div className="item-infos">
+														<div className="col-1">
+															{getNameRoom(rooms, elem.id)}
+														</div>
+														<div className="col-2">
+															{itemsElement}
+														</div>
+														<div className="col-3 actions">
+															<ButtonIcon type="default" icon="pencil">Modifier</ButtonIcon>
+															<ButtonIcon type="default" icon="trash">Supprimer</ButtonIcon>
+														</div>
+													</div>
+												</div>
+											</div>
+										})}
+									</div>
+								</div>
+							</div>
+							: null
+						}
 					</div>
 				</div>
 			</div>
