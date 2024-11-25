@@ -82,14 +82,19 @@ class DataFokus
         $gender = $gender == 0 ? "m" : "f";
         $gender = $gender . (($ortho == 0) ? "" : "p");
 
+
+        $variants = [];
+        foreach($data->variants as $variant){
+            $variants[] = $this->sanitizeData->cleanForFokus($variant);
+        }
+
         return [
             'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
-            'category' => $this->sanitizeData->cleanForFokus($data->category),
-            'family' => $this->sanitizeData->cleanForFokus($data->family),
+            'category' => $data->category,
+            'family' => $data->family,
             'gender' => $gender,
-            'variants' => $data->variants,
-            'natures' => $data->elemNatures,
+            'variants' => $variants,
         ];
     }
 }

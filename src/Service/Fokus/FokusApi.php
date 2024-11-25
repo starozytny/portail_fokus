@@ -155,4 +155,9 @@ class FokusApi
     {
         return $this->callApi("GET", "library/delete_" . $entityName . "/" . $id);
     }
+
+    public function bibliUpdateElementNature($data, $id)
+    {
+        return $this->callApi("POST", "library/edit_natures/" . $id, $data);
+    }
 }

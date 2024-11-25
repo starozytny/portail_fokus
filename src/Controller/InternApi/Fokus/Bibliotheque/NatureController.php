@@ -46,7 +46,7 @@ class NatureController extends AbstractController
             if($result == 409){
                 return $apiResponse->apiJsonResponseBadRequest('Cette nature existe déjà.');
             }
-            return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[NF0001] Une erreur est survenue.');
         }
 
         $obj = $em->getRepository(FkNature::class)->findOneBy(['name' => $dataToSend['name']]);

@@ -46,7 +46,7 @@ class KeyTypeController extends AbstractController
             if($result == 409){
                 return $apiResponse->apiJsonResponseBadRequest('Cette clé existe déjà.');
             }
-            return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[KF0001] Une erreur est survenue.');
         }
 
         $obj = $em->getRepository(FkKeyType::class)->findOneBy(['name' => $dataToSend['name']]);

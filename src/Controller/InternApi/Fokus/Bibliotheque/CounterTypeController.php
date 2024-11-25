@@ -47,7 +47,7 @@ class CounterTypeController extends AbstractController
             if($result == 409){
                 return $apiResponse->apiJsonResponseBadRequest('Ce compteur existe déjà.');
             }
-            return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[CF0001] Une erreur est survenue.');
         }
 
         $obj = $em->getRepository(FkCounterType::class)->findOneBy(['name' => $dataToSend['name']]);

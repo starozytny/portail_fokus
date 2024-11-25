@@ -22,6 +22,8 @@ class ElementController extends AbstractController
         $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
         $data = json_decode($request->getContent());
 
+        dump($data);
+
         if ($data === null) {
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
@@ -37,16 +39,22 @@ class ElementController extends AbstractController
                 ]]);
             }
 
-            $result = $fokusApi->bibliCreate('aspect', $dataToSend);
+            $result = $fokusApi->bibliCreate('element', $dataToSend);
         } else {
-            $result = $fokusApi->bibliUpdate('aspect', $dataToSend, $obj->getId());
+            $result = $fokusApi->bibliUpdate('element', $dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){
             if($result == 409){
                 return $apiResponse->apiJsonResponseBadRequest('Cet élément existe déjà.');
             }
-            return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[EF0001] Une erreur est survenue.');
+        }
+
+        $result = $fokusApi->bibliUpdateElementNature(['natures' => $data->elemNatures], $obj->getId());
+
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('[EF0002] Une erreur est survenue.');
         }
 
         $obj = $em->getRepository(FkElement::class)->findOneBy(['name' => $dataToSend['name']]);

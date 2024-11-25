@@ -46,7 +46,7 @@ class RoomController extends AbstractController
             if($result == 409){
                 return $apiResponse->apiJsonResponseBadRequest('Cette pièce existe déjà.');
             }
-            return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[RF0001] Une erreur est survenue.');
         }
 
         $obj = $em->getRepository(FkRoom::class)->findOneBy(['name' => $dataToSend['name']]);
