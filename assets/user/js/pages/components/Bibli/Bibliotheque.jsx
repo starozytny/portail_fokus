@@ -22,15 +22,17 @@ export class Bibliotheque extends Component {
 		super(props);
 
 		this.state = {
-			pageId: props.pageId ? parseInt(props.pageId) : 0,
+			pageId: props.pageId ? parseInt(props.pageId) : 5,
 			highlight: props.highlight,
 			loadingData: true,
-			rooms: [],
-			keysType: [],
-			countersType: [],
-			natures: [],
-			aspects: [],
-			elements: [],
+			rooms: "[]",
+			keysType: "[]",
+			countersType: "[]",
+			natures: "[]",
+			aspects: "[]",
+			elements: "[]",
+			categories: [],
+			elementsNature: [],
 		}
 	}
 
@@ -49,6 +51,8 @@ export class Bibliotheque extends Component {
 					natures: data.natures,
 					aspects: data.aspects,
 					elements: data.elements,
+					categories: JSON.parse(data.categories),
+					elementsNature: JSON.parse(data.elementsNature),
 					loadingData: false
 				})
 			})
@@ -61,7 +65,7 @@ export class Bibliotheque extends Component {
 	}
 
 	render () {
-		const { loadingData, pageId, highlight, rooms, keysType, countersType, natures, aspects, elements } = this.state;
+		const { loadingData, pageId, highlight, rooms, keysType, countersType, natures, aspects, elements, categories, elementsNature } = this.state;
 
 		let menu = [
 			{ id: 0, label: "Pièces" },
@@ -77,7 +81,8 @@ export class Bibliotheque extends Component {
 		let content;
 		switch (pageId){
 			case 5:
-				content = <Elements {...paramsPage} donnees={elements} key={pageId} />;
+				content = <Elements {...paramsPage} donnees={elements} key={pageId}
+									categories={categories} elementsNature={elementsNature} natures={JSON.parse(natures)} />;
 				break;
 			case 4:
 				content = <Aspects {...paramsPage} donnees={aspects} key={pageId} />;

@@ -85,7 +85,7 @@ export class Elements extends Component {
 	}
 
 	render () {
-		const { pageId, highlight } = this.props;
+		const { pageId, highlight, categories, elementsNature, natures } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -115,6 +115,9 @@ export class Elements extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<ElementsList data={currentData}
+								  categories={categories}
+								  elementsNature={elementsNature}
+								  natures={natures}
 								  highlight={parseInt(highlight)}
 								  onModal={this.handleModal} />
 

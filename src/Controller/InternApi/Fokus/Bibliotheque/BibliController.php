@@ -3,8 +3,10 @@
 namespace App\Controller\InternApi\Fokus\Bibliotheque;
 
 use App\Entity\Fokus\FkAspect;
+use App\Entity\Fokus\FkCategory;
 use App\Entity\Fokus\FkCounterType;
 use App\Entity\Fokus\FkElement;
+use App\Entity\Fokus\FkElementNature;
 use App\Entity\Fokus\FkKeyType;
 use App\Entity\Fokus\FkNature;
 use App\Entity\Fokus\FkRoom;
@@ -30,6 +32,8 @@ class BibliController extends AbstractController
         $natures = $em->getRepository(FkNature::class)->findAll();
         $aspects = $em->getRepository(FkAspect::class)->findAll();
         $elements = $em->getRepository(FkElement::class)->findAll();
+        $categories = $em->getRepository(FkCategory::class)->findAll();
+        $elementsNature = $em->getRepository(FkElementNature::class)->findAll();
 
         $rooms = $serializer->serialize($rooms, 'json', ['groups' => FkRoom::LIST]);
         $keysType = $serializer->serialize($keysType, 'json', ['groups' => FkKeyType::LIST]);
@@ -37,7 +41,8 @@ class BibliController extends AbstractController
         $natures = $serializer->serialize($natures, 'json', ['groups' => FkNature::LIST]);
         $aspects = $serializer->serialize($aspects, 'json', ['groups' => FkAspect::LIST]);
         $elements = $serializer->serialize($elements, 'json', ['groups' => FkElement::LIST]);
-
+        $categories = $serializer->serialize($categories, 'json', ['groups' => FkCategory::LIST]);
+        $elementsNature = $serializer->serialize($elementsNature, 'json', ['groups' => FkElementNature::LIST]);
 
         return $apiResponse->apiJsonResponseCustom([
             'rooms' => $rooms,
@@ -46,6 +51,8 @@ class BibliController extends AbstractController
             'natures' => $natures,
             'aspects' => $aspects,
             'elements' => $elements,
+            'categories' => $categories,
+            'elementsNature' => $elementsNature,
         ]);
     }
 }

@@ -151,4 +151,12 @@ class FkElement
 
         return $this;
     }
+
+    #[Groups(['fk_element_list'])]
+    public function getFamilyString(): string
+    {
+        $values = ["Classique", "Fonctionnel", "Électrique", "Sanitaire"];
+
+        return $values[$this->family];
+    }
 }
