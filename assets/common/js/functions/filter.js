@@ -7,6 +7,15 @@ function process(dataImmuable, filters, property) {
             filters.forEach(filter => {
                 let push = false;
                 switch (property){
+                    case "bibli":
+                        if(filter === 0){
+                            if(el.isNative) push = true;
+                        } else if(filter === 1){
+                            if(el.isUsed) push = true;
+                        } else {
+                            if(!el.isNative && !el.isUsed) push = true;
+                        }
+                        break;
                     default:
                         if(filter === el[property]){
                             push = true;
