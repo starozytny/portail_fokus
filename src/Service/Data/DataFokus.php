@@ -76,9 +76,20 @@ class DataFokus
 
     public function setDataElement(?FkElement $obj, $data): array
     {
+        $gender = $this->sanitizeData->cleanForFokus($data->gender);
+        $ortho = $this->sanitizeData->cleanForFokus($data->ortho);
+
+        $gender = $gender == 0 ? "m" : "f";
+        $gender = $gender . (($ortho == 0) ? "" : "p");
+
         return [
             'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
+            'category' => $this->sanitizeData->cleanForFokus($data->category),
+            'family' => $this->sanitizeData->cleanForFokus($data->family),
+            'gender' => $gender,
+            'variants' => $data->variants,
+            'natures' => $data->elemNatures,
         ];
     }
 }
