@@ -5,10 +5,10 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { KeysItem } from "@userPages/Bibli/Keys/KeysItem";
 
-export function KeysList ({ data, highlight, onModal }) {
+export function NaturesList ({ data, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
-            <div className="items items-keys">
+            <div className="items items-natures">
                 <div className="item item-header uppercase text-sm text-gray-600">
                     <div className="item-content">
                         <div className="item-infos">
@@ -31,7 +31,7 @@ export function KeysList ({ data, highlight, onModal }) {
     </div>
 }
 
-KeysList.propTypes = {
+NaturesList.propTypes = {
     data: PropTypes.array.isRequired,
     highlight: PropTypes.number,
 }

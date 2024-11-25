@@ -4,8 +4,8 @@ import { createPortal } from "react-dom";
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
-import { KeysList } from "@userPages/Bibli/Keys/KeysList";
-import { KeyFormulaire } from "@userPages/Bibli/Keys/KeyForm";
+import { NaturesList } from "@userPages/Bibli/Natures/NaturesList";
+import { NatureFormulaire } from "@userPages/Bibli/Natures/NatureForm";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Button } from "@tailwindComponents/Elements/Button";
@@ -15,12 +15,12 @@ import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
-const URL_DELETE_ELEMENT = "intern_api_fokus_bibli_keys_delete";
+const URL_DELETE_ELEMENT = "intern_api_fokus_bibli_natures_delete";
 
-const SESSION_PERPAGE = "project.perpage.fk_keys";
-const SESSION_FILTERS = "project.filters.fk_keys";
+const SESSION_PERPAGE = "project.perpage.fk_natures";
+const SESSION_FILTERS = "project.filters.fk_natures";
 
-export class Keys extends Component {
+export class Natures extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -101,7 +101,7 @@ export class Keys extends Component {
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
 						<div className="md:w-[258px]">
 							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
-								Ajouter une clé
+								Ajouter une nature
 							</Button>
 						</div>
 						<div className="w-full flex flex-row">
@@ -114,24 +114,24 @@ export class Keys extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage} />
 
-					<KeysList data={currentData}
-							  highlight={parseInt(highlight)}
-							  onModal={this.handleModal} />
+					<NaturesList data={currentData}
+								 highlight={parseInt(highlight)}
+								 onModal={this.handleModal} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
 					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
-											   title="Supprimer cette clé" msgSuccess="Clé supprimée."
+											   title="Supprimer cette nature" msgSuccess="Nature supprimée."
 											   onUpdateList={this.handleUpdateList}>
-						Êtes-vous sûr de vouloir supprimer définitivement cette clé : <b>{element ? element.name : ""}</b> ?
+						Êtes-vous sûr de vouloir supprimer définitivement cette nature : <b>{element ? element.name : ""}</b> ?
 					</ModalDelete>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-keys' maxWidth={568}
-										 title={element ? `Modifier ${element.name}` : "Ajouter une clé"}
+					{createPortal(<Modal ref={this.form} identifiant='form-natures' maxWidth={568}
+										 title={element ? `Modifier ${element.name}` : "Ajouter une nature"}
 										 isForm={true}
-										 content={<KeyFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																 pageId={pageId} identifiant="form-keys" key={element ? element.id : 0} />}
+										 content={<NatureFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	pageId={pageId} identifiant="form-natures" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
 			}
