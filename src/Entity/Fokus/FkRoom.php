@@ -11,11 +11,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FkRoom
 {
     const LIST = ['fk_room_list'];
+    const MODEL = ['fk_room_model'];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fk_room_list'])]
+    #[Groups(['fk_room_list', 'fk_room_model'])]
     private ?int $id = null;
 
     #[ORM\Column]
@@ -23,7 +24,7 @@ class FkRoom
     private ?float $uid = null;
 
     #[ORM\Column(length: 40)]
-    #[Groups(['fk_room_list'])]
+    #[Groups(['fk_room_list', 'fk_room_model'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
