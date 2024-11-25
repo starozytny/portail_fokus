@@ -1,19 +1,21 @@
 import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
+import axios from "axios";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
+import Formulaire from "@commonFunctions/formulaire";
 
 import { ModelsList } from "@userPages/Models/ModelsList";
+import { ModelFormulaire } from "@userPages/Models/ModelForm";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import axios from "axios";
-import Formulaire from "@commonFunctions/formulaire";
 
 const URL_GET_DATA = "intern_api_fokus_models_list";
 
@@ -35,6 +37,7 @@ export class Models extends Component {
 
 		this.pagination = React.createRef();
 		this.details = React.createRef();
+		this.form = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -158,13 +161,20 @@ export class Models extends Component {
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2 flex flex-row">
-						<Search onSearch={this.handleSearch} placeholder="Rechercher par intitule.." />
+					<div className="mb-2 flex flex-col gap-4 md:flex-row">
+						<div className="md:w-[258px]">
+							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+								Ajouter un modèle
+							</Button>
+						</div>
+						<div className="w-full flex flex-row">
+							<Search onSearch={this.handleSearch} placeholder="Rechercher par intitule.." />
+						</div>
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
 										 onClick={this.handlePaginationClick}
-										 onPerPage={this.handlePerPage}/>
+										 onPerPage={this.handlePerPage} />
 
 					<ModelsList data={currentData}
 								highlight={parseInt(highlight)}
@@ -178,6 +188,13 @@ export class Models extends Component {
 										 content={<div className="flex flex-col gap-4">
 											 {itemsElement}
 										 </div>}
+					/>, document.body)}
+
+					{createPortal(<Modal ref={this.form} identifiant='form-model' maxWidth={768} margin={5}
+										 title={element ? `Modifier ${element.name}` : "Ajouter un modèle"}
+										 isForm={true}
+										 content={<ModelFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																   identifiant="form-model" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
 			}

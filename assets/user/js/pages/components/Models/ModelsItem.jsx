@@ -28,7 +28,7 @@ export function ModelsItem ({ elem, highlight, onModal })
                     }
                 </div>
                 <div className="col-3 actions">
-                    <ButtonIcon type="default" icon="pencil" onClick={() => onModal('update', elem)}>Modifier</ButtonIcon>
+                    <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
                 </div>
             </div>
         </div>
