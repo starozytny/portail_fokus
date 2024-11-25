@@ -24,7 +24,7 @@ export class Rooms extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-            perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
+            perPage: List.getSessionPerpage(SESSION_PERPAGE, props.onAddRoom ? 10 : 20),
 			currentPage: 0,
 			sorter: Sort.compareName,
 			filters: List.getSessionFilters(SESSION_FILTERS, [], props.highlight),
