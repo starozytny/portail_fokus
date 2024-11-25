@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { RoomsItem } from "@userPages/Bibli/Rooms/RoomsItem";
 
-export function RoomsList ({ data, highlight, onModal }) {
+export function RoomsList ({ data, highlight, onModal, roomsSelected, onAddRoom }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-rooms">
@@ -20,7 +20,8 @@ export function RoomsList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <RoomsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <RoomsItem key={elem.id} elem={elem} roomsSelected={roomsSelected} highlight={highlight}
+                                          onModal={onModal} onAddRoom={onAddRoom} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

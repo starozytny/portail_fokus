@@ -85,7 +85,7 @@ export class Rooms extends Component {
 	}
 
 	render () {
-		const { pageId, highlight } = this.props;
+		const { pageId, highlight, roomsSelected, onAddRoom } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -99,11 +99,14 @@ export class Rooms extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
-						<div className="md:w-[258px]">
-							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
-								Ajouter une pièce
-							</Button>
-						</div>
+						{onAddRoom
+							? null
+							: <div className="md:w-[258px]">
+								<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+									Ajouter une pièce
+								</Button>
+							</div>
+						}
 						<div className="w-full flex flex-row">
 							<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
 							<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas intitulé.." />
@@ -115,8 +118,10 @@ export class Rooms extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<RoomsList data={currentData}
+							   roomsSelected={roomsSelected}
 							   highlight={parseInt(highlight)}
-							   onModal={this.handleModal} />
+							   onModal={this.handleModal}
+							   onAddRoom={onAddRoom} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />

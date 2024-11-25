@@ -194,6 +194,7 @@ export class Models extends Component {
 										 title={element ? `Modifier ${element.name}` : "Ajouter un modèle"}
 										 isForm={true}
 										 content={<ModelFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																   rooms={rooms}
 																   identifiant="form-model" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>

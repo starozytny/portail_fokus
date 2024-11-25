@@ -8,10 +8,10 @@ function getElements (identifiant)
 	return [body, modal, modalContent, btns];
 }
 
-function openM (body, modal, modalContent)
+function openM (body, modal, modalContent, zIndex)
 {
 	body.style.overflow = "hidden";
-	modal.style.zIndex = "40";
+	modal.style.zIndex = zIndex;
 	modal.style.opacity = "1";
 	modalContent.style.opacity = "1";
 	modalContent.style.translateY = "0";

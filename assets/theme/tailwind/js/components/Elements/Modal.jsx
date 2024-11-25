@@ -30,11 +30,11 @@ export class Modal extends Component {
 	}
 
 	handleClick = (e) => {
-		const { identifiant } = this.props;
+		const { identifiant, zIndex = 40 } = this.props;
 
 		let [body, modal, modalContent, btns] = ModalFunctions.getElements(identifiant);
 
-		ModalFunctions.openM(body, modal, modalContent);
+		ModalFunctions.openM(body, modal, modalContent, zIndex);
 
 		window.onclick = (e) => {
 			if (e.target === modal) {
