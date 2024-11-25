@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 import { Alert } from "@tailwindComponents/Elements/Alert";
 
-import { NaturesItem } from "@userPages/Bibli/Natures/NaturesItem";
+import { AspectsItem } from "@userPages/Bibli/Aspects/AspectsItem";
 
-export function NaturesList ({ data, highlight, onModal }) {
+export function AspectsList ({ data, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
-            <div className="items items-natures">
+            <div className="items items-aspects">
                 <div className="item item-header uppercase text-sm text-gray-600">
                     <div className="item-content">
                         <div className="item-infos">
@@ -20,7 +20,7 @@ export function NaturesList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <NaturesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <AspectsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
@@ -31,7 +31,7 @@ export function NaturesList ({ data, highlight, onModal }) {
     </div>
 }
 
-NaturesList.propTypes = {
+AspectsList.propTypes = {
     data: PropTypes.array.isRequired,
     highlight: PropTypes.number,
 }

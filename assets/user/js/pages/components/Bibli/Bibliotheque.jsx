@@ -12,6 +12,7 @@ import { Keys } from "@userPages/Bibli/Keys/Keys";
 import { Counters } from "@userPages/Bibli/Counters/Counters";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Natures } from "@userPages/Bibli/Natures/Natures";
+import { Aspects } from "@userPages/Bibli/Aspects/Aspects";
 
 const URL_GET_DATA = "intern_api_fokus_bibli_global_list";
 
@@ -74,6 +75,9 @@ export class Bibliotheque extends Component {
 
 		let content;
 		switch (pageId){
+			case 4:
+				content = <Aspects {...paramsPage} donnees={aspects} key={pageId} />;
+				break;
 			case 3:
 				content = <Natures {...paramsPage} donnees={natures} key={pageId} />;
 				break;
