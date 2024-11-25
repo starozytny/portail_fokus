@@ -11,10 +11,10 @@ import { Button } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn } from "@tailwindComponents/Elements/Modal";
 
 const URL_INDEX_ELEMENTS = "user_bibli_index";
-const URL_CREATE_ELEMENT = "intern_api_fokus_bibli_rooms_create";
-const URL_UPDATE_ELEMENT = "intern_api_fokus_bibli_rooms_update";
+const URL_CREATE_ELEMENT = "intern_api_fokus_bibli_counters_create";
+const URL_UPDATE_ELEMENT = "intern_api_fokus_bibli_counters_update";
 
-export function RoomFormulaire ({ context, element, pageId, identifiant }) {
+export function CounterFormulaire ({ context, element, pageId, identifiant }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {
@@ -25,6 +25,7 @@ export function RoomFormulaire ({ context, element, pageId, identifiant }) {
         context={context}
         url={url}
         name={element ? Formulaire.setValue(element.name) : ""}
+        unit={element ? Formulaire.setValue(element.unit) : ""}
 
 		pageId={pageId}
 		identifiant={identifiant}
@@ -37,6 +38,7 @@ class Form extends Component {
 
 		this.state = {
 			name: props.name,
+			unit: props.unit,
 			errors: [],
 		}
 	}
@@ -47,12 +49,13 @@ class Form extends Component {
 		e.preventDefault();
 
 		const { pageId, context, url } = this.props;
-		const { name } = this.state;
+		const { name, unit } = this.state;
 
 		this.setState({ errors: [] });
 
 		let paramsToValidate = [
 			{ type: "text", id: 'name', value: name },
+			{ type: "text", id: 'unit', value: unit },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)
@@ -75,14 +78,21 @@ class Form extends Component {
 
 	render () {
 		const { context, identifiant } = this.props;
-		const { errors, name } = this.state;
+		const { errors, name, unit } = this.state;
 
 		let params0 = { errors: errors, onChange: this.handleChange };
 
 		return <>
 			<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
-				<div>
-					<Input valeur={name} identifiant="name" {...params0}>Intitulé</Input>
+				<div className="flex flex-col gap-4">
+					<div className="flex flex-col gap-4 xl:flex-row">
+						<div className="w-full">
+							<Input valeur={name} identifiant="name" {...params0}>Intitulé</Input>
+						</div>
+						<div className="w-full">
+							<Input valeur={unit} identifiant="unit" {...params0}>Unité</Input>
+						</div>
+					</div>
 				</div>
 			</div>
 

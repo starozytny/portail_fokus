@@ -121,7 +121,6 @@ export class Rooms extends Component {
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
-
 					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
 											   title="Supprimer cette pièce" msgSuccess="Pièce supprimée."
 											   onUpdateList={this.handleUpdateList}>

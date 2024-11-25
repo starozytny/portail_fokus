@@ -18,12 +18,15 @@ export function CountersItem ({ elem, highlight, onModal })
                 <div className="col-1">
                     <div className="font-medium">{elem.name}</div>
                 </div>
-                <div className="col-2 actions">
+                <div className="col-2">
+                    <div className="font-medium">{elem.unit}</div>
+                </div>
+                <div className="col-3 actions">
                     {elem.isNative || elem.isUsed
                         ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
                         : <>
-                            <ButtonIcon type="default" icon="pencil" onClick={() => onModal('update', elem)}>Modifier</ButtonIcon>
-                            <ButtonIcon type="default" icon="trash" onClick={() => onModal('update', elem)}>Supprimer</ButtonIcon>
+                            <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                            <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
                         </>
                     }
                 </div>

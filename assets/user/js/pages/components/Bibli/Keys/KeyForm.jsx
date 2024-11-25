@@ -81,17 +81,13 @@ class Form extends Component {
 
 		return <>
 			<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
-				<div className="flex flex-col gap-4">
-					<div className="flex flex-col gap-4 xl:flex-row">
-						<div className="w-full">
-							<Input valeur={name} identifiant="name" {...params0}>Intitulé</Input>
-						</div>
-					</div>
+				<div>
+					<Input valeur={name} identifiant="name" {...params0}>Intitulé</Input>
 				</div>
 			</div>
 
-			<div className="bg-gray-50 px-4 py-3 flex flex-row justify-end gap-2 sm:px-6 border-t">
-				<CloseModalBtn identifiant={identifiant} />
+			<div className="bg-gray-50 px-4 py-3 flex flex-row justify-end gap-2 sm:px-6 border-t rounded-b-lg">
+			<CloseModalBtn identifiant={identifiant} />
 				<Button type="blue" onClick={this.handleSubmit}>
 					{context === "create" ? "Enregistrer" : "Enregistrer les modifications"}
 				</Button>

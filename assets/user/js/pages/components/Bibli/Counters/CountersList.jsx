@@ -8,12 +8,13 @@ import { CountersItem } from "@userPages/Bibli/Counters/CountersItem";
 export function CountersList ({ data, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
-            <div className="items items-rooms">
+            <div className="items items-counters">
                 <div className="item item-header uppercase text-sm text-gray-600">
                     <div className="item-content">
                         <div className="item-infos">
                             <div className="col-1">Intitulé</div>
-                            <div className="col-2 actions" />
+                            <div className="col-2">Unité</div>
+                            <div className="col-3 actions" />
                         </div>
                     </div>
                 </div>

@@ -1,14 +1,21 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
 import { CountersList } from "@userPages/Bibli/Counters/CountersList";
+import { CounterFormulaire } from "@userPages/Bibli/Counters/CounterForm";
 
+import { Modal } from "@tailwindComponents/Elements/Modal";
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
+import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+
+const URL_DELETE_ELEMENT = "intern_api_fokus_bibli_counters_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_counters";
 const SESSION_FILTERS = "project.filters.fk_counters";
@@ -26,6 +33,8 @@ export class Counters extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.delete = React.createRef();
+		this.form = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -76,8 +85,8 @@ export class Counters extends Component {
 	}
 
 	render () {
-		const { highlight } = this.props;
-		const { data, currentData, loadingData, perPage, currentPage, filters } = this.state;
+		const { pageId, highlight } = this.props;
+		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
 			{ value: 0, id: "f-0", label: "Natif" },
@@ -89,9 +98,16 @@ export class Counters extends Component {
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2 flex flex-row">
-						<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
-						<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas intitulé.." />
+					<div className="mb-2 flex flex-col gap-4 md:flex-row">
+						<div className="md:w-[258px]">
+							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+								Ajouter un compteur
+							</Button>
+						</div>
+						<div className="w-full flex flex-row">
+							<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
+							<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas intitulé.." />
+						</div>
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
@@ -104,6 +120,19 @@ export class Counters extends Component {
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+											   title="Supprimer ce compteur" msgSuccess="Compteur supprimé."
+											   onUpdateList={this.handleUpdateList}>
+						Êtes-vous sûr de vouloir supprimer définitivement ce compteur : <b>{element ? element.name : ""}</b> ?
+					</ModalDelete>, document.body)}
+
+					{createPortal(<Modal ref={this.form} identifiant='form-counter' maxWidth={568}
+										 title={element ? `Modifier ${element.name}` : "Ajouter un compteur"}
+										 isForm={true}
+										 content={<CounterFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	 pageId={pageId} identifiant="form-counter" key={element ? element.id : 0} />}
+					/>, document.body)}
 				</>
 			}
 		</>
