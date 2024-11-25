@@ -6,13 +6,14 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 import Formulaire from "@commonFunctions/formulaire";
 
 import { Button } from "@tailwindComponents/Elements/Button";
+import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 
 import { Rooms } from "@userPages/Bibli/Rooms/Rooms";
 import { Keys } from "@userPages/Bibli/Keys/Keys";
 import { Counters } from "@userPages/Bibli/Counters/Counters";
-import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Natures } from "@userPages/Bibli/Natures/Natures";
 import { Aspects } from "@userPages/Bibli/Aspects/Aspects";
+import { Elements } from "@userPages/Bibli/Elements/Elements";
 
 const URL_GET_DATA = "intern_api_fokus_bibli_global_list";
 
@@ -75,6 +76,9 @@ export class Bibliotheque extends Component {
 
 		let content;
 		switch (pageId){
+			case 5:
+				content = <Elements {...paramsPage} donnees={elements} key={pageId} />;
+				break;
 			case 4:
 				content = <Aspects {...paramsPage} donnees={aspects} key={pageId} />;
 				break;

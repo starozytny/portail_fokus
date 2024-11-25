@@ -4,6 +4,7 @@ namespace App\Service\Data;
 
 use App\Entity\Fokus\FkAspect;
 use App\Entity\Fokus\FkCounterType;
+use App\Entity\Fokus\FkElement;
 use App\Entity\Fokus\FkKeyType;
 use App\Entity\Fokus\FkNature;
 use App\Entity\Fokus\FkRoom;
@@ -66,6 +67,14 @@ class DataFokus
     }
 
     public function setDataAspect(?FkAspect $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'name' => $this->sanitizeData->cleanForFokus($data->name),
+        ];
+    }
+
+    public function setDataElement(?FkElement $obj, $data): array
     {
         return [
             'id' => $obj->getId() ?: null,

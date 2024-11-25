@@ -4,8 +4,8 @@ import { createPortal } from "react-dom";
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
-import { AspectsList } from "@userPages/Bibli/Aspects/AspectsList";
-import { AspectFormulaire } from "@userPages/Bibli/Aspects/AspectForm";
+import { ElementsList } from "@userPages/Bibli/Elements/ElementsList";
+import { ElementFormulaire } from "@userPages/Bibli/Elements/ElementForm";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Button } from "@tailwindComponents/Elements/Button";
@@ -15,12 +15,12 @@ import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
-const URL_DELETE_ELEMENT = "intern_api_fokus_bibli_aspects_delete";
+const URL_DELETE_ELEMENT = "intern_api_fokus_bibli_elements_delete";
 
-const SESSION_PERPAGE = "project.perpage.fk_aspects";
-const SESSION_FILTERS = "project.filters.fk_aspects";
+const SESSION_PERPAGE = "project.perpage.fk_elements";
+const SESSION_FILTERS = "project.filters.fk_elements";
 
-export class Aspects extends Component {
+export class Elements extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -101,7 +101,7 @@ export class Aspects extends Component {
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
 						<div className="md:w-[258px]">
 							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
-								Ajouter un aspect
+								Ajouter un élément
 							</Button>
 						</div>
 						<div className="w-full flex flex-row">
@@ -114,24 +114,24 @@ export class Aspects extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage} />
 
-					<AspectsList data={currentData}
-								 highlight={parseInt(highlight)}
-								 onModal={this.handleModal} />
+					<ElementsList data={currentData}
+								  highlight={parseInt(highlight)}
+								  onModal={this.handleModal} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
 					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
-											   title="Supprimer cet aspect" msgSuccess="Aspect supprimée."
+											   title="Supprimer cet élément" msgSuccess="Élément supprimée."
 											   onUpdateList={this.handleUpdateList}>
-						Êtes-vous sûr de vouloir supprimer définitivement cet aspect : <b>{element ? element.name : ""}</b> ?
+						Êtes-vous sûr de vouloir supprimer définitivement cet élément : <b>{element ? element.name : ""}</b> ?
 					</ModalDelete>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-aspects' maxWidth={568}
-										 title={element ? `Modifier ${element.name}` : "Ajouter un aspect"}
+					{createPortal(<Modal ref={this.form} identifiant='form-elements' maxWidth={568}
+										 title={element ? `Modifier ${element.name}` : "Ajouter un élément"}
 										 isForm={true}
-										 content={<AspectFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																	pageId={pageId} identifiant="form-aspects" key={element ? element.id : 0} />}
+										 content={<ElementFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	 pageId={pageId} identifiant="form-elements" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
 			}
