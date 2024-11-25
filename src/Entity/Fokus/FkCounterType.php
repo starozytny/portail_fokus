@@ -4,29 +4,38 @@ namespace App\Entity\Fokus;
 
 use App\Repository\Fokus\FkCounterTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkCounterTypeRepository::class)]
 #[ORM\Table(name: 'counter_types')]
 class FkCounterType
 {
+    const LIST = ['fk_counter_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_counter_list'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['fk_counter_list'])]
     private ?float $uid = null;
 
     #[ORM\Column(length: 40)]
+    #[Groups(['fk_counter_list'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Groups(['fk_counter_list'])]
     private ?string $unit = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_counter_list'])]
     private ?bool $isNative = true;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_counter_list'])]
     private ?bool $isUsed = false;
 
     public function getId(): ?int

@@ -5,38 +5,50 @@ namespace App\Entity\Fokus;
 use App\Repository\Fokus\FkElementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkElementRepository::class)]
 #[ORM\Table(name: 'elements')]
 class FkElement
 {
+    const LIST = ['fk_element_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_element_list'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['fk_element_list'])]
     private ?float $uid = null;
 
     #[ORM\Column(length: 40)]
+    #[Groups(['fk_element_list'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 2, nullable: true)]
+    #[Groups(['fk_element_list'])]
     private ?string $gender = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[Groups(['fk_element_list'])]
     private ?int $category = 0;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[Groups(['fk_element_list'])]
     private ?int $family = 0;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['fk_element_list'])]
     private ?string $variants = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_element_list'])]
     private ?bool $isNative = true;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_element_list'])]
     private ?bool $isUsed = false;
 
     public function getId(): ?int

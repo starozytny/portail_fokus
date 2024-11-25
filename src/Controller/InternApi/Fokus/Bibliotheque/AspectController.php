@@ -2,15 +2,15 @@
 
 namespace App\Controller\InternApi\Fokus\Bibliotheque;
 
-use App\Entity\Fokus\FkRoom;
+use App\Entity\Fokus\FkAspect;
 use App\Service\ApiResponse;
 use App\Service\Fokus\FokusService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/intern/api/fokus/bibli/rooms', name: 'intern_api_fokus_bibli_rooms_')]
-class RoomController extends AbstractController
+#[Route('/intern/api/fokus/bibli/aspects', name: 'intern_api_fokus_bibli_aspects_')]
+class AspectController extends AbstractController
 {
     #[Route('/list/{numSociety}', name: 'list', options: ['expose' => true], methods: 'GET')]
     public function list($numSociety, FokusService $fokusService, ApiResponse $apiResponse): Response
@@ -18,8 +18,8 @@ class RoomController extends AbstractController
         $client = $fokusService->getAdClientByNumSociety($numSociety);
 
         $em = $fokusService->getEntityNameManager($client->getManager());
-        $data = $em->getRepository(FkRoom::class)->findAll();
+        $data = $em->getRepository(FkAspect::class)->findAll();
 
-        return $apiResponse->apiJsonResponse($data, FkRoom::LIST);
+        return $apiResponse->apiJsonResponse($data, FkAspect::LIST);
     }
 }

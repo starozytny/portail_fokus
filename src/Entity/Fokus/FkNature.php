@@ -4,26 +4,34 @@ namespace App\Entity\Fokus;
 
 use App\Repository\Fokus\FkNatureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkNatureRepository::class)]
 #[ORM\Table(name: 'natures')]
 class FkNature
 {
+    const LIST = ['fk_nature_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_nature_list'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['fk_nature_list'])]
     private ?float $uid = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['fk_nature_list'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_nature_list'])]
     private ?bool $isNative = true;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_nature_list'])]
     private ?bool $isUsed = false;
 
     public function getId(): ?int

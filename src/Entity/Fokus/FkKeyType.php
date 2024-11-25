@@ -4,26 +4,34 @@ namespace App\Entity\Fokus;
 
 use App\Repository\Fokus\FkKeyTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkKeyTypeRepository::class)]
 #[ORM\Table(name: 'key_types')]
 class FkKeyType
 {
+    const LIST = ['fk_key_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_key_list'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['fk_key_list'])]
     private ?float $uid = null;
 
     #[ORM\Column(length: 40)]
+    #[Groups(['fk_key_list'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_key_list'])]
     private ?bool $isNative = true;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_key_list'])]
     private ?bool $isUsed = false;
 
     public function getId(): ?int

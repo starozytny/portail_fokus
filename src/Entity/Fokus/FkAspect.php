@@ -4,26 +4,34 @@ namespace App\Entity\Fokus;
 
 use App\Repository\Fokus\FkAspectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FkAspectRepository::class)]
 #[ORM\Table(name: 'aspects')]
 class FkAspect
 {
+    const LIST = ['fk_aspect_list'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fk_aspect_list'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['fk_aspect_list'])]
     private ?float $uid = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['fk_aspect_list'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_aspect_list'])]
     private ?bool $isNative = true;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_aspect_list'])]
     private ?bool $isUsed = false;
 
     public function getId(): ?int
