@@ -46,6 +46,8 @@ class RoomController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
         }
 
+        $obj = $em->getRepository(FkRoom::class)->findOneBy(['name' => $dataToSend['name']]);
+
         $this->addFlash('info', 'Données mises à jour.');
         return $apiResponse->apiJsonResponse($obj, FkRoom::LIST);
     }
