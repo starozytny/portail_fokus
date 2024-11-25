@@ -19,7 +19,7 @@ export class Bibliotheque extends Component {
 		super(props);
 
 		this.state = {
-			pageId: 0,
+			pageId: props.pageId ? parseInt(props.pageId) : 0,
 			highlight: props.highlight,
 			loadingData: true,
 			rooms: [],
@@ -58,7 +58,6 @@ export class Bibliotheque extends Component {
 	}
 
 	render () {
-		const { numSociety } = this.props;
 		const { loadingData, pageId, highlight, rooms, keysType, countersType, natures, aspects, elements } = this.state;
 
 		let menu = [
@@ -70,7 +69,7 @@ export class Bibliotheque extends Component {
 			{ id: 5, label: "Éléments" },
 		]
 
-		let paramsPage = { numSociety: numSociety, highlight: highlight };
+		let paramsPage = { pageId: pageId, highlight: highlight };
 
 		let content;
 		switch (pageId){

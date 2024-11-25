@@ -85,7 +85,7 @@ export class Rooms extends Component {
 	}
 
 	render () {
-		const { highlight } = this.props;
+		const { pageId, highlight } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -132,7 +132,7 @@ export class Rooms extends Component {
 										 title={element ? `Modifier ${element.name}` : "Ajouter une pièce"}
 										 isForm={true}
 										 content={<RoomFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																  identifiant="form-rooms" key={element ? element.id : 0} />}
+																  pageId={pageId} identifiant="form-rooms" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
 			}

@@ -5,6 +5,7 @@
 {% block main_content %}
     <div id="bibli_list"
          data-num-society="{{ app.request.session.get('numSociety') }}"
+         data-page-id="{{ app.request.query.get('pageId') }}"
          data-highlight="{{ app.request.query.get('h') }}"
     >
         {% include "layout/components/tailwind/loaders/loader.html.twig" %}

@@ -14,7 +14,7 @@ const URL_INDEX_ELEMENTS = "user_bibli_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_bibli_rooms_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_bibli_rooms_update";
 
-export function RoomFormulaire ({ context, element, identifiant }) {
+export function RoomFormulaire ({ context, element, pageId, identifiant }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {
@@ -26,6 +26,7 @@ export function RoomFormulaire ({ context, element, identifiant }) {
         url={url}
         name={element ? Formulaire.setValue(element.name) : ""}
 
+		pageId={pageId}
 		identifiant={identifiant}
     />
 }
@@ -45,7 +46,7 @@ class Form extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 
-		const { context, url } = this.props;
+		const { pageId, context, url } = this.props;
 		const { name } = this.state;
 
 		this.setState({ errors: [] });
@@ -62,7 +63,7 @@ class Form extends Component {
 			Formulaire.loader(true);
 			axios({ method: context === "create" ? "POST" : "PUT", url: url, data: this.state })
 				.then(function (response) {
-					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
+					location.href = Routing.generate(URL_INDEX_ELEMENTS, { pageId: pageId, h: response.data.id });
 				})
 				.catch(function (error) {
 					Formulaire.displayErrors(self, error);
