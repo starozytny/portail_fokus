@@ -32,7 +32,7 @@ class RoomController extends AbstractController
             $existe = $em->getRepository(FkRoom::class)->findOneBy(['name' => $dataToSend['name']]);
             if($existe && $existe->getId() !== $dataToSend['id']) {
                 return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'username',
+                    'name' => 'name',
                     'message' => "Cette pièce existe déjà."
                 ]]);
             }
@@ -42,7 +42,10 @@ class RoomController extends AbstractController
             $result = $fokusApi->bibliUpdate('room', $dataToSend, $obj->getId());
         }
 
-        if($result === false){
+        if($result === false || $result == 409){
+            if($result == 409){
+                return $apiResponse->apiJsonResponseBadRequest('Cette pièce existe déjà.');
+            }
             return $apiResponse->apiJsonResponseBadRequest('[UF0001] Une erreur est survenue.');
         }
 

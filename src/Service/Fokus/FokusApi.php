@@ -86,6 +86,9 @@ class FokusApi
             ]);
 
             $statusCode = $response->getStatusCode();
+            if($statusCode == 409){
+                return $statusCode;
+            }
             if($statusCode !== 200){
                 return false;
             }

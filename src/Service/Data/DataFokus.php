@@ -2,6 +2,10 @@
 
 namespace App\Service\Data;
 
+use App\Entity\Fokus\FkAspect;
+use App\Entity\Fokus\FkCounterType;
+use App\Entity\Fokus\FkKeyType;
+use App\Entity\Fokus\FkNature;
 use App\Entity\Fokus\FkRoom;
 use App\Entity\Fokus\FkUser;
 use App\Service\SanitizeData;
@@ -29,6 +33,39 @@ class DataFokus
     }
 
     public function setDataRoom(?FkRoom $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'name' => $this->sanitizeData->cleanForFokus($data->name),
+        ];
+    }
+
+    public function setDataKey(?FkKeyType $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'name' => $this->sanitizeData->cleanForFokus($data->name),
+        ];
+    }
+
+    public function setDataCounter(?FkCounterType $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'name' => $this->sanitizeData->cleanForFokus($data->name),
+            'unit' => $this->sanitizeData->cleanFullFokus($data->unit),
+        ];
+    }
+
+    public function setDataNature(?FkNature $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'name' => $this->sanitizeData->cleanForFokus($data->name),
+        ];
+    }
+
+    public function setDataAspect(?FkAspect $obj, $data): array
     {
         return [
             'id' => $obj->getId() ?: null,
