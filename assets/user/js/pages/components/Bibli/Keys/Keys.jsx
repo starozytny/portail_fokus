@@ -5,19 +5,19 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
-import { RoomsList } from "@userPages/Bibli/Rooms/RoomsList";
+import { KeysList } from "@userPages/Bibli/Keys/KeysList";
 
 import { Search } from "@tailwindComponents/Elements/Search";
 import { Filter } from "@tailwindComponents/Elements/Filter";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
-const URL_GET_DATA = "intern_api_fokus_bibli_rooms_list";
+const URL_GET_DATA = "intern_api_fokus_bibli_keys_list";
 
-const SESSION_PERPAGE = "project.perpage.fk_rooms";
-const SESSION_FILTERS = "project.filters.fk_rooms";
+const SESSION_PERPAGE = "project.perpage.fk_keys";
+const SESSION_FILTERS = "project.filters.fk_keys";
 
-export class Rooms extends Component {
+export class Keys extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -102,9 +102,9 @@ export class Rooms extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage} />
 
-					<RoomsList data={currentData}
-							   highlight={parseInt(highlight)}
-							   onModal={this.handleModal} />
+					<KeysList data={currentData}
+							  highlight={parseInt(highlight)}
+							  onModal={this.handleModal} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />

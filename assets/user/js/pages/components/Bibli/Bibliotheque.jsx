@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 
 import { Button } from "@tailwindComponents/Elements/Button";
+
 import { Rooms } from "@userPages/Bibli/Rooms/Rooms";
+import { Keys } from "@userPages/Bibli/Keys/Keys";
 
 export class Bibliotheque extends Component {
 	constructor (props) {
@@ -19,7 +21,7 @@ export class Bibliotheque extends Component {
 
 	render () {
 		const { numSociety } = this.props;
-		const { loadingData, pageId, highlight } = this.state;
+		const { pageId, highlight } = this.state;
 
 		let menu = [
 			{ id: 0, label: "Pièces" },
@@ -30,13 +32,16 @@ export class Bibliotheque extends Component {
 			{ id: 5, label: "Éléments" },
 		]
 
-		let content = null;
-		if(!loadingData){
-			switch (pageId){
-				default:
-					content = <Rooms numSociety={numSociety} highlight={highlight} />
-					break;
-			}
+		let paramsPage = { numSociety: numSociety, highlight: highlight };
+
+		let content;
+		switch (pageId){
+			case 1:
+				content = <Keys {...paramsPage} />;
+				break;
+			default:
+				content = <Rooms {...paramsPage} />;
+				break;
 		}
 
 		return <>
