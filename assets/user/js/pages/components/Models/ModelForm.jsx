@@ -9,12 +9,11 @@ import Formulaire from "@commonFunctions/formulaire";
 import Validateur from "@commonFunctions/validateur"
 
 import { Rooms } from "@userPages/Bibli/Rooms/Rooms";
-import { getDisplayDetails } from "@userPages/Models/Models";
+import { Elements } from "@userPages/Bibli/Elements/Elements";
 
 import { Input } from "@tailwindComponents/Elements/Fields";
 import { Button, ButtonIcon } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
-import { Elements } from "@userPages/Bibli/Elements/Elements";
 
 const URL_INDEX_ELEMENTS = "user_models_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_bibli_aspects_create";
@@ -34,15 +33,24 @@ function getNameRoom (rooms, id){
 export function ModelFormulaire ({ context, element, identifiant, rooms, categories, elements, elementsNatures, natures }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
+	let content = [];
 	if (context === "update") {
 		url = Routing.generate(URL_UPDATE_ELEMENT, { id: element.id });
+
+		JSON.parse(element.content).forEach(item => {
+			content.push({
+				uid: uid(),
+				id: item.id,
+				elements: item.elements
+			})
+		})
 	}
 
 	return  <Form
         context={context}
         url={url}
         name={element ? Formulaire.setValue(element.name) : ""}
-		content={element ? JSON.parse(element.content) : []}
+		content={content}
 
 		identifiant={identifiant}
 		rooms={rooms}
@@ -81,15 +89,34 @@ class Form extends Component {
 		this.setState({ content: [...[{ uid: uid(), id: roomId, elements: '[3, 4, 5, 6, 7, 8, 16, 17, 18]' }], ...content] })
 	}
 
-	handleRemoveRoom = (identifiant, isUid) => {
+	handleRemoveRoom = (identifiant) => {
 		const { content } = this.state;
 
+		let nContent = content.filter(elem => {return elem.uid !== identifiant});
+		this.setState({ content: nContent });
+	}
+
+	handleSelectElement = (el, type, element) => {
+		const { iUpdate, content } = this.state;
+
+		let newElements = "";
 		let nContent = [];
-		if(isUid){
-			nContent = content.filter(elem => {return elem.uid !== identifiant});
-		}else{
-			nContent = content.filter(elem => {return elem.id !== identifiant});
-		}
+		content.forEach(elem => {
+			if(elem.uid === element.uid){
+				let elements = JSON.parse(elem.elements);
+
+				if(elements.includes(el.id)){
+					elements = elements.filter(v => { return v !== el.id });
+				}else{
+					elements.push(el.id);
+				}
+
+				newElements = JSON.stringify(elements);
+				elem.elements = newElements;
+			}
+
+			nContent.push(elem);
+		})
 
 		this.setState({ content: nContent });
 	}
@@ -204,7 +231,7 @@ class Form extends Component {
 														<div className="col-3 actions">
 															<ButtonIcon type="default" icon="pencil" onClick={() => this.handleModal('elements', elem)}>Modifier</ButtonIcon>
 															<ButtonIcon type="default" icon="trash"
-																		onClick={() => this.handleRemoveRoom(elem.uid ? elem.uid : elem.id, !!elem.uid)}>
+																		onClick={() => this.handleRemoveRoom(elem.uid)}>
 																Supprimer
 															</ButtonIcon>
 														</div>
@@ -228,16 +255,17 @@ class Form extends Component {
 				</Button>
 			</div>
 
-			{createPortal(<Modal ref={this.room} identifiant='model-room' maxWidth={568} margin={2} zIndex={41}
+			{createPortal(<Modal ref={this.room} identifiant='model-room' maxWidth={568} margin={2} zIndex={41} bgColor="bg-gray-100"
 								 title="Sélectionner une/des pièce.s"
 								 content={<Rooms donnees={JSON.stringify(rooms)} roomsSelected={content} onAddRoom={this.handleAddRoom} />}
 			/>, document.body)}
 
-			{createPortal(<Modal ref={this.elements} identifiant='model-elements' maxWidth={1280} margin={2} zIndex={41}
+			{createPortal(<Modal ref={this.elements} identifiant='model-elements' maxWidth={1280} margin={2} zIndex={41} bgColor="bg-gray-100"
 								 title={element ? `Modifier ${getNameRoom(rooms, element.id)}` : ""}
 								 content={element
 									 ? <Categories element={element} categories={categories} elements={elements}
-												   elementsNatures={elementsNatures} natures={natures} />
+												   elementsNatures={elementsNatures} natures={natures}
+												   onSelector={this.handleSelectElement} />
 									 : null
 								}
 			/>, document.body)}
@@ -256,10 +284,8 @@ class Categories extends Component {
 
 	handleChangeCat = (id) => { this.setState({ catId: id }) }
 
-	handleSelector = () => {  }
-
 	render () {
-		const { element, categories, elements, elementsNatures, natures } = this.props;
+		const { element, categories, elements, elementsNatures, natures, onSelector } = this.props;
 		const { catId } = this.state;
 
 		let elementsSelected = JSON.parse(element.elements);
@@ -285,7 +311,7 @@ class Categories extends Component {
 			<div className="mt-4">
 				{catId
 					? <Elements donnees={JSON.stringify(nElements)} categories={categories} elementsNatures={elementsNatures} natures={natures}
-								elementsSelected={elementsSelected} onSelector={this.handleSelector} key={catId} />
+								element={element} elementsSelected={elementsSelected} onSelector={onSelector} key={catId + '-' + elementsSelected.length} />
 					: null
 				}
 			</div>

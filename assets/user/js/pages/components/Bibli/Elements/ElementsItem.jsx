@@ -7,7 +7,7 @@ import { Badge } from "@tailwindComponents/Elements/Badge";
 import { ButtonIcon } from "@tailwindComponents/Elements/Button";
 import { Selector } from "@tailwindComponents/Elements/Selector";
 
-export function ElementsItem ({ elem, categories, elementsNatures, natures, highlight, onModal, elementsSelected, onSelector })
+export function ElementsItem ({ elem, element, categories, elementsNatures, natures, highlight, onModal, elementsSelected, onSelector })
 {
     const refItem = useRef(null);
 
@@ -37,8 +37,8 @@ export function ElementsItem ({ elem, categories, elementsNatures, natures, high
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1">
-                    <div className="flex flex-row gap-4">
-                        <Selector elem={elem} elements={elementsSelected} onSelectors={onSelector} typeCheck={1} />
+                    <div className="flex flex-row gap-2">
+                        <Selector elem={elem} elements={elementsSelected} onSelectors={onSelector} typeCheck={1} element={element} />
                         <div>
                             <div className="font-medium">{elem.name}</div>
                             <div className="text-sm">{elem.gender === "f" || elem.gender === "fp" ? "F" : "M"} - {elem.gender === "fp" || elem.gender === "hp" ? "Pluriel" : "Singulier"}</div>

@@ -148,7 +148,7 @@ export class Models extends Component {
 										 </div>}
 					/>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-model' maxWidth={768} margin={1}
+					{createPortal(<Modal ref={this.form} identifiant='form-model' maxWidth={768} margin={1} bgColor="bg-gray-100"
 										 title={element ? `Modifier ${element.name}` : "Ajouter un modèle"}
 										 isForm={true}
 										 content={<ModelFormulaire context={element ? "update" : "create"} element={element ? element : null}

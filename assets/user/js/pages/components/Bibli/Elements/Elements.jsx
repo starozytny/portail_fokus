@@ -118,6 +118,7 @@ export class Elements extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<ElementsList data={currentData}
+								  element={this.props.element}
 								  categories={categories}
 								  elementsNatures={elementsNatures}
 								  natures={natures}

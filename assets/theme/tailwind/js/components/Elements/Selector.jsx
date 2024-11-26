@@ -25,14 +25,14 @@ export class Selector extends Component {
 
     // from fo uncheck via toolbar filter checked
     handleChange = (e) => {
-        const { elem } = this.props;
+        const { elem, element } = this.props;
 
         let isChecked = !!(e.currentTarget.checked)
 
         if(isChecked){
-            this.props.onSelectors(elem, "create")
+            this.props.onSelectors(elem, "create", element)
         }else{
-            this.props.onSelectors(elem, "delete")
+            this.props.onSelectors(elem, "delete", element)
         }
 
         this.setState({ isChecked })
