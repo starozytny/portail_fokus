@@ -13,6 +13,9 @@ class FkInventory
 {
     const LIST = ['fk_inventory_list'];
 
+    const STATUS_PROCESSING = 0;
+    const STATUS_END = 2;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -48,6 +51,7 @@ class FkInventory
     private ?int $state = 0;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_inventory_list'])]
     private ?float $comparative = 0;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
@@ -55,6 +59,7 @@ class FkInventory
     private ?int $isImported = 0;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fk_inventory_list'])]
     private ?float $input = 0;
 
     public function getId(): ?int

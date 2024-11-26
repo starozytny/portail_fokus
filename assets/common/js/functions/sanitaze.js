@@ -114,6 +114,14 @@ function toDateFormat(date, format = 'LLL', retour = "", replaceHours = true) {
     ;
 }
 
+function timestampToDateForm(date, format = 'LLL', retour = "", replaceHours = true) {
+    if(date === null) return retour;
+    return replaceHours
+        ? moment.unix(date).format(format).replace(':', 'h')
+        : moment.unix(date).format(format)
+    ;
+}
+
 module.exports = {
     sanitizeString,
     addZeroToNumber,
@@ -124,4 +132,5 @@ module.exports = {
     capitalize,
     removeAccents,
     toDateFormat,
+    timestampToDateForm,
 }
