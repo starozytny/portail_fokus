@@ -3,6 +3,7 @@
 namespace App\Controller\InternApi\Fokus;
 
 use App\Entity\Fokus\FkInventory;
+use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkProperty;
 use App\Entity\Fokus\FkTenant;
 use App\Entity\Fokus\FkUser;
@@ -35,15 +36,21 @@ class InventoryController extends AbstractController
         }
         $properties = $em->getRepository(FkProperty::class)->findAll();
         $tenants = $em->getRepository(FkTenant::class)->findAll();
+        $users = $em->getRepository(FkUser::class)->findAll();
+        $models = $em->getRepository(FkModel::class)->findAll();
 
         $data = $serializer->serialize($data, 'json', ['groups' => FkInventory::LIST]);
         $properties = $serializer->serialize($properties, 'json', ['groups' => FkProperty::LIST]);
         $tenants = $serializer->serialize($tenants, 'json', ['groups' => FkTenant::LIST]);
+        $users = $serializer->serialize($users, 'json', ['groups' => FkUser::LIST]);
+        $models = $serializer->serialize($models, 'json', ['groups' => FkModel::INVENTORY]);
 
         return $apiResponse->apiJsonResponseCustom([
             'donnees' => $data,
             'properties' => $properties,
             'tenants' => $tenants,
+            'users' => $users,
+            'models' => $models,
         ]);
     }
 }

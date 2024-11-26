@@ -10,13 +10,14 @@ import List from "@commonFunctions/list";
 import { InventoriesList } from "@userPages/Inventories/InventoriesList";
 import { InventoryFormulaire } from "@userPages/Inventories/InventoryForm";
 
-import { Button } from "@tailwindComponents/Elements/Button";
+import { Button, ButtonA } from "@tailwindComponents/Elements/Button";
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
+const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_properties_delete";
 
@@ -43,28 +44,59 @@ export class Inventories extends Component {
 	}
 
 	handleGetData = () => {
-		const { numSociety, highlight } = this.props;
+		const { numSociety, status, highlight } = this.props;
 		const { perPage, sorter } = this.state;
 
 		const self = this;
-		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
+		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {st: status, numSociety: numSociety}), data: {} })
 			.then(function (response) {
 				let data = [];
 				let dataImmuable = JSON.parse(response.data.donnees);
 
 				let properties = JSON.parse(response.data.properties);
+				let users = JSON.parse(response.data.users);
+				let models = JSON.parse(response.data.models);
+				let tenants = JSON.parse(response.data.tenants);
 
 				data.sort(sorter);
 				dataImmuable.sort(sorter);
 
 				JSON.parse(response.data.donnees).forEach(elem => {
 					elem.property = null;
+					elem.user = null;
+					elem.model = null;
+					elem.tenantsData = [];
 
 					properties.forEach(pr => {
 						if(pr.uid === elem.propertyUid){
 							elem.property = pr;
 						}
 					})
+
+					users.forEach(us => {
+						if(us.id === elem.userId){
+							elem.user = us;
+						}
+					})
+
+					if(elem.input < 0){
+						models.forEach(mo => {
+							if(mo.id === Math.abs(elem.input)){
+								elem.model = mo;
+							}
+						})
+					}
+
+					if(elem.tenants){
+						JSON.parse(elem.tenants).forEach(te => {
+							tenants.forEach(tenant => {
+								if(te === tenant.reference){
+									elem.tenantsData.push(tenant)
+								}
+							})
+						})
+
+					}
 
 					data.push(elem);
 				})
@@ -75,7 +107,7 @@ export class Inventories extends Component {
 				self.setState({
 					data: data, dataImmuable: dataImmuable, currentData: currentData,
 					properties: properties,
-					tenants: JSON.parse(response.data.tenants),
+					tenants: tenants,
 					currentPage: currentPage,
 					loadingData: false })
 			})
@@ -114,17 +146,29 @@ export class Inventories extends Component {
 	}
 
 	render () {
-		const { highlight } = this.props;
+		const { highlight, status } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
 
 		return <>
 			{loadingData
 				? <LoaderElements />
 				: <>
+					<div className="mb-4">
+						<div className="text-xl font-semibold mb-2">États des lieux : </div>
+						<div className="flex gap-2">
+							<ButtonA type={status !== "2" ? "color3" : "default"} onClick={Routing.generate(URL_INDEX_ELEMENTS, { st: 0 })}>
+								En cours
+							</ButtonA>
+							<ButtonA type={status === "2" ? "color3" : "default"} onClick={Routing.generate(URL_INDEX_ELEMENTS, { st: 2 })}>
+								Terminés
+							</ButtonA>
+						</div>
+					</div>
+
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
 						<div className="md:w-[258px]">
 							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
-								Ajouter un état des lieux
+								Ajouter un <span className="lg:hidden">EDL</span> <span className="hidden lg:inline">état des lieux</span>
 							</Button>
 						</div>
 						<div className="w-full flex flex-row">
@@ -149,12 +193,12 @@ export class Inventories extends Component {
 						Êtes-vous sûr de vouloir supprimer définitivement cet état des lieux : <b>{element ? element.id : ""}</b> ?
 					</ModalDelete>, document.body)}
 
-					{/*{createPortal(<Modal ref={this.form} identifiant='form-edl' maxWidth={568} margin={5}*/}
-					{/*					 title={element ? `Modifier ${element.id}` : "Ajouter un état des lieux"}*/}
-					{/*					 isForm={true}*/}
-					{/*					 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null} */}
-					{/*												   identifiant="form-edl" key={element ? element.id : 0} />}*/}
-					{/*/>, document.body)}*/}
+					{createPortal(<Modal ref={this.form} identifiant='form-edl' maxWidth={568} margin={5}
+										 title={element ? `Modifier ${element.id}` : "Ajouter un état des lieux"}
+										 isForm={true}
+										 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	   identifiant="form-edl" key={element ? element.id : 0} />}
+					/>, document.body)}
 				</>
 			}
 		</>

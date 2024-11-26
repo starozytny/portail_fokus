@@ -16,6 +16,9 @@ class FkInventory
     const STATUS_PROCESSING = 0;
     const STATUS_END = 2;
 
+    const TYPE_SORTANT = 0;
+    const TYPE_ENTRANT = 1;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
