@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
+import axios from "axios";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
@@ -9,16 +10,15 @@ import List from "@commonFunctions/list";
 import { BiensList } from "@userPages/Biens/BiensList";
 import { BienFormulaire } from "@userPages/Biens/BienForm";
 
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import { Button } from "@tailwindComponents/Elements/Button";
-import axios from "axios";
 
 const URL_GET_DATA = "intern_api_fokus_properties_list";
-const URL_DELETE_ELEMENT = "intern_api_fokus_tenants_delete";
+const URL_DELETE_ELEMENT = "intern_api_fokus_properties_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_biens";
 

@@ -22,8 +22,6 @@ class ElementController extends AbstractController
         $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
         $data = json_decode($request->getContent());
 
-        dump($data);
-
         if ($data === null) {
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }

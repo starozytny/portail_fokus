@@ -8,6 +8,7 @@ use App\Entity\Fokus\FkElement;
 use App\Entity\Fokus\FkKeyType;
 use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkNature;
+use App\Entity\Fokus\FkProperty;
 use App\Entity\Fokus\FkRoom;
 use App\Entity\Fokus\FkTenant;
 use App\Entity\Fokus\FkUser;
@@ -122,6 +123,27 @@ class DataFokus
             'addr3' => $this->sanitizeData->cleanFullFokus($data->addr3),
             'city' => $this->sanitizeData->cleanFullFokus($data->city),
             'zipcode' => $this->sanitizeData->cleanFullFokus($data->zipcode)
+        ];
+    }
+
+    public function setDataProperty(?FkProperty $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'reference' => $this->sanitizeData->cleanFullFokus($data->reference),
+            'addr1' => $this->sanitizeData->cleanFullFokus($data->addr1),
+            'addr2' => $this->sanitizeData->cleanFullFokus($data->addr2),
+            'addr3' => $this->sanitizeData->cleanFullFokus($data->addr3),
+            'city' => $this->sanitizeData->cleanFullFokus($data->city),
+            'zipcode' => $this->sanitizeData->cleanFullFokus($data->zipcode),
+            'building' => $this->sanitizeData->cleanFullFokus($data->building),
+            'type' => $this->sanitizeData->cleanFullFokus($data->type),
+            'surface' => $this->sanitizeData->cleanFullFokus($data->surface, 0),
+            'floor' => $this->sanitizeData->cleanFullFokus($data->floor),
+            'door' => $this->sanitizeData->cleanFullFokus($data->door),
+            'rooms' => $this->sanitizeData->cleanFullFokus($data->rooms, 0),
+            'owner' => $this->sanitizeData->cleanFullFokus($data->owner),
+            'is_furnished' => $data->isFurnished[0]
         ];
     }
 }

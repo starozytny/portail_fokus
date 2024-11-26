@@ -165,7 +165,7 @@ class FokusApi
 
     public function modelCreate($data)
     {
-        return $this->callApi("POST", "models/add_model", $data);
+        return $this->callApi("POST", "models/add_model/", $data);
     }
 
     public function modelUpdate($data, $id)
@@ -183,20 +183,37 @@ class FokusApi
         return $this->callApi("GET", "models/" . $id);
     }
 
-    // ------- Locatire
+    // ------- Tenants
 
     public function tenantCreate($data)
     {
-        return $this->callApi("POST", "add_tenant_portal", $data);
+        return $this->callApi("POST", "add_tenant_portal/", $data);
     }
 
     public function tenantUpdate($data, $id)
     {
-        return $this->callApi("PUT", "add_tenant_portal/" . $id, $data);
+        return $this->callApi("PUT", "edit_tenant/" . $id, $data);
     }
 
     public function tenantDelete($id)
     {
         return $this->callApi("GET", "delete_tenant/" . $id);
+    }
+
+    // ------- Properties
+
+    public function propertyCreate($data)
+    {
+        return $this->callApi("POST", "add_property/", $data);
+    }
+
+    public function propertyUpdate($data, $id)
+    {
+        return $this->callApi("PUT", "edit_property/" . $id, $data);
+    }
+
+    public function propertyDelete($id)
+    {
+        return $this->callApi("GET", "delete_property/" . $id);
     }
 }

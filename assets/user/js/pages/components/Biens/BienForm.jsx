@@ -7,14 +7,14 @@ import Inputs from "@commonFunctions/inputs";
 import Formulaire from "@commonFunctions/formulaire";
 import Validateur from "@commonFunctions/validateur";
 
+import { Alert } from "@tailwindComponents/Elements/Alert";
 import { Button } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn } from "@tailwindComponents/Elements/Modal";
 import { Input, InputCity, InputView, Switcher } from "@tailwindComponents/Elements/Fields";
-import { Alert } from "@tailwindComponents/Elements/Alert";
 
-const URL_INDEX_ELEMENTS = "user_tenants_index";
-const URL_CREATE_ELEMENT = "intern_api_fokus_tenants_create";
-const URL_UPDATE_ELEMENT = "intern_api_fokus_tenants_update";
+const URL_INDEX_ELEMENTS = "user_properties_index";
+const URL_CREATE_ELEMENT = "intern_api_fokus_properties_create";
+const URL_UPDATE_ELEMENT = "intern_api_fokus_properties_update";
 
 let saveZipcodes = [];
 
@@ -83,6 +83,11 @@ class Form extends Component {
 	handleChange = (e) => {
 		let name = e.currentTarget.name;
 		let value = e.currentTarget.value;
+
+		if (name === "reference") {
+			value = value !== "" ? value.toUpperCase() : value;
+			value = value.length > 10 ? this.state[name] : value;
+		}
 
 		if (name === "isFurnished") {
 			value = e.currentTarget.checked ? [parseInt(value)] : [0];
@@ -178,7 +183,7 @@ class Form extends Component {
 							<div>
 								<InputCity identifiant="city" valeur={city} {...params0}
 										   cities={cities} openCities={openCities} onSelectCity={this.handleSelectCity}>
-									Villev *
+									Ville *
 								</InputCity>
 							</div>
 						</div>
