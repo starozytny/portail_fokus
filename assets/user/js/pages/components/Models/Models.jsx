@@ -14,12 +14,14 @@ import { ModelFormulaire } from "@userPages/Models/ModelForm";
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
+import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 
+const URL_INDEX_ELEMENTS = "user_models_index";
 const URL_GET_DATA = "intern_api_fokus_models_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_models_delete";
+const URL_DUPLICATE_ELEMENT = "intern_api_fokus_models_duplicate";
 
 const SESSION_PERPAGE = "project.perpage.fk_models";
 
@@ -43,6 +45,7 @@ export class Models extends Component {
 		this.delete = React.createRef();
 		this.details = React.createRef();
 		this.form = React.createRef();
+		this.duplicate = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -109,6 +112,24 @@ export class Models extends Component {
 		this.setState({ element: elem, assign: assign })
 	}
 
+	handleDuplicate = (e) => {
+		e.preventDefault();
+
+		const { element } = this.state;
+
+		let self = this;
+		Formulaire.loader(true);
+		axios({ method: "POST", url: Routing.generate(URL_DUPLICATE_ELEMENT, { id: element.id }), data: {} })
+			.then(function (response) {
+				location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
+			})
+			.catch(function (error) {
+				Formulaire.displayErrors(self, error);
+				Formulaire.loader(false);
+			})
+		;
+	}
+
 	render () {
 		const { highlight } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, rooms, categories, elements, elementsNatures, natures } = this.state;
@@ -164,6 +185,14 @@ export class Models extends Component {
 																   rooms={rooms} categories={categories} elements={elements}
 																   elementsNatures={elementsNatures} natures={natures}
 																   identifiant="form-model" key={element ? element.id : 0} />}
+					/>, document.body)}
+
+					{createPortal(<Modal ref={this.duplicate} identifiant='duplicate-model' maxWidth={568}
+										 title={element ? `Dupliquer le modèle : ${element.name}` : ""}
+										 content={<p>
+											 Êtes-vous sûr de vouloir dupliquer ce modèle : <b>{element ? element.name : ""}</b> ?
+										 </p>}
+										 footer={<Button type="blue" onClick={this.handleDuplicate}>Confirmer</Button>}
 					/>, document.body)}
 				</>
 			}

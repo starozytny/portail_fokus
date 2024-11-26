@@ -122,4 +122,34 @@ class ModelController extends AbstractController
 
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
+
+    #[Route('/duplicate/{id}', name: 'duplicate', options: ['expose' => true], methods: 'POST')]
+    public function duplicate($id, FokusService $fokusService, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkModel::class)->find($id);
+
+
+        $dataToSend = [
+            'name' => $obj->getName() . " (copie)",
+            'content' => $obj->getContent(),
+        ];
+
+        $existe = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);
+        if($existe && $existe->getId() !== $dataToSend['id']) {
+            return $apiResponse->apiJsonResponseBadRequest("Un modèle porte déjà l'intitulé : " . $dataToSend['name']);
+        }
+
+        $result = $fokusApi->modelCreate($dataToSend);
+
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('Une erreur est survenue.');
+        }
+
+        $obj = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);
+
+        $this->addFlash('info', 'Données mises à jour.');
+        return $apiResponse->apiJsonResponse($obj, FkModel::LIST);
+    }
 }

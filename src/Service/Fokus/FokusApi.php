@@ -177,4 +177,9 @@ class FokusApi
     {
         return $this->callApi("GET", "models/delete_model/" . $id);
     }
+
+    public function modelDuplicate($id)
+    {
+        return $this->callApi("GET", "models/" . $id);
+    }
 }

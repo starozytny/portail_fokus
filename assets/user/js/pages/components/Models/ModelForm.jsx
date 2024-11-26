@@ -124,8 +124,6 @@ class Form extends Component {
 	handleDeselectManuelElement = (id, element) => {
 		const { content } = this.state;
 
-		console.log(element);
-
 		let newElements = "";
 		let nContent = [];
 		content.forEach(elem => {
