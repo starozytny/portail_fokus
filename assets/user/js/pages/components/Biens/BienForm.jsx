@@ -9,7 +9,8 @@ import Validateur from "@commonFunctions/validateur";
 
 import { Button } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn } from "@tailwindComponents/Elements/Modal";
-import { Input, InputCity, InputView } from "@tailwindComponents/Elements/Fields";
+import { Input, InputCity, InputView, Switcher } from "@tailwindComponents/Elements/Fields";
+import { Alert } from "@tailwindComponents/Elements/Alert";
 
 const URL_INDEX_ELEMENTS = "user_tenants_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_tenants_create";
@@ -40,7 +41,7 @@ export function BienFormulaire ({ context, element, identifiant }) {
         door={element ? Formulaire.setValue(element.door) : ""}
         rooms={element ? Formulaire.setValue(element.rooms) : ""}
         owner={element ? Formulaire.setValue(element.owner) : ""}
-        isFurnished={element ? Formulaire.setValue(element.isFurnished) : ""}
+        isFurnished={element ? element.isFurnished ? [1] : [0] : [0]}
 
 		identifiant={identifiant}
     />
@@ -78,7 +79,17 @@ class Form extends Component {
 		Inputs.getZipcodes(this);
 	}
 
-	handleChange = (e) => { this.setState({ [e.currentTarget.name]: e.currentTarget.value, openCities: "" }) }
+
+	handleChange = (e) => {
+		let name = e.currentTarget.name;
+		let value = e.currentTarget.value;
+
+		if (name === "isFurnished") {
+			value = e.currentTarget.checked ? [parseInt(value)] : [0];
+		}
+
+		this.setState({ [name]: value, openCities: "" })
+	}
 
 	handleChangeCity = (e) => {
 		Inputs.cityInput(this, e, this.state.zipcode, this.state.arrayZipcodes ? this.state.arrayZipcodes : saveZipcodes)
@@ -92,12 +103,14 @@ class Form extends Component {
 		e.preventDefault();
 
 		const { context, url } = this.props;
-		const { addr1, building, type, surface, floor, door, rooms, owner, isFurnished } = this.state;
+		const { addr1, zipcode, city } = this.state;
 
 		this.setState({ errors: [] });
 
 		let paramsToValidate = [
 			{ type: "text", id: 'addr1', value: addr1 },
+			{ type: "text", id: 'zipcode', value: zipcode },
+			{ type: "text", id: 'city', value: city },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)
@@ -129,19 +142,25 @@ class Form extends Component {
 			building, type, surface, floor, door, rooms, owner, isFurnished
 		} = this.state;
 
+		let switcherItems = [{ value: 1, label: "Oui", identifiant: "prop-oui" }];
+
 		let params0 = { errors: errors, onChange: this.handleChange };
 
 		return <>
 			<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
 				<div className="flex flex-col gap-4">
 					<div>
-						<InputView valeur={context === "update" ? reference : "Attribution auto."} identifiant="reference" {...params0}>Référence</InputView>
+						{context === "create"
+							? <Input valeur={reference} identifiant="reference" {...params0}>Référence <span className="text-xs">(10 carac. max)</span> *</Input>
+							: <InputView valeur={reference} identifiant="reference" {...params0}>Référence *</InputView>
+						}
+
 					</div>
 
 					<div className="flex flex-col gap-4">
 						<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
 							<div className="col-span-2 md:col-span-1">
-								<Input valeur={addr1} identifiant="addr1" {...params0}>Adresse</Input>
+								<Input valeur={addr1} identifiant="addr1" {...params0}>Adresse *</Input>
 							</div>
 							<div>
 								<Input valeur={addr2} identifiant="addr2" {...params0}>Complément</Input>
@@ -153,16 +172,54 @@ class Form extends Component {
 						<div className="grid grid-cols-2 gap-4">
 							<div>
 								<Input valeur={zipcode} identifiant="zipcode" errors={errors} onChange={this.handleChangeCity} type="cleave-zipcode">
-									Code postal
+									Code postal *
 								</Input>
 							</div>
 							<div>
 								<InputCity identifiant="city" valeur={city} {...params0}
 										   cities={cities} openCities={openCities} onSelectCity={this.handleSelectCity}>
-									Ville
+									Villev *
 								</InputCity>
 							</div>
 						</div>
+						<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+							<div>
+								<Input valeur={type} identifiant="type" {...params0}>Type de bien</Input>
+							</div>
+							<div>
+								<Input valeur={building} identifiant="building" {...params0}>Bâtiment</Input>
+							</div>
+							<div>
+								<Input valeur={door} identifiant="door" {...params0}>Porte</Input>
+							</div>
+							<div>
+								<Input valeur={floor} identifiant="floor" {...params0}>Étage</Input>
+							</div>
+						</div>
+						<div className="flex flex-col gap-4 md:flex-row">
+							<div className="w-full flex gap-4">
+								<div className="w-full">
+									<Input valeur={surface} identifiant="surface" {...params0}>Surface (m²)</Input>
+								</div>
+								<div className="w-full">
+									<Input valeur={rooms} identifiant="rooms" {...params0}>Nombre de pièces</Input>
+								</div>
+							</div>
+							<div className="w-full">
+								<Switcher items={switcherItems} identifiant="isFurnished" valeur={isFurnished} {...params0}>
+									Est-ce meublé ?
+								</Switcher>
+							</div>
+						</div>
+						<div>
+							<div>
+								<Input valeur={owner} identifiant="owner" {...params0}>Propriétaire</Input>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<Alert type="gray" icon="question">N'oubliez pas de re-synchroniser votre appareil.</Alert>
 					</div>
 				</div>
 			</div>
