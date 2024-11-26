@@ -78,30 +78,37 @@ export class Bibliotheque extends Component {
 
 		let paramsPage = { pageId: pageId, highlight: highlight };
 
-		let content;
+		let content, pageName;
 		switch (pageId){
 			case 5:
+				pageName = "éléments";
 				content = <Elements {...paramsPage} donnees={elements} key={pageId}
 									categories={categories} elementsNatures={elementsNatures} natures={JSON.parse(natures)} />;
 				break;
 			case 4:
+				pageName = "aspects";
 				content = <Aspects {...paramsPage} donnees={aspects} key={pageId} />;
 				break;
 			case 3:
+				pageName = "natures";
 				content = <Natures {...paramsPage} donnees={natures} key={pageId} />;
 				break;
 			case 2:
+				pageName = "compteurs";
 				content = <Counters {...paramsPage} donnees={countersType} key={pageId} />;
 				break;
 			case 1:
+				pageName = "clés";
 				content = <Keys {...paramsPage} donnees={keysType} key={pageId} />;
 				break;
 			default:
+				pageName = "pièces";
 				content = <Rooms {...paramsPage} donnees={rooms} key={pageId} />;
 				break;
 		}
 
 		return <>
+			<div className="text-xl font-semibold mb-2">Les catégories de la bibliothèque</div>
 			<div className="grid grid-cols-2 gap-2 md:grid-cols-6">
 				{menu.map(item => {
 					return <Button type={item.id === pageId ? "color3" : "default"} key={item.id}
@@ -111,7 +118,13 @@ export class Bibliotheque extends Component {
 				})}
 			</div>
 			<div className="mt-4">
-				{loadingData ? <LoaderElements /> : content}
+				{loadingData
+					? <LoaderElements />
+					: <>
+						<div className="text-xl font-semibold mb-2">Liste des {pageName}</div>
+						{content}
+					</>
+				}
 			</div>
 		</>
 	}

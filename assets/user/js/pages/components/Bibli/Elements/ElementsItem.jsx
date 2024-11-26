@@ -38,7 +38,10 @@ export function ElementsItem ({ elem, element, categories, elementsNatures, natu
             <div className="item-infos">
                 <div className="col-1">
                     <div className="flex flex-row gap-2">
-                        <Selector elem={elem} elements={elementsSelected} onSelectors={onSelector} typeCheck={1} element={element} />
+                        {onSelector
+                            ? <Selector elem={elem} elements={elementsSelected} onSelectors={onSelector} typeCheck={1} element={element} />
+                            : null
+                        }
                         <div>
                             <div className="font-medium">{elem.name}</div>
                             <div className="text-sm">{elem.gender === "f" || elem.gender === "fp" ? "F" : "M"} - {elem.gender === "fp" || elem.gender === "hp" ? "Pluriel" : "Singulier"}</div>
