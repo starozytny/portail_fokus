@@ -172,4 +172,9 @@ class FokusApi
     {
         return $this->callApi("POST", "models/edit_model/" . $id, $data);
     }
+
+    public function modelDelete($id)
+    {
+        return $this->callApi("GET", "models/delete_model/" . $id);
+    }
 }

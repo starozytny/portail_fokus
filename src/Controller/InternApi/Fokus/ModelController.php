@@ -107,4 +107,19 @@ class ModelController extends AbstractController
         $obj = $em->getRepository(FkModel::class)->find($id);
         return $this->submitForm("update", $obj, $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
     }
+
+    #[Route('/delete/{id}', name: 'delete', options: ['expose' => true], methods: 'DELETE')]
+    public function delete($id, FokusService $fokusService, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkModel::class)->find($id);
+        $result = $fokusApi->modelDelete($obj->getId());
+
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('Une erreur est survenue.');
+        }
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
+    }
 }

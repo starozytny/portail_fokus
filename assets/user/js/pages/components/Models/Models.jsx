@@ -16,8 +16,10 @@ import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 
 const URL_GET_DATA = "intern_api_fokus_models_list";
+const URL_DELETE_ELEMENT = "intern_api_fokus_models_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_models";
 
@@ -38,6 +40,7 @@ export class Models extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.delete = React.createRef();
 		this.details = React.createRef();
 		this.form = React.createRef();
 	}
@@ -140,6 +143,12 @@ export class Models extends Component {
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+											   title="Supprimer ce modèle" msgSuccess="Modèle supprimé"
+											   onUpdateList={this.handleUpdateList}>
+						Êtes-vous sûr de vouloir supprimer définitivement ce modèle : <b>{element ? element.name : ""}</b> ?
+					</ModalDelete>, document.body)}
 
 					{createPortal(<Modal ref={this.details} identifiant='details-model' maxWidth={568} margin={1}
 										 title={element ? `Détails de : ${element.name}` : ""}
