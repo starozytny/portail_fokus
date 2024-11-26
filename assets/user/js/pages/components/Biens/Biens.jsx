@@ -43,48 +43,52 @@ export class Biens extends Component {
 	}
 
 	handleGetData = () => {
-		const { numSociety, highlight } = this.props;
+		const { numSociety, highlight, donnees } = this.props;
 		const { perPage, sorter } = this.state;
 
-		const self = this;
-		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
-			.then(function (response) {
-				let data = [];
-				let dataImmuable = [];
+		if(donnees){
+			List.setData(this, donnees, perPage, sorter, highlight)
+		}else{
+			const self = this;
+			axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
+				.then(function (response) {
+					let data = [];
+					let dataImmuable = [];
 
-				JSON.parse(response.data.donnees).forEach(elem => {
-					let elemInventories = [];
-					let canActions = true;
-					JSON.parse(response.data.inventories).forEach(inventory => {
-						if(inventory.propertyUid === elem.uid || elem.isImported !== "0"
-							|| elem.lastInventoryUid !== "0" || elem.lastInventoryUid === ""
-						){
-							canActions = false;
-						}
+					JSON.parse(response.data.donnees).forEach(elem => {
+						let elemInventories = [];
+						let canActions = true;
+						JSON.parse(response.data.inventories).forEach(inventory => {
+							if(inventory.propertyUid === elem.uid || elem.isImported !== "0"
+								|| elem.lastInventoryUid !== "0" || elem.lastInventoryUid === ""
+							){
+								canActions = false;
+							}
 
-						if(inventory.propertyUid === elem.uid){
-							elemInventories.push(inventory)
-						}
+							if(inventory.propertyUid === elem.uid){
+								elemInventories.push(inventory)
+							}
+						})
+
+						elem.canActions = canActions;
+						elem.inventories = elemInventories;
+
+						data.push(elem);
+						dataImmuable.push(elem);
 					})
 
-					elem.canActions = canActions;
-					elem.inventories = elemInventories;
+					data.sort(sorter);
+					dataImmuable.sort(sorter);
 
-					data.push(elem);
-					dataImmuable.push(elem);
+					let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
+
+					self.setState({
+						data: data, dataImmuable: dataImmuable, currentData: currentData,
+						currentPage: currentPage,
+						loadingData: false })
 				})
-
-				data.sort(sorter);
-				dataImmuable.sort(sorter);
-
-				let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
-
-				self.setState({
-					data: data, dataImmuable: dataImmuable, currentData: currentData,
-					currentPage: currentPage,
-					loadingData: false })
-			})
-		;
+			;
+		}
 	}
 
 	handleUpdateData = (currentData) => {
@@ -154,7 +158,7 @@ export class Biens extends Component {
 						Êtes-vous sûr de vouloir supprimer définitivement ce bien : <b>{element ? element.addr1 : ""}</b> ?
 					</ModalDelete>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5}
+					{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5} zIndex={42}
 										 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
 										 isForm={true}
 										 content={<BienFormulaire context={element ? "update" : "create"} element={element ? element : null}

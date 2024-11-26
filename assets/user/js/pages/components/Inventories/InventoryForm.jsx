@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
+import { createPortal } from "react-dom";
 
 import axios from 'axios';
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
-import Inputs from "@commonFunctions/inputs";
 import Formulaire from "@commonFunctions/formulaire";
 import Validateur from "@commonFunctions/validateur";
 
 import { Button } from "@tailwindComponents/Elements/Button";
-import { CloseModalBtn } from "@tailwindComponents/Elements/Modal";
+import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
 import { Checkbox, Input, Radiobox, Select } from "@tailwindComponents/Elements/Fields";
+
+import { Biens } from "@userPages/Biens/Biens";
 
 const URL_INDEX_ELEMENTS = "user_properties_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_properties_create";
@@ -69,12 +71,14 @@ class Form extends Component {
 			inventoryTenants: props.inventoryTenants,
 			errors: []
 		}
+
+		this.property = React.createRef();
 	}
 
-	componentDidMount () {
-		Inputs.getZipcodes(this);
+	handleModal = (identifiant, elem) => {
+		this[identifiant].current.handleClick();
+		this.setState({ element: elem })
 	}
-
 
 	handleChange = (e) => {
 		let name = e.currentTarget.name;
@@ -120,7 +124,7 @@ class Form extends Component {
 	}
 
 	render () {
-		const { context, identifiant, users, models } = this.props;
+		const { context, identifiant, users, models, properties } = this.props;
 		const { errors, userId, input, date, type, comparative, model, property, tenants } = this.state;
 
 		let usersItems = [];
@@ -157,6 +161,9 @@ class Form extends Component {
 		return <>
 			<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
 				<div className="flex flex-col gap-4">
+					<div>
+						<Button type="default" onClick={() => this.handleModal('property')}>Sélectionner un bien</Button>
+					</div>
 					<div className="flex gap-4">
 						<div className="w-full">
 							<Select identifiant="userId" valeur={userId} items={usersItems} {...params0}>
@@ -211,6 +218,11 @@ class Form extends Component {
 					{context === "create" ? "Enregistrer" : "Enregistrer les modifications"}
 				</Button>
 			</div>
+
+			{createPortal(<Modal ref={this.property} identifiant='inventory-property' maxWidth={1280} margin={2} zIndex={41} bgColor="bg-gray-100"
+								 title="Sélectionner un bien"
+								 content={<Biens donnees={JSON.stringify(properties)} />}
+			/>, document.body)}
 		</>
 	}
 }

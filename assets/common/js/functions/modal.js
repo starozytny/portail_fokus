@@ -3,7 +3,7 @@ function getElements (identifiant)
 	let body = document.querySelector("body");
 	let modal = document.getElementById(identifiant);
 	let modalContent = document.querySelector("#" + identifiant + " .modal-content");
-	let btns = document.querySelectorAll(".close-modal");
+	let btns = document.querySelectorAll(".close-modal-" + identifiant);
 
 	return [body, modal, modalContent, btns];
 }

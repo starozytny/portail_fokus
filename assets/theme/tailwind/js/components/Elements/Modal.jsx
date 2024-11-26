@@ -15,7 +15,7 @@ export function CloseModalBtn ({ identifiant, children = "Annuler" })
 		ModalFunctions.closeM(body, modal, modalContent);
 	}
 
-	return <div className="close-modal"><Button type="default" onClick={handleCloseModal}>{children}</Button></div>
+	return <div className="close-modal-manual"><Button type="default" onClick={handleCloseModal}>{children}</Button></div>
 }
 
 export class Modal extends Component {
@@ -87,7 +87,7 @@ export class Modal extends Component {
 					<div className="text-center sm:text-left">
 						<div className="flex flex-row justify-between gap-1">
 							<h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">{title ? title : ""}</h3>
-							<div className="close-modal cursor-pointer"><span className="icon-cancel" /></div>
+							<div className={`close-modal-${identifiant} cursor-pointer`}><span className="icon-cancel" /></div>
 						</div>
 					</div>
 				</div>
