@@ -94,6 +94,18 @@ class SanitizeData
         return $return;
     }
 
+    public function toFormatPhone($value, $return = null): ?string
+    {
+        if($value != "" && $value != null){
+            $value = trim($value);
+            $value = $this->removeCarac($value);
+            $value = str_replace(' ', '.', $value);
+            return htmlspecialchars($value);
+        }
+
+        return $return;
+    }
+
     private function removeCarac($value): string
     {
         $value = str_replace('\'', '', $value);

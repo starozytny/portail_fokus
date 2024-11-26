@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
@@ -6,7 +7,10 @@ import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
 import { TenantsList } from "@userPages/Tenants/TenantsList";
+import { TenantFormulaire } from "@userPages/Tenants/TenantForm";
 
+import { Modal } from "@tailwindComponents/Elements/Modal";
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
@@ -27,6 +31,7 @@ export class Tenants extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.form = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -73,19 +78,26 @@ export class Tenants extends Component {
 
 	render () {
 		const { highlight } = this.props;
-		const { data, currentData, loadingData, perPage, currentPage } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
 
 		return <>
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2 flex flex-row">
-						<Search onSearch={this.handleSearch} placeholder="Rechercher par locataire, reference, adresse.." />
+					<div className="mb-2 flex flex-col gap-4 md:flex-row">
+						<div className="md:w-[258px]">
+							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+								Ajouter un locataire
+							</Button>
+						</div>
+						<div className="w-full flex flex-row">
+							<Search onSearch={this.handleSearch} placeholder="Rechercher par locataire, reference, adresse.." />
+						</div>
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
 										 onClick={this.handlePaginationClick}
-										 onPerPage={this.handlePerPage}/>
+										 onPerPage={this.handlePerPage} />
 
 					<TenantsList data={currentData}
 								 highlight={parseInt(highlight)}
@@ -93,6 +105,13 @@ export class Tenants extends Component {
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+					{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5}
+										 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}
+										 isForm={true}
+										 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	identifiant="form-tenant" key={element ? element.id : 0} />}
+					/>, document.body)}
 				</>
 			}
 		</>

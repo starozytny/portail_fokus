@@ -9,6 +9,7 @@ use App\Entity\Fokus\FkKeyType;
 use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkNature;
 use App\Entity\Fokus\FkRoom;
+use App\Entity\Fokus\FkTenant;
 use App\Entity\Fokus\FkUser;
 use App\Service\SanitizeData;
 
@@ -85,7 +86,7 @@ class DataFokus
 
 
         $variants = [];
-        foreach($data->variants as $variant){
+        foreach ($data->variants as $variant) {
             $variants[] = $this->sanitizeData->cleanForFokus($variant);
         }
 
@@ -105,6 +106,22 @@ class DataFokus
             'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
             'content' => json_encode($data->content),
+        ];
+    }
+
+    public function setDataTenant(?FkTenant $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'last_name' => $this->sanitizeData->cleanFullFokus($data->lastName),
+            'first_name' => $this->sanitizeData->cleanFullFokus($data->firstName),
+            'phone' => $this->sanitizeData->toFormatPhone($data->phone),
+            'email' => $this->sanitizeData->cleanFullFokus($data->email),
+            'addr1' => $this->sanitizeData->cleanFullFokus($data->addr1),
+            'addr2' => $this->sanitizeData->cleanFullFokus($data->addr2),
+            'addr3' => $this->sanitizeData->cleanFullFokus($data->addr3),
+            'city' => $this->sanitizeData->cleanFullFokus($data->city),
+            'zipcode' => $this->sanitizeData->cleanFullFokus($data->zipcode)
         ];
     }
 }

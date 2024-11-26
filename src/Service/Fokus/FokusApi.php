@@ -89,7 +89,7 @@ class FokusApi
             if($statusCode == 409){
                 return $statusCode;
             }
-            if($statusCode !== 200){
+            if($statusCode !== 200 && $statusCode !== 201){
                 return false;
             }
 
@@ -181,5 +181,22 @@ class FokusApi
     public function modelDuplicate($id)
     {
         return $this->callApi("GET", "models/" . $id);
+    }
+
+    // ------- Locatire
+
+    public function tenantCreate($data)
+    {
+        return $this->callApi("POST", "add_tenant_portal", $data);
+    }
+
+    public function tenantUpdate($data, $id)
+    {
+        return $this->callApi("PUT", "edit_tenant/" . $id, $data);
+    }
+
+    public function tenantDelete($id)
+    {
+        return $this->callApi("GET", "delete_tenant/" . $id);
     }
 }

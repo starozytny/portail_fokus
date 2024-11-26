@@ -40,7 +40,7 @@ export function TenantsItem ({ elem, highlight, onModal })
                 </div>
                 <div className="col-4 actions">
                     <ButtonIcon type="default" icon="receipt" onClick={() => onModal('update', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
-                    <ButtonIcon type="default" icon="pencil" onClick={() => onModal('update', elem)}>Modifier</ButtonIcon>
+                    <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
                 </div>
             </div>
         </div>
