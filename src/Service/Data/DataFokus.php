@@ -6,6 +6,7 @@ use App\Entity\Fokus\FkAspect;
 use App\Entity\Fokus\FkCounterType;
 use App\Entity\Fokus\FkElement;
 use App\Entity\Fokus\FkKeyType;
+use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkNature;
 use App\Entity\Fokus\FkRoom;
 use App\Entity\Fokus\FkUser;
@@ -95,6 +96,15 @@ class DataFokus
             'family' => $data->family,
             'gender' => $gender,
             'variants' => $variants,
+        ];
+    }
+
+    public function setDataModel(?FkModel $obj, $data): array
+    {
+        return [
+            'id' => $obj->getId() ?: null,
+            'name' => $this->sanitizeData->cleanForFokus($data->name),
+            'content' => json_encode($data->content),
         ];
     }
 }

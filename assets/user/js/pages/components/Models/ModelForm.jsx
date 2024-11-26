@@ -16,8 +16,8 @@ import { Button, ButtonIcon } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
 
 const URL_INDEX_ELEMENTS = "user_models_index";
-const URL_CREATE_ELEMENT = "intern_api_fokus_bibli_aspects_create";
-const URL_UPDATE_ELEMENT = "intern_api_fokus_bibli_aspects_update";
+const URL_CREATE_ELEMENT = "intern_api_fokus_models_create";
+const URL_UPDATE_ELEMENT = "intern_api_fokus_models_update";
 
 function getNameRoom (rooms, id){
 	let name = "";

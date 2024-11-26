@@ -160,4 +160,16 @@ class FokusApi
     {
         return $this->callApi("POST", "library/edit_natures/" . $id, $data);
     }
+
+    // ------- Model
+
+    public function modelCreate($data)
+    {
+        return $this->callApi("POST", "models/add_model", $data);
+    }
+
+    public function modelUpdate($data, $id)
+    {
+        return $this->callApi("POST", "models/edit_model/" . $id, $data);
+    }
 }

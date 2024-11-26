@@ -9,8 +9,12 @@ use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkNature;
 use App\Entity\Fokus\FkRoom;
 use App\Service\ApiResponse;
+use App\Service\Data\DataFokus;
+use App\Service\Fokus\FokusApi;
 use App\Service\Fokus\FokusService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -46,5 +50,61 @@ class ModelController extends AbstractController
             'elementsNatures' => $elementsNatures,
             'natures' => $natures,
         ]);
+    }
+
+    public function submitForm($type, FkModel $obj, Request $request, ApiResponse $apiResponse,
+                               FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): JsonResponse
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+        $data = json_decode($request->getContent());
+
+        if ($data === null) {
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
+        }
+
+        $dataToSend = $dataFokus->setDataModel($obj, $data);
+
+        if($type == "create") {
+            $existe = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);
+            if($existe && $existe->getId() !== $dataToSend['id']) {
+                return $apiResponse->apiJsonResponseValidationFailed([[
+                    'name' => 'name',
+                    'message' => "Ce modèle existe déjà."
+                ]]);
+            }
+
+            $result = $fokusApi->modelCreate($dataToSend);
+        } else {
+            $result = $fokusApi->modelUpdate($dataToSend, $obj->getId());
+        }
+
+        if($result === false || $result == 409){
+            if($result == 409){
+                return $apiResponse->apiJsonResponseBadRequest('Ce modèle existe déjà.');
+            }
+            return $apiResponse->apiJsonResponseBadRequest('[AF0001] Une erreur est survenue.');
+        }
+
+        $obj = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);
+
+        $this->addFlash('info', 'Données mises à jour.');
+        return $apiResponse->apiJsonResponse($obj, FkModel::LIST);
+    }
+
+    #[Route('/create', name: 'create', options: ['expose' => true], methods: 'POST')]
+    public function create(Request $request, ApiResponse $apiResponse,
+                           FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): Response
+    {
+        return $this->submitForm("create", new FkModel(), $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
+    }
+
+    #[Route('/update/{id}', name: 'update', options: ['expose' => true], methods: 'PUT')]
+    public function update(Request $request, $id, ApiResponse $apiResponse,
+                           FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkModel::class)->find($id);
+        return $this->submitForm("update", $obj, $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
     }
 }
