@@ -192,7 +192,7 @@ class FokusApi
 
     public function tenantUpdate($data, $id)
     {
-        return $this->callApi("PUT", "edit_tenant/" . $id, $data);
+        return $this->callApi("PUT", "add_tenant_portal/" . $id, $data);
     }
 
     public function tenantDelete($id)

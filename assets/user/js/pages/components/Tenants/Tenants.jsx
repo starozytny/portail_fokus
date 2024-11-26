@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
+import axios from "axios";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
@@ -12,10 +13,12 @@ import { TenantFormulaire } from "@userPages/Tenants/TenantForm";
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
+import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
 const URL_GET_DATA = "intern_api_fokus_tenants_list";
+const URL_DELETE_ELEMENT = "intern_api_fokus_tenants_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_tenants";
 
@@ -42,7 +45,49 @@ export class Tenants extends Component {
 		const { numSociety, highlight } = this.props;
 		const { perPage, sorter } = this.state;
 
-		List.getData(this, Routing.generate(URL_GET_DATA, {numSociety: numSociety}), perPage, sorter, highlight);
+		const self = this;
+		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
+			.then(function (response) {
+				let data = [];
+				let dataImmuable = JSON.parse(response.data.donnees);
+
+				JSON.parse(response.data.donnees).forEach(elem => {
+					let elemInventories = [];
+					let canActions = true;
+					JSON.parse(response.data.inventories).forEach(inventory => {
+						if(inventory.tenants !== ""){
+							let removeDollars = inventory.tenants.replaceAll("$", "")
+							JSON.parse(removeDollars).forEach(tenant => {
+								let nRef = elem.reference.replaceAll("$", "")
+								if(tenant === nRef){
+									canActions = false;
+
+									elemInventories.push(inventory)
+								}
+							})
+							if(elem.is_imported !== "0" ){
+								canActions = false;
+							}
+						}
+					})
+
+					elem.canActions = canActions;
+					elem.inventories = elemInventories;
+
+					data.push(elem);
+				})
+
+				data.sort(sorter);
+				dataImmuable.sort(sorter);
+
+				let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
+
+				self.setState({
+					data: data, dataImmuable: dataImmuable, currentData: currentData,
+					currentPage: currentPage,
+					loadingData: false })
+			})
+		;
 	}
 
 	handleUpdateData = (currentData) => {
@@ -105,6 +150,12 @@ export class Tenants extends Component {
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+											   title="Supprimer ce locataire" msgSuccess="Locataire supprimé"
+											   onUpdateList={this.handleUpdateList}>
+						Êtes-vous sûr de vouloir supprimer définitivement ce locataire : <b>{element ? element.name : ""}</b> ?
+					</ModalDelete>, document.body)}
 
 					{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5}
 										 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}

@@ -2,6 +2,7 @@
 
 namespace App\Controller\InternApi\Fokus;
 
+use App\Entity\Fokus\FkInventory;
 use App\Entity\Fokus\FkTenant;
 use App\Service\ApiResponse;
 use App\Service\Data\DataFokus;
@@ -12,19 +13,27 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/intern/api/fokus/tenants', name: 'intern_api_fokus_tenants_')]
 class TenantController extends AbstractController
 {
     #[Route('/list/{numSociety}', name: 'list', options: ['expose' => true], methods: 'GET')]
-    public function list($numSociety, FokusService $fokusService, ApiResponse $apiResponse): Response
+    public function list($numSociety, FokusService $fokusService, ApiResponse $apiResponse, SerializerInterface $serializer): Response
     {
         $client = $fokusService->getAdClientByNumSociety($numSociety);
 
         $em = $fokusService->getEntityNameManager($client->getManager());
         $data = $em->getRepository(FkTenant::class)->findAll();
+        $inventories = $em->getRepository(FkInventory::class)->findAll();
 
-        return $apiResponse->apiJsonResponse($data, FkTenant::LIST);
+        $data = $serializer->serialize($data, 'json', ['groups' => FkTenant::LIST]);
+        $inventories = $serializer->serialize($inventories, 'json', ['groups' => FkInventory::LIST]);
+
+        return $apiResponse->apiJsonResponseCustom([
+            'donnees' => $data,
+            'inventories' => $inventories
+        ]);
     }
 
     public function submitForm($type, FkTenant $obj, Request $request, ApiResponse $apiResponse,
@@ -85,5 +94,20 @@ class TenantController extends AbstractController
 
         $obj = $em->getRepository(FkTenant::class)->find($id);
         return $this->submitForm("update", $obj, $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
+    }
+
+    #[Route('/delete/{id}', name: 'delete', options: ['expose' => true], methods: 'DELETE')]
+    public function delete($id, FokusService $fokusService, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkTenant::class)->find($id);
+        $result = $fokusApi->tenantDelete($obj->getId());
+
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('Une erreur est survenue.');
+        }
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }
