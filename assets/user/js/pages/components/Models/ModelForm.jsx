@@ -97,7 +97,7 @@ class Form extends Component {
 	}
 
 	handleSelectElement = (el, type, element) => {
-		const { iUpdate, content } = this.state;
+		const { content } = this.state;
 
 		let newElements = "";
 		let nContent = [];
@@ -110,6 +110,29 @@ class Form extends Component {
 				}else{
 					elements.push(el.id);
 				}
+
+				newElements = JSON.stringify(elements);
+				elem.elements = newElements;
+			}
+
+			nContent.push(elem);
+		})
+
+		this.setState({ content: nContent });
+	}
+
+	handleDeselectManuelElement = (id, element) => {
+		const { content } = this.state;
+
+		console.log(element);
+
+		let newElements = "";
+		let nContent = [];
+		content.forEach(elem => {
+			if(elem.uid === element.uid){
+				let elements = JSON.parse(elem.elements);
+
+				elements = elements.filter(v => { return v !== id });
 
 				newElements = JSON.stringify(elements);
 				elem.elements = newElements;
@@ -183,6 +206,8 @@ class Form extends Component {
 
 										{content.map((elem, index) => {
 
+											console.log(elem);
+
 											let itemsElement = [];
 
 											let elementCat = [];
@@ -197,7 +222,13 @@ class Form extends Component {
 													})
 
 													if(itemElement.category === cat.id){
-														catData.push(<div key={cat.id + "-" + itemElement.id}>- {itemElement.name}</div>)
+														catData.push(<div className="flex justify-between items-center gap-2 hover:bg-gray-100" key={cat.id + "-" + itemElement.id}>
+															<div>- {itemElement.name}</div>
+															<div className="cursor-pointer"
+																 onClick={() => this.handleDeselectManuelElement(itemElement.id, elem)}>
+																<span className="icon-cancel"></span>
+															</div>
+														</div>)
 													}
 												})
 
