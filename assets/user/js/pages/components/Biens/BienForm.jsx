@@ -159,7 +159,6 @@ class Form extends Component {
 							? <Input valeur={reference} identifiant="reference" {...params0}>Référence <span className="text-xs">(10 carac. max)</span> *</Input>
 							: <InputView valeur={reference} identifiant="reference" {...params0}>Référence *</InputView>
 						}
-
 					</div>
 
 					<div className="flex flex-col gap-4">

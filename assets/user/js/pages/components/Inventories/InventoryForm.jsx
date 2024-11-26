@@ -7,43 +7,50 @@ import Inputs from "@commonFunctions/inputs";
 import Formulaire from "@commonFunctions/formulaire";
 import Validateur from "@commonFunctions/validateur";
 
-import { Alert } from "@tailwindComponents/Elements/Alert";
 import { Button } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn } from "@tailwindComponents/Elements/Modal";
-import { Input, InputCity, InputView, Switcher } from "@tailwindComponents/Elements/Fields";
+import { Checkbox, Input, Radiobox, Select } from "@tailwindComponents/Elements/Fields";
 
 const URL_INDEX_ELEMENTS = "user_properties_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_properties_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_properties_update";
 
-let saveZipcodes = [];
-
-export function InventoryFormulaire ({ context, element, identifiant }) {
+export function InventoryFormulaire ({ context, element, identifiant, properties, users, models, tenants }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
+	let comparativeValue = [0];
 	if (context === "update") {
 		url = Routing.generate(URL_UPDATE_ELEMENT, { id: element.id });
+
+		switch (parseInt(element.comparative)){
+			case 1: comparativeValue = [2]; break;
+			case 2: comparativeValue = [0]; break;
+			case 3: comparativeValue = [0,1]; break;
+			case 4: comparativeValue = [0,1,2]; break;
+			case 5: comparativeValue = [0,2]; break;
+			case 6: comparativeValue = [1,2]; break;
+			case 7: comparativeValue = [1]; break;
+			default:break;
+		}
 	}
 
 	return  <Form
         context={context}
         url={url}
-		reference={element ? Formulaire.setValue(element.reference) : ""}
-        addr1={element ? Formulaire.setValue(element.addr1) : ""}
-        addr2={element ? Formulaire.setValue(element.addr2) : ""}
-        addr3={element ? Formulaire.setValue(element.addr3) : ""}
-        zipcode={element ? Formulaire.setValue(element.zipcode) : ""}
-        city={element ? Formulaire.setValue(element.city) : ""}
-        building={element ? Formulaire.setValue(element.building) : ""}
+		userId={element ? Formulaire.setValue(element.userId) : ""}
+        input={element ? Formulaire.setValue(element.input) : 0}
+        date={element ? Formulaire.setValue(element.date === 0 ? "" : element.date) : ""}
         type={element ? Formulaire.setValue(element.type) : ""}
-        surface={element ? Formulaire.setValue(element.surface) : ""}
-        floor={element ? Formulaire.setValue(element.floor) : ""}
-        door={element ? Formulaire.setValue(element.door) : ""}
-        rooms={element ? Formulaire.setValue(element.rooms) : ""}
-        owner={element ? Formulaire.setValue(element.owner) : ""}
-        isFurnished={element ? element.isFurnished ? [1] : [0] : [0]}
+        comparative={element ? comparativeValue : []}
+        model={element ? Formulaire.setValue(element.model) : ""}
+        property={element ? Formulaire.setValue(element.property) : ""}
+        inventoryTenants={element ? Formulaire.setValue(element.tenants) : ""}
 
 		identifiant={identifiant}
+		properties={properties}
+		users={users}
+		models={models}
+		tenants={tenants}
     />
 }
 
@@ -52,26 +59,15 @@ class Form extends Component {
 		super(props);
 
 		this.state = {
-			reference: props.reference,
-			phone: props.phone,
-			email: props.email,
-			addr1: props.addr1,
-			addr2: props.addr2,
-			addr3: props.addr3,
-			zipcode: props.zipcode,
-			city: props.city,
-			building: props.building,
+			userId: props.userId,
+			input: props.input,
+			date: props.date,
 			type: props.type,
-			surface: props.surface,
-			floor: props.floor,
-			door: props.door,
-			rooms: props.rooms,
-			owner: props.owner,
-			isFurnished: props.isFurnished,
-			errors: [],
-			arrayZipcodes: [],
-			openCities: "",
-			cities: [],
+			comparative: props.comparative,
+			model: props.model,
+			property: props.property,
+			inventoryTenants: props.inventoryTenants,
+			errors: []
 		}
 	}
 
@@ -84,38 +80,25 @@ class Form extends Component {
 		let name = e.currentTarget.name;
 		let value = e.currentTarget.value;
 
-		if (name === "reference") {
-			value = value !== "" ? value.toUpperCase() : value;
-			value = value.length > 10 ? this.state[name] : value;
+		if (name === "comparative") {
+			value = Formulaire.updateValueCheckbox(e, this.state[name], parseInt(value));
 		}
 
-		if (name === "isFurnished") {
-			value = e.currentTarget.checked ? [parseInt(value)] : [0];
-		}
-
-		this.setState({ [name]: value, openCities: "" })
-	}
-
-	handleChangeCity = (e) => {
-		Inputs.cityInput(this, e, this.state.zipcode, this.state.arrayZipcodes ? this.state.arrayZipcodes : saveZipcodes)
-	}
-
-	handleSelectCity = (name, value) => {
-		this.setState({ [name]: value, openCities: "" })
+		this.setState({ [name]: value })
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
 
 		const { context, url } = this.props;
-		const { addr1, zipcode, city } = this.state;
+		const { userId, input, type } = this.state;
 
 		this.setState({ errors: [] });
 
 		let paramsToValidate = [
-			{ type: "text", id: 'addr1', value: addr1 },
-			{ type: "text", id: 'zipcode', value: zipcode },
-			{ type: "text", id: 'city', value: city },
+			{ type: "text", id: 'userId', value: userId },
+			{ type: "text", id: 'input', value: input },
+			{ type: "text", id: 'type', value: type },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)
@@ -124,10 +107,6 @@ class Form extends Component {
 		} else {
 			let self = this;
 			Formulaire.loader(true);
-
-			saveZipcodes = this.state.arrayZipcodes;
-			delete this.state.arrayZipcodes;
-
 			axios({ method: context === "create" ? "POST" : "PUT", url: url, data: this.state })
 				.then(function (response) {
 					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
@@ -141,90 +120,87 @@ class Form extends Component {
 	}
 
 	render () {
-		const { context, identifiant } = this.props;
-		const {
-			errors, reference, addr1, addr2, addr3, zipcode, city, cities, openCities,
-			building, type, surface, floor, door, rooms, owner, isFurnished
-		} = this.state;
+		const { context, identifiant, users, models } = this.props;
+		const { errors, userId, input, date, type, comparative, model, property, tenants } = this.state;
 
-		let switcherItems = [{ value: 1, label: "Oui", identifiant: "prop-oui" }];
+		let usersItems = [];
+		users.forEach(us => {
+			usersItems.push({ value: us.id, label: us.lastName + " " + us.firstName, identifiant: 'user-' + us.id })
+		});
+
+		let modelsItems = [];
+		models.forEach(mo => {
+			modelsItems.push({ value: "-" + mo.id, label: mo.name, identifiant: 'model-' + mo.id })
+		});
+
+		let inputItems = [{ value: 0, label: 'EDL Vierge', identifiant: 'edl-vierge' }]
+		if (models.length > 0) {
+			inputItems = [...inputItems, { value: 1, label: 'Établir structure', identifiant: 'etablir-structure' }]
+		}
+		if (property && property.lastInventoryUid && property.lastInventoryUid !== "" && property.lastInventoryUid !== "0") {
+			inputItems = [...inputItems, { value: 2, label: 'EDL Précédent', identifiant: 'edl-precedent' }]
+		}
+
+		let typeItems = [
+			{ value: 1, identifiant: 'entrant', label: 'Entrant' },
+			{ value: 0, identifiant: 'sortant', label: 'Sortant' }
+		]
+
+		let comparativeItems = [
+			{ value: 0, identifiant: 'compa-0', label: 'Conserver commentaires' },
+			{ value: 1, identifiant: 'compa-1', label: 'Conserver photos' },
+			{ value: 2, identifiant: 'compa-2', label: 'Comparatif' }
+		]
 
 		let params0 = { errors: errors, onChange: this.handleChange };
 
 		return <>
 			<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
 				<div className="flex flex-col gap-4">
-					<div>
-						{context === "create"
-							? <Input valeur={reference} identifiant="reference" {...params0}>Référence <span className="text-xs">(10 carac. max)</span> *</Input>
-							: <InputView valeur={reference} identifiant="reference" {...params0}>Référence *</InputView>
-						}
-
+					<div className="flex gap-4">
+						<div className="w-full">
+							<Select identifiant="userId" valeur={userId} items={usersItems} {...params0}>
+								Attribution
+							</Select>
+						</div>
+						<div className="w-full">
+							<Select identifiant="input" valeur={input} items={inputItems} {...params0}>
+								Structure
+							</Select>
+						</div>
 					</div>
-
-					<div className="flex flex-col gap-4">
-						<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-							<div className="col-span-2 md:col-span-1">
-								<Input valeur={addr1} identifiant="addr1" {...params0}>Adresse *</Input>
-							</div>
-							<div>
-								<Input valeur={addr2} identifiant="addr2" {...params0}>Complément</Input>
-							</div>
-							<div>
-								<Input valeur={addr3} identifiant="addr3" {...params0}>Suite adresse</Input>
-							</div>
-						</div>
-						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<Input valeur={zipcode} identifiant="zipcode" errors={errors} onChange={this.handleChangeCity} type="cleave-zipcode">
-									Code postal *
-								</Input>
-							</div>
-							<div>
-								<InputCity identifiant="city" valeur={city} {...params0}
-										   cities={cities} openCities={openCities} onSelectCity={this.handleSelectCity}>
-									Ville *
-								</InputCity>
-							</div>
-						</div>
-						<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-							<div>
-								<Input valeur={type} identifiant="type" {...params0}>Type de bien</Input>
-							</div>
-							<div>
-								<Input valeur={building} identifiant="building" {...params0}>Bâtiment</Input>
-							</div>
-							<div>
-								<Input valeur={door} identifiant="door" {...params0}>Porte</Input>
-							</div>
-							<div>
-								<Input valeur={floor} identifiant="floor" {...params0}>Étage</Input>
-							</div>
-						</div>
-						<div className="flex flex-col gap-4 md:flex-row">
-							<div className="w-full flex gap-4">
-								<div className="w-full">
-									<Input valeur={surface} identifiant="surface" {...params0}>Surface (m²)</Input>
-								</div>
-								<div className="w-full">
-									<Input valeur={rooms} identifiant="rooms" {...params0}>Nombre de pièces</Input>
-								</div>
-							</div>
+					{parseInt(input) === 1
+						? <div className="flex gap-4">
+							<div className="w-full"></div>
 							<div className="w-full">
-								<Switcher items={switcherItems} identifiant="isFurnished" valeur={isFurnished} {...params0}>
-									Est-ce meublé ?
-								</Switcher>
+								<Select identifiant="model" valeur={model} items={modelsItems} {...params0}>
+									Modèle
+								</Select>
 							</div>
 						</div>
-						<div>
-							<div>
-								<Input valeur={owner} identifiant="owner" {...params0}>Propriétaire</Input>
-							</div>
+						: null
+					}
+					{parseInt(input) === 2
+						? <div>
+							<Checkbox identifiant="comparative" valeur={comparative} items={comparativeItems} {...params0}
+									  styleType="fat" classItems="flex gap-2">
+								Options de la structure
+							</Checkbox>
 						</div>
-					</div>
-
-					<div>
-						<Alert type="gray" icon="question">N'oubliez pas de re-synchroniser votre appareil.</Alert>
+						: null
+					}
+					<div className="flex gap-4">
+						<div className="w-full">
+							<Radiobox identifiant="type" valeur={type} items={typeItems} {...params0}
+									  styleType="fat" classItems="flex gap-2">
+								Type d'état des lieux
+							</Radiobox>
+						</div>
+						<div className="w-full">
+							<Input type="datetime-local" identifiant="date" valeur={date} {...params0}>
+								Prévu le <span className="text-xs">(facultatif)</span>
+							</Input>
+						</div>
 					</div>
 				</div>
 			</div>

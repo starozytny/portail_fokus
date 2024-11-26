@@ -10,11 +10,11 @@ import List from "@commonFunctions/list";
 import { InventoriesList } from "@userPages/Inventories/InventoriesList";
 import { InventoryFormulaire } from "@userPages/Inventories/InventoryForm";
 
-import { Button, ButtonA } from "@tailwindComponents/Elements/Button";
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
+import { Button, ButtonA } from "@tailwindComponents/Elements/Button";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
 const URL_INDEX_ELEMENTS = "user_inventories_index";
@@ -32,6 +32,10 @@ export class Inventories extends Component {
 			sorter: Sort.compareAddr1,
 			loadingData: true,
 			element: null,
+			properties: [],
+			users: [],
+			tenants: [],
+			models: [],
 		}
 
 		this.pagination = React.createRef();
@@ -107,7 +111,9 @@ export class Inventories extends Component {
 				self.setState({
 					data: data, dataImmuable: dataImmuable, currentData: currentData,
 					properties: properties,
+					users: users,
 					tenants: tenants,
+					models: models,
 					currentPage: currentPage,
 					loadingData: false })
 			})
@@ -147,7 +153,7 @@ export class Inventories extends Component {
 
 	render () {
 		const { highlight, status } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage, properties, users, tenants, models } = this.state;
 
 		return <>
 			{loadingData
@@ -197,6 +203,7 @@ export class Inventories extends Component {
 										 title={element ? `Modifier ${element.id}` : "Ajouter un état des lieux"}
 										 isForm={true}
 										 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	   properties={properties} users={users} tenants={tenants} models={models}
 																	   identifiant="form-edl" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>

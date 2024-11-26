@@ -36,8 +36,8 @@ class InventoryController extends AbstractController
         }
         $properties = $em->getRepository(FkProperty::class)->findAll();
         $tenants = $em->getRepository(FkTenant::class)->findAll();
-        $users = $em->getRepository(FkUser::class)->findAll();
-        $models = $em->getRepository(FkModel::class)->findAll();
+        $users = $em->getRepository(FkUser::class)->findBy([], ['lastName' => 'ASC']);
+        $models = $em->getRepository(FkModel::class)->findBy([], ['name' => 'ASC']);
 
         $data = $serializer->serialize($data, 'json', ['groups' => FkInventory::LIST]);
         $properties = $serializer->serialize($properties, 'json', ['groups' => FkProperty::LIST]);
