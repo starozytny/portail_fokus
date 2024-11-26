@@ -34,6 +34,7 @@ export class Tenants extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.delete = React.createRef();
 		this.form = React.createRef();
 	}
 

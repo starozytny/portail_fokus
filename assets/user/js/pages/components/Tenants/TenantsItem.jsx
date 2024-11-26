@@ -27,7 +27,7 @@ export function TenantsItem ({ elem, highlight, onModal })
                 <span className="icon-trash" />
                 <span className="pl-1">Supprimer</span>
             </div> },
-    ]
+    ];
 
     return <div className={`item${setHighlightClass(nHighlight)} border-t hover:bg-slate-50`} ref={refItem}>
         <div className="item-content">

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
@@ -6,12 +7,18 @@ import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 
 import { BiensList } from "@userPages/Biens/BiensList";
+import { BienFormulaire } from "@userPages/Biens/BienForm";
 
+import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Search } from "@tailwindComponents/Elements/Search";
+import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+import { Button } from "@tailwindComponents/Elements/Button";
+import axios from "axios";
 
 const URL_GET_DATA = "intern_api_fokus_properties_list";
+const URL_DELETE_ELEMENT = "intern_api_fokus_tenants_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_biens";
 
@@ -27,6 +34,8 @@ export class Biens extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.delete = React.createRef();
+		this.form = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -37,7 +46,44 @@ export class Biens extends Component {
 		const { numSociety, highlight } = this.props;
 		const { perPage, sorter } = this.state;
 
-		List.getData(this, Routing.generate(URL_GET_DATA, {numSociety: numSociety}), perPage, sorter, highlight);
+		const self = this;
+		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
+			.then(function (response) {
+				let data = [];
+				let dataImmuable = JSON.parse(response.data.donnees);
+
+				JSON.parse(response.data.donnees).forEach(elem => {
+					let elemInventories = [];
+					let canActions = true;
+					JSON.parse(response.data.inventories).forEach(inventory => {
+						if(inventory.propertyUid === elem.uid || elem.isImported !== "0"
+							|| elem.lastInventoryUid !== "0" || elem.lastInventoryUid === ""
+						){
+							canActions = false;
+						}
+
+						if(inventory.propertyUid === elem.uid){
+							elemInventories.push(inventory)
+						}
+					})
+
+					elem.canActions = canActions;
+					elem.inventories = elemInventories;
+
+					data.push(elem);
+				})
+
+				data.sort(sorter);
+				dataImmuable.sort(sorter);
+
+				let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
+
+				self.setState({
+					data: data, dataImmuable: dataImmuable, currentData: currentData,
+					currentPage: currentPage,
+					loadingData: false })
+			})
+		;
 	}
 
 	handleUpdateData = (currentData) => {
@@ -73,19 +119,26 @@ export class Biens extends Component {
 
 	render () {
 		const { highlight } = this.props;
-		const { data, currentData, loadingData, perPage, currentPage } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
 
 		return <>
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2 flex flex-row">
-						<Search onSearch={this.handleSearch} placeholder="Rechercher par reference, adresse, code postal, ville, locataire, propriétaire.." />
+					<div className="mb-2 flex flex-col gap-4 md:flex-row">
+						<div className="md:w-[258px]">
+							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+								Ajouter un bien
+							</Button>
+						</div>
+						<div className="w-full flex flex-row">
+							<Search onSearch={this.handleSearch} placeholder="Rechercher par reference, adresse, code postal, ville, locataire, propriétaire.." />
+						</div>
 					</div>
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
 										 onClick={this.handlePaginationClick}
-										 onPerPage={this.handlePerPage}/>
+										 onPerPage={this.handlePerPage} />
 
 					<BiensList data={currentData}
 							   highlight={parseInt(highlight)}
@@ -93,6 +146,19 @@ export class Biens extends Component {
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+											   title="Supprimer ce bien" msgSuccess="Bien supprimé"
+											   onUpdateList={this.handleUpdateList}>
+						Êtes-vous sûr de vouloir supprimer définitivement ce bien : <b>{element ? element.addr1 : ""}</b> ?
+					</ModalDelete>, document.body)}
+
+					{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5}
+										 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
+										 isForm={true}
+										 content={<BienFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																  identifiant="form-property" key={element ? element.id : 0} />}
+					/>, document.body)}
 				</>
 			}
 		</>

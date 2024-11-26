@@ -25,7 +25,7 @@ class TenantController extends AbstractController
 
         $em = $fokusService->getEntityNameManager($client->getManager());
         $data = $em->getRepository(FkTenant::class)->findAll();
-        $inventories = $em->getRepository(FkInventory::class)->findAll();
+        $inventories = $em->getRepository(FkInventory::class)->findBy([], ['date' => 'DESC']);
 
         $data = $serializer->serialize($data, 'json', ['groups' => FkTenant::LIST]);
         $inventories = $serializer->serialize($inventories, 'json', ['groups' => FkInventory::LIST]);
