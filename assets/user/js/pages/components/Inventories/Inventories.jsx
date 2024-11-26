@@ -51,7 +51,7 @@ export class Inventories extends Component {
 		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {st: status, numSociety: numSociety}), data: {} })
 			.then(function (response) {
 				let data = [];
-				let dataImmuable = JSON.parse(response.data.donnees);
+				let dataImmuable = [];
 
 				let properties = JSON.parse(response.data.properties);
 				let users = JSON.parse(response.data.users);
@@ -99,8 +99,8 @@ export class Inventories extends Component {
 					}
 
 					data.push(elem);
+					dataImmuable.push(elem);
 				})
-				console.log(data);
 
 				let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
 
@@ -120,7 +120,7 @@ export class Inventories extends Component {
 
 	handleSearch = (search) => {
 		const { perPage, sorter, dataImmuable } = this.state;
-		List.search(this, 'fokus_property', search, dataImmuable, perPage, sorter)
+		List.search(this, 'fokus_inventory', search, dataImmuable, perPage, sorter)
 	}
 
 	handleUpdateList = (element, context) => {

@@ -5,8 +5,8 @@ import Sanitaze from "@commonFunctions/sanitaze";
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
-import { ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 import { Badge } from "@tailwindComponents/Elements/Badge";
+import { ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
 export function InventoriesItem ({ elem, highlight, onModal })
 {
@@ -49,7 +49,7 @@ export function InventoriesItem ({ elem, highlight, onModal })
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1">
-                    <div className={`font-medium text-sm ${elem.date === 0 ? "text-red-500" : ""}`}>
+                    <div className={`font-semibold text-sm ${elem.date === 0 ? "text-red-500" : ""}`}>
                         {elem.date === 0 ? "Indéfinie" : Sanitaze.timestampToDateForm(elem.date)}
                     </div>
                 </div>

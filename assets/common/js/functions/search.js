@@ -45,17 +45,31 @@ function switchFunction(type, search, v) {
                 return v;
             }
             break;
+        case "fokus_inventory":
+            if((v.property && v.property.addr1 && searchContainsWith(v.property.addr1, search))
+                || (v.uid && searchStartWith(v.uid + "", search))
+                || (v.property && v.property.addr2 && searchContainsWith(v.property.addr2, search))
+                || (v.property && v.property.addr3 && searchContainsWith(v.property.addr3, search))
+                || (v.property && v.property.zipcode && searchContainsWith(v.property.zipcode, search))
+                || (v.property && v.property.city && searchContainsWith(v.property.city, search))
+                || (v.property && v.property.reference && searchStartWith(v.property.reference + "", search))
+                || (v.tenants && searchStartWith(v.tenants, search))
+                || (v.property && v.property.owner && searchContainsWith(v.property.owner, search))
+            ){
+                return v;
+            }
+            break;
         case "fokus_property":
-            if(searchContainsWith(v.addr1, search)
-                || searchStartWith(v.uid + "", search)
-                || searchStartWith(v.lastInventoryUid + "", search)
-                || searchContainsWith(v.addr2, search)
-                || searchContainsWith(v.addr3, search)
-                || searchContainsWith(v.zipcode, search)
-                || searchContainsWith(v.city, search)
-                || searchStartWith(v.reference + "", search)
-                || searchContainsWith(v.currentTenant, search)
-                || searchContainsWith(v.owner, search)
+            if((v.addr1 &&searchContainsWith(v.addr1, search))
+                || (v.uid &&searchStartWith(v.uid + "", search))
+                || (v.lastInventoryUid &&searchStartWith(v.lastInventoryUid + "", search))
+                || (v.addr2 &&searchContainsWith(v.addr2, search))
+                || (v.addr3 &&searchContainsWith(v.addr3, search))
+                || (v.zipcode &&searchContainsWith(v.zipcode, search))
+                || (v.city &&searchContainsWith(v.city, search))
+                || (v.reference &&searchStartWith(v.reference + "", search))
+                || (v.currentTenant &&searchContainsWith(v.currentTenant, search))
+                || (v.owner &&searchContainsWith(v.owner, search))
             ){
                 return v;
             }

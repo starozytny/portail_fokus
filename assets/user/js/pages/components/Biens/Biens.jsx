@@ -50,7 +50,7 @@ export class Biens extends Component {
 		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
 			.then(function (response) {
 				let data = [];
-				let dataImmuable = JSON.parse(response.data.donnees);
+				let dataImmuable = [];
 
 				JSON.parse(response.data.donnees).forEach(elem => {
 					let elemInventories = [];
@@ -71,6 +71,7 @@ export class Biens extends Component {
 					elem.inventories = elemInventories;
 
 					data.push(elem);
+					dataImmuable.push(elem);
 				})
 
 				data.sort(sorter);
