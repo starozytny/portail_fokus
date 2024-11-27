@@ -9,7 +9,7 @@ import List from "@commonFunctions/list";
 
 import { TenantsList } from "@userPages/Tenants/TenantsList";
 import { TenantFormulaire } from "@userPages/Tenants/TenantForm";
-import { Tenantetails } from "@userPages/Tenants/TenantDetails";
+import { TenantDetails } from "@userPages/Tenants/TenantDetails";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Button } from "@tailwindComponents/Elements/Button";
@@ -186,7 +186,7 @@ export class Tenants extends Component {
 							{createPortal(<Modal ref={this.details} identifiant='details-tenant' maxWidth={1024} margin={1}
 												 title={element ? `Détails de ${element.lastName} ${element.firstName}` : ""}
 												 content={element
-													 ? <Tenantetails elem={element} key={element.id}
+													 ? <TenantDetails elem={element} key={element.id}
 																	 users={users} models={models} tenants={dataImmuable} properties={properties} />
 													 :	null
 												 }

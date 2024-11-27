@@ -2,7 +2,7 @@ import React from "react";
 
 import { InventoriesLight } from "@userPages/Inventories/Light/InventoriesLight";
 
-export function Tenantetails ({ elem, users, models, tenants, properties }) {
+export function TenantDetails ({ elem, users, models, tenants, properties }) {
     return <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4 md:col-span-2">
             <div className="bg-white border rounded-md">

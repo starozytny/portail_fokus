@@ -10,7 +10,7 @@
 .items-inventories-light {
   $col1: 90px;
   $col2: 100px;
-  $col3: 100px;
+  $col3: 180px;
   $col5: 34px;
   $colGap: 40px;
   @media (min-width: 768px) {
@@ -37,10 +37,10 @@
     }
   }
 
-  @media (min-width: 1280px) {
+  @media (min-width: 1024px) {
     $col1: 160px;
-    $col2: 120px;
-    $col3: 180px;
+    $col2: 180px;
+    $col3: 200px;
     .item-infos {
       & > .col-1 {
         width: $col1;
