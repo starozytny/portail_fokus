@@ -16,7 +16,7 @@ export function InventoryDetails ({ elem }) {
                 </div>
                 <div className="p-4 flex flex-col gap-2">
                     <div>
-                        <Badge type={elem.type === 0 ? "red" : "green"}>
+                        <Badge type={elem.type === 0 ? "red" : "yellow"}>
                             {elem.type === 0 ? "Sortant" : "Entrant"}
                         </Badge>
                     </div>

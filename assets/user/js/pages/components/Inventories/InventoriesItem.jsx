@@ -68,7 +68,7 @@ export function InventoriesItem ({ elem, highlight, onModal })
 
                 </div>
                 <div className="col-3 text-sm text-gray-600">
-                <Badge type={elem.type === 0 ? "red" : "green"}>
+                <Badge type={elem.type === 0 ? "red" : "yellow"}>
                         {elem.type === 0 ? "Sortant" : "Entrant"}
                     </Badge>
                     <div className="mt-1">
