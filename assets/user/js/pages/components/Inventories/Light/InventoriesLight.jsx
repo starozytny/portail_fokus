@@ -129,6 +129,7 @@ export class InventoriesLight extends Component {
 	}
 
 	render () {
+		const { property } = this.props;
 		const { data, currentData, loadingData, perPage, currentPage } = this.state;
 
 		return <>
@@ -143,7 +144,7 @@ export class InventoriesLight extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage} />
 
-					<InventoriesLightList data={currentData} />
+					<InventoriesLightList data={currentData} property={property} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />

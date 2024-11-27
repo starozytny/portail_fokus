@@ -5,6 +5,7 @@ import Sanitaze from "@commonFunctions/sanitaze";
 import { Badge } from "@tailwindComponents/Elements/Badge";
 
 import { BienData } from "@userPages/Biens/BienDetails";
+import { TenantData } from "@userPages/Tenants/TenantDetails";
 
 export function InventoryDetails ({ elem }) {
     return <div className="flex flex-col gap-4 md:grid md:grid-cols-3">
@@ -63,22 +64,7 @@ export function InventoryDetails ({ elem }) {
                         ? <div className="flex flex-col divide-y">
                             {elem.tenantsData.map((tenant, index) => {
                                 return <div className="py-4" key={index}>
-                                    <div><u>Référence</u> : <span className="font-medium">{tenant.reference}</span></div>
-                                    <div>{tenant.lastName} {tenant.firstName}</div>
-                                    <div>
-                                        <div>{tenant.phone}</div>
-                                        <div>{tenant.email ? tenant.email.split(';').map((it, index) => {
-                                            return <div key={index}>{it}</div>
-                                        }) : null}</div>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <div>{tenant.addr1}</div>
-                                            <div>{tenant.addr2}</div>
-                                            <div>{tenant.addr3}</div>
-                                        </div>
-                                        <div>{tenant.zipcode} {tenant.city}</div>
-                                    </div>
+                                    <TenantData elem={tenant} />
                                 </div>
                             })}
                         </div>

@@ -59,40 +59,4 @@
       }
     }
   }
-
-  @media (min-width: 1536px) {
-    $col1: 180px;
-    $col2: 160px;
-    $col3: 220px;
-    .item-infos {
-      & > .col-1 {
-        width: $col1;
-      }
-
-      & > .col-2 {
-        width: $col2;
-      }
-
-      & > .col-3 {
-        width: $col3;
-      }
-
-      & > .col-4 {
-        width: calc(100% -  $col1 - $col2 - $col3 - $col5 - $colGap);
-      }
-    }
-  }
-
-  @media (min-width: 1536px) {
-    $col2: 180px;
-    .item-infos {
-      & > .col-2 {
-        width: $col2;
-      }
-
-      & > .col-4 {
-        width: calc(100% -  $col1 - $col2 - $col3 - $col5 - $colGap);
-      }
-    }
-  }
 }

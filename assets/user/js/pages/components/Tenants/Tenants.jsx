@@ -9,6 +9,7 @@ import List from "@commonFunctions/list";
 
 import { TenantsList } from "@userPages/Tenants/TenantsList";
 import { TenantFormulaire } from "@userPages/Tenants/TenantForm";
+import { Tenantetails } from "@userPages/Tenants/TenantDetails";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Button } from "@tailwindComponents/Elements/Button";
@@ -31,11 +32,15 @@ export class Tenants extends Component {
 			sorter: Sort.compareLastName,
 			loadingData: true,
 			element: null,
+			users: [],
+			models: [],
+			properties: [],
 		}
 
 		this.pagination = React.createRef();
 		this.delete = React.createRef();
 		this.form = React.createRef();
+		this.details = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -53,7 +58,7 @@ export class Tenants extends Component {
 			axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
 				.then(function (response) {
 					let data = [];
-					let dataImmuable = JSON.parse(response.data.donnees);
+					let dataImmuable = [];
 
 					JSON.parse(response.data.donnees).forEach(elem => {
 						let elemInventories = [];
@@ -79,6 +84,7 @@ export class Tenants extends Component {
 						elem.inventories = elemInventories;
 
 						data.push(elem);
+						dataImmuable.push(elem);
 					})
 
 					data.sort(sorter);
@@ -88,6 +94,9 @@ export class Tenants extends Component {
 
 					self.setState({
 						data: data, dataImmuable: dataImmuable, currentData: currentData,
+						users: JSON.parse(response.data.users),
+						models: JSON.parse(response.data.models),
+						properties: JSON.parse(response.data.properties),
 						currentPage: currentPage,
 						loadingData: false })
 				})
@@ -128,7 +137,7 @@ export class Tenants extends Component {
 
 	render () {
 		const { highlight, onSelector, tenantsSelected } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
+		const { data, dataImmuable, currentData, element, loadingData, perPage, currentPage, users, models, properties } = this.state;
 
 		return <>
 			{loadingData
@@ -172,6 +181,15 @@ export class Tenants extends Component {
 												 isForm={true}
 												 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
 																			identifiant="form-tenant" key={element ? element.id : 0} />}
+							/>, document.body)}
+
+							{createPortal(<Modal ref={this.details} identifiant='details-tenant' maxWidth={1024} margin={1}
+												 title={element ? `Détails de ${element.lastName} ${element.firstName}` : ""}
+												 content={element
+													 ? <Tenantetails elem={element} key={element.id}
+																	 users={users} models={models} tenants={dataImmuable} properties={properties} />
+													 :	null
+												 }
 							/>, document.body)}
 						</>
 					}

@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { InventoriesLightItem } from "@userPages/Inventories/Light/InventoriesLightItem";
 
-export function InventoriesLightList ({ data, highlight }) {
+export function InventoriesLightList ({ data, property }) {
     return <div className="list my-4">
         <div className="list-table">
             <div className="items items-inventories-light">
@@ -23,7 +23,7 @@ export function InventoriesLightList ({ data, highlight }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <InventoriesLightItem key={elem.id} elem={elem} highlight={highlight} />
+                        return <InventoriesLightItem key={elem.id} elem={elem} property={property} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
@@ -36,5 +36,4 @@ export function InventoriesLightList ({ data, highlight }) {
 
 InventoriesLightList.propTypes = {
     data: PropTypes.array.isRequired,
-    highlight: PropTypes.number,
 }

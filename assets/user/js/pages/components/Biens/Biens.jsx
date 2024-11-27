@@ -9,6 +9,7 @@ import List from "@commonFunctions/list";
 
 import { BiensList } from "@userPages/Biens/BiensList";
 import { BienFormulaire } from "@userPages/Biens/BienForm";
+import { BienDetails } from "@userPages/Biens/BienDetails";
 
 import { Button } from "@tailwindComponents/Elements/Button";
 import { Modal } from "@tailwindComponents/Elements/Modal";
@@ -16,7 +17,6 @@ import { Search } from "@tailwindComponents/Elements/Search";
 import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import { BienDetails } from "@userPages/Biens/BienDetails";
 
 const URL_GET_DATA = "intern_api_fokus_properties_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_properties_delete";
