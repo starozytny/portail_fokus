@@ -99,6 +99,10 @@ function compareAddr1(a, b){
     return compareWithoutAccent(a.addr1, b.addr1);
 }
 
+function compareDate(a, b){
+    return comparison(a.date, b.date);
+}
+
 module.exports = {
     compareUsername,
     compareLastname,
@@ -116,4 +120,5 @@ module.exports = {
     compareNumSociety,
     compareLastName,
     compareAddr1,
+    compareDate,
 }

@@ -1,0 +1,98 @@
+.list-table{
+  .items-inventories-light{
+    & > .item{
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+.items-inventories-light {
+  $col1: 90px;
+  $col2: 100px;
+  $col3: 100px;
+  $col5: 34px;
+  $colGap: 40px;
+  @media (min-width: 768px) {
+    .item-infos {
+      & > .col-1 {
+        width: $col1;
+      }
+
+      & > .col-2 {
+        width: $col2;
+      }
+
+      & > .col-3 {
+        width: $col3;
+      }
+
+      & > .col-4 {
+        width: calc(100% -  $col1 - $col2 - $col3 - $col5 - $colGap);
+      }
+
+      & > .col-5.actions {
+        width: $col5;
+      }
+    }
+  }
+
+  @media (min-width: 1280px) {
+    $col1: 160px;
+    $col2: 120px;
+    $col3: 180px;
+    .item-infos {
+      & > .col-1 {
+        width: $col1;
+      }
+
+      & > .col-2 {
+        width: $col2;
+      }
+
+      & > .col-3 {
+        width: $col3;
+      }
+
+      & > .col-4 {
+        width: calc(100% -  $col1 - $col2 - $col3 - $col5 - $colGap);
+      }
+    }
+  }
+
+  @media (min-width: 1536px) {
+    $col1: 180px;
+    $col2: 160px;
+    $col3: 220px;
+    .item-infos {
+      & > .col-1 {
+        width: $col1;
+      }
+
+      & > .col-2 {
+        width: $col2;
+      }
+
+      & > .col-3 {
+        width: $col3;
+      }
+
+      & > .col-4 {
+        width: calc(100% -  $col1 - $col2 - $col3 - $col5 - $colGap);
+      }
+    }
+  }
+
+  @media (min-width: 1536px) {
+    $col2: 180px;
+    .item-infos {
+      & > .col-2 {
+        width: $col2;
+      }
+
+      & > .col-4 {
+        width: calc(100% -  $col1 - $col2 - $col3 - $col5 - $colGap);
+      }
+    }
+  }
+}

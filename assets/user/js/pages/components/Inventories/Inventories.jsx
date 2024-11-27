@@ -10,6 +10,7 @@ import Formulaire from "@commonFunctions/formulaire";
 
 import { InventoriesList } from "@userPages/Inventories/InventoriesList";
 import { InventoryFormulaire } from "@userPages/Inventories/InventoryForm";
+import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Search } from "@tailwindComponents/Elements/Search";
@@ -17,7 +18,6 @@ import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Button, ButtonA } from "@tailwindComponents/Elements/Button";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
-import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
 
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
@@ -31,7 +31,7 @@ export class Inventories extends Component {
 		this.state = {
             perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
 			currentPage: 0,
-			sorter: Sort.compareAddr1,
+			sorter: Sort.compareDate,
 			loadingData: true,
 			element: null,
 			properties: [],
@@ -119,6 +119,9 @@ export class Inventories extends Component {
 					data.push(elem);
 					dataImmuable.push(elem);
 				})
+
+				data.sort(sorter);
+				dataImmuable.sort(sorter);
 
 				let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
 

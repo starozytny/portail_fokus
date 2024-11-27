@@ -3,7 +3,10 @@
 namespace App\Controller\InternApi\Fokus;
 
 use App\Entity\Fokus\FkInventory;
+use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkProperty;
+use App\Entity\Fokus\FkTenant;
+use App\Entity\Fokus\FkUser;
 use App\Service\ApiResponse;
 use App\Service\Data\DataFokus;
 use App\Service\Fokus\FokusApi;
@@ -27,13 +30,22 @@ class PropertyController extends AbstractController
         $em = $fokusService->getEntityNameManager($client->getManager());
         $data = $em->getRepository(FkProperty::class)->findAll();
         $inventories = $em->getRepository(FkInventory::class)->findBy([], ['date' => 'DESC']);
+        $users = $em->getRepository(FkUser::class)->findAll();
+        $models = $em->getRepository(FkModel::class)->findAll();
+        $tenants = $em->getRepository(FkTenant::class)->findAll();
 
         $data = $serializer->serialize($data, 'json', ['groups' => FkProperty::LIST]);
         $inventories = $serializer->serialize($inventories, 'json', ['groups' => FkInventory::LIST]);
+        $users = $serializer->serialize($users, 'json', ['groups' => FkUser::LIST]);
+        $models = $serializer->serialize($models, 'json', ['groups' => FkModel::LIST]);
+        $tenants = $serializer->serialize($tenants, 'json', ['groups' => FkTenant::LIST]);
 
         return $apiResponse->apiJsonResponseCustom([
             'donnees' => $data,
-            'inventories' => $inventories
+            'inventories' => $inventories,
+            'users' => $users,
+            'models' => $models,
+            'tenants' => $tenants,
         ]);
     }
 

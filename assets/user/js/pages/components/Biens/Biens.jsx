@@ -16,6 +16,7 @@ import { Search } from "@tailwindComponents/Elements/Search";
 import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+import { BienDetails } from "@userPages/Biens/BienDetails";
 
 const URL_GET_DATA = "intern_api_fokus_properties_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_properties_delete";
@@ -31,11 +32,15 @@ export class Biens extends Component {
 			sorter: Sort.compareAddr1,
 			loadingData: true,
 			element: null,
+			users: [],
+			models: [],
+			tenants: [],
 		}
 
 		this.pagination = React.createRef();
 		this.delete = React.createRef();
 		this.form = React.createRef();
+		this.details = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -84,6 +89,9 @@ export class Biens extends Component {
 
 					self.setState({
 						data: data, dataImmuable: dataImmuable, currentData: currentData,
+						users: JSON.parse(response.data.users),
+						models: JSON.parse(response.data.models),
+						tenants: JSON.parse(response.data.tenants),
 						currentPage: currentPage,
 						loadingData: false })
 				})
@@ -124,7 +132,7 @@ export class Biens extends Component {
 
 	render () {
 		const { highlight, onSelector, propertiesSelected } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage, users, models, tenants } = this.state;
 
 		return <>
 			{loadingData
@@ -168,6 +176,15 @@ export class Biens extends Component {
 												 isForm={true}
 												 content={<BienFormulaire context={element ? "update" : "create"} element={element ? element : null}
 																		  identifiant="form-property" key={element ? element.id : 0} />}
+							/>, document.body)}
+
+							{createPortal(<Modal ref={this.details} identifiant='details-property' maxWidth={1024} margin={1}
+												 title={element ? `Détails de ${element.addr1}` : ""}
+												 content={element
+													 ? <BienDetails elem={element} key={element.id}
+																	users={users} models={models} tenants={tenants} />
+													 :	null
+												 }
 							/>, document.body)}
 						</>
 					}

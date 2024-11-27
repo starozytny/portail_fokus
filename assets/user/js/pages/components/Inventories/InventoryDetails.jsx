@@ -4,9 +4,9 @@ import Sanitaze from "@commonFunctions/sanitaze";
 
 import { Badge } from "@tailwindComponents/Elements/Badge";
 
-export function InventoryDetails ({ elem }) {
-    let property = elem.property;
+import { BienData } from "@userPages/Biens/BienDetails";
 
+export function InventoryDetails ({ elem }) {
     return <div className="flex flex-col gap-4 md:grid md:grid-cols-3">
         <div>
             <div className="bg-white border rounded-md">
@@ -51,36 +51,8 @@ export function InventoryDetails ({ elem }) {
                 <div className="text-lg font-semibold border-b px-4 pt-2 pb-1 bg-color0 rounded-t-md text-white">
                     Bien
                 </div>
-                <div className="p-4 flex flex-col gap-2 divide-y lg:divide-y-0 lg:divide-x lg:flex-row">
-                    <div className="w-full">
-                        <div><u>Référence</u> : <span className="font-semibold">{property.reference}</span></div>
-                        <div>
-                            <div>{property.addr1}</div>
-                            <div>{property.addr2}</div>
-                            <div>{property.addr3}</div>
-                            <div>{property.zipcode} {property.city}</div>
-                        </div>
-                        {property.owner
-                            ? <div className="mt-2">Propriétaire : {property.owner}</div>
-                            : null
-                        }
-                    </div>
-                    <div className="w-full pt-2 lg:pt-0 lg:pl-4">
-                        {property.building && <div>Bâtiment : {property.building}</div>}
-                        {property.type && <div>Type : {property.type}</div>}
-                        {property.isFurnished && parseInt(property.isFurnished) !== 0 && <div>Meublé</div>}
 
-                        {property.door || (elem.floor !== "" && elem.floor !== "0")
-                            ? <div className="flex gap-4">
-                                {property.door && <div>Porte : {property.door}</div>}
-                                {property.floor !== "" && elem.floor !== "0" && <div>Étage : {elem.floor}</div>}
-                            </div>
-                            : null
-                        }
-                        {parseInt(property.surface) > 0 && <div>{property.surface} m²</div>}
-                        {parseInt(property.rooms) !== 0 && <div>{property.rooms} {parseInt(property.rooms) > 1 ? "pièces" : "pièce"}</div>}
-                    </div>
-                </div>
+                <BienData elem={elem.property} currentTenant={null} />
             </div>
             <div className="bg-white border rounded-md">
                 <div className="text-lg font-semibold border-b px-4 pt-2 pb-1 bg-color0 rounded-t-md text-white">
