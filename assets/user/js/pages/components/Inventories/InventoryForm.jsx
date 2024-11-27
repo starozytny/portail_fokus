@@ -18,7 +18,7 @@ const URL_INDEX_ELEMENTS = "user_properties_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_inventories_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_inventories_update";
 
-export function InventoryFormulaire ({ context, element, identifiant, properties, users, models, tenants }) {
+export function InventoryFormulaire ({ context, element, identifiant, userId, properties, users, models, tenants }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	let inventoryTenants = [];
@@ -51,7 +51,7 @@ export function InventoryFormulaire ({ context, element, identifiant, properties
 	return  <Form
         context={context}
         url={url}
-		userId={element ? Formulaire.setValue(element.userId) : ""}
+		userId={element ? Formulaire.setValue(element.userId) : userId}
         input={element ? Formulaire.setValue(element.input) : 0}
         date={element ? Formulaire.setValue(element.date === 0 ? "" : element.date) : ""}
         type={element ? Formulaire.setValue(element.type) : ""}

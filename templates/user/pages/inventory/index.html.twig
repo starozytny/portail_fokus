@@ -5,6 +5,7 @@
 {% block main_content %}
     <div id="inventories_list"
          data-num-society="{{ app.request.session.get('numSociety') }}"
+         data-user-id="{{ app.user.id }}"
          data-highlight="{{ app.request.query.get('h') }}"
          data-status="{{ app.request.query.get('st') }}"
          data-add-context="{{ app.request.query.get('ajouter') }}"
