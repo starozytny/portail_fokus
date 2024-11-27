@@ -119,4 +119,29 @@ class InventoryController extends AbstractController
 
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
+
+    #[Route('/document/{id}', name: 'document', options: ['expose' => true], methods: 'GET')]
+    public function document($id, FokusService $fokusService, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkInventory::class)->find($id);
+        $result = $fokusApi->inventoryDocument($obj->getUid());
+
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('Une erreur est survenue.');
+        }
+
+        $stream = fopen('php://memory', 'w+');
+        fwrite($stream, $result);
+        rewind($stream);
+
+        $response = new Response(stream_get_contents($stream));
+        fclose($stream);
+
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename="edl.pdf"');
+
+        return $response;
+    }
 }

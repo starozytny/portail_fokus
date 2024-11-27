@@ -1,12 +1,16 @@
 import React, { useRef } from "react";
 import PropTypes from 'prop-types';
 
+import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
+
 import Sanitaze from "@commonFunctions/sanitaze";
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
 import { Badge } from "@tailwindComponents/Elements/Badge";
 import { ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
+
+const URL_DOCUMENT_ELEMENT = "intern_api_fokus_inventories_document";
 
 export function InventoriesItem ({ elem, highlight, onModal })
 {
@@ -38,10 +42,10 @@ export function InventoriesItem ({ elem, highlight, onModal })
                     <span className="icon-vision" />
                     <span className="pl-1">Détails</span>
                 </div> },
-            { data: <div className={styleItemDropdown} onClick={() => onModal("form", elem)}>
+            { data: <a className={styleItemDropdown} href={Routing.generate(URL_DOCUMENT_ELEMENT, {id: elem.id})} target="_blank">
                     <span className="icon-file" />
                     <span className="pl-1">Document PDF</span>
-                </div> },
+                </a> },
         ]
     }
 

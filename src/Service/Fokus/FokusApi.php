@@ -233,4 +233,9 @@ class FokusApi
     {
         return $this->callApi("GET", "delete_inventory/" . $id);
     }
+
+    public function inventoryDocument($uid)
+    {
+        return $this->callApi("GET", "inventories/pdf/" . $uid, [], false);
+    }
 }
