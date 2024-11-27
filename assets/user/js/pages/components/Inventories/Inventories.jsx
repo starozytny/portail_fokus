@@ -16,6 +16,7 @@ import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Button, ButtonA } from "@tailwindComponents/Elements/Button";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
 
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
@@ -41,6 +42,7 @@ export class Inventories extends Component {
 		this.pagination = React.createRef();
 		this.delete = React.createRef();
 		this.form = React.createRef();
+		this.details = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -205,6 +207,11 @@ export class Inventories extends Component {
 										 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null}
 																	   properties={properties} users={users} tenants={tenants} models={models}
 																	   identifiant="form-edl" key={element ? element.id : 0} />}
+					/>, document.body)}
+
+					{createPortal(<Modal ref={this.details} identifiant='details-edl' maxWidth={1024} margin={5}
+										 title={element ? `Détails de ${element.uid}` : ""}
+										 content={element ? <InventoryDetails elem={element} key={element.id} /> : null}
 					/>, document.body)}
 				</>
 			}

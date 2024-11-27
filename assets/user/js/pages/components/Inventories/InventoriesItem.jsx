@@ -117,15 +117,3 @@ InventoriesItem.propTypes = {
     elem: PropTypes.object.isRequired,
     highlight: PropTypes.number,
 }
-
-function DisplayTenant({ tenant })
-{
-    let content = tenant;
-
-    if(tenant.indexOf("$") !== -1){
-        tenant = tenant.replaceAll("$", "")
-        content = <>Vacant ({tenant})</>
-    }
-
-    return <span>{content}</span>
-}
