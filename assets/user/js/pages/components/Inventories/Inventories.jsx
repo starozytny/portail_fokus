@@ -31,7 +31,7 @@ export class Inventories extends Component {
 		this.state = {
             perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
 			currentPage: 0,
-			sorter: Sort.compareDate,
+			sorter: Sort.compareDateInverse,
 			loadingData: true,
 			element: null,
 			properties: [],

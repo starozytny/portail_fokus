@@ -15,7 +15,7 @@ export function InventoriesLightList ({ data, property }) {
                             <div className="col-1">Date</div>
                             <div className="col-2">Attribution</div>
                             <div className="col-3">Type</div>
-                            <div className="col-4">Bien</div>
+                            <div className="col-4">{property ? "Locataire.s" : "Bien"}</div>
                             <div className="col-5 actions" />
                         </div>
                     </div>

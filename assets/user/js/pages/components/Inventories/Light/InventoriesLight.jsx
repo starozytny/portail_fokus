@@ -17,7 +17,7 @@ export class InventoriesLight extends Component {
 		this.state = {
             perPage: List.getSessionPerpage(SESSION_PERPAGE, 5),
 			currentPage: 0,
-			sorter: Sort.compareDate,
+			sorter: Sort.compareDateInverse,
 			loadingData: true,
 			element: null,
 			properties: [],
@@ -136,9 +136,9 @@ export class InventoriesLight extends Component {
 			{loadingData
 				? <LoaderElements />
 				: <>
-					<div className="mb-2 w-full flex flex-row">
-						<Search onSearch={this.handleSearch} placeholder="Rechercher par reference, adresse, code postal, ville, locataire, propriétaire.." />
-					</div>
+					{/*<div className="mb-2 w-full flex flex-row">*/}
+					{/*	<Search onSearch={this.handleSearch} placeholder="Rechercher par reference, adresse, code postal, ville, locataire, propriétaire.." />*/}
+					{/*</div>*/}
 
 					<TopSorterPagination taille={data.length} currentPage={currentPage} perPage={perPage}
 										 onClick={this.handlePaginationClick}
