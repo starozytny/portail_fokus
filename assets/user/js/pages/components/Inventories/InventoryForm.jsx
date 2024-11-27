@@ -15,8 +15,8 @@ import { Biens } from "@userPages/Biens/Biens";
 import { Tenants } from "@userPages/Tenants/Tenants";
 
 const URL_INDEX_ELEMENTS = "user_properties_index";
-const URL_CREATE_ELEMENT = "intern_api_fokus_properties_create";
-const URL_UPDATE_ELEMENT = "intern_api_fokus_properties_update";
+const URL_CREATE_ELEMENT = "intern_api_fokus_inventories_create";
+const URL_UPDATE_ELEMENT = "intern_api_fokus_inventories_update";
 
 export function InventoryFormulaire ({ context, element, identifiant, properties, users, models, tenants }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
@@ -151,7 +151,6 @@ class Form extends Component {
 		];
 
 		let validate = Validateur.validateur(paramsToValidate);
-		console.log(validate);
 		if (!validate.code) {
 			Formulaire.showErrors(this, validate);
 		} else {

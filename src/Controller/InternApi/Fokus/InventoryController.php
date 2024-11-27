@@ -8,8 +8,11 @@ use App\Entity\Fokus\FkProperty;
 use App\Entity\Fokus\FkTenant;
 use App\Entity\Fokus\FkUser;
 use App\Service\ApiResponse;
+use App\Service\Data\DataFokus;
+use App\Service\Fokus\FokusApi;
 use App\Service\Fokus\FokusService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -52,5 +55,68 @@ class InventoryController extends AbstractController
             'users' => $users,
             'models' => $models,
         ]);
+    }
+
+    public function submitForm($type, FkInventory $obj, Request $request, ApiResponse $apiResponse,
+                               FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): JsonResponse
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+        $data = json_decode($request->getContent());
+
+        if ($data === null) {
+            return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
+        }
+
+        $dataToSend = $dataFokus->setDataInventory($obj, $data);
+
+        if($type == "create") {
+            $result = $fokusApi->inventoryCreate($dataToSend);
+        } else {
+            $result = $fokusApi->inventoryUpdate($dataToSend, $obj->getId());
+        }
+
+        if($result === false || $result == 409){
+            if($result == 409){
+                return $apiResponse->apiJsonResponseBadRequest('Un état des lieux existe déjà pour ce bien.');
+            }
+            return $apiResponse->apiJsonResponseBadRequest('[AF0001] Une erreur est survenue.');
+        }
+
+        $obj = $em->getRepository(FkInventory::class)->findOneBy(['id' => $result]);
+
+        $this->addFlash('info', 'Données mises à jour.');
+        return $apiResponse->apiJsonResponse($obj, FkInventory::LIST);
+    }
+
+    #[Route('/create', name: 'create', options: ['expose' => true], methods: 'POST')]
+    public function create(Request $request, ApiResponse $apiResponse,
+                           FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): Response
+    {
+        return $this->submitForm("create", new FkInventory(), $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
+    }
+
+    #[Route('/update/{id}', name: 'update', options: ['expose' => true], methods: 'PUT')]
+    public function update(Request $request, $id, ApiResponse $apiResponse,
+                           FokusApi $fokusApi, FokusService $fokusService, DataFokus $dataFokus): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkInventory::class)->find($id);
+        return $this->submitForm("update", $obj, $request, $apiResponse, $fokusApi, $fokusService, $dataFokus);
+    }
+
+    #[Route('/delete/{id}', name: 'delete', options: ['expose' => true], methods: 'DELETE')]
+    public function delete($id, FokusService $fokusService, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+
+        $obj = $em->getRepository(FkInventory::class)->find($id);
+        $result = $fokusApi->inventoryDelete($obj->getId());
+
+        if($result === false){
+            return $apiResponse->apiJsonResponseBadRequest('Une erreur est survenue.');
+        }
+
+        return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 }

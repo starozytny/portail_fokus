@@ -5,6 +5,7 @@ namespace App\Service\Data;
 use App\Entity\Fokus\FkAspect;
 use App\Entity\Fokus\FkCounterType;
 use App\Entity\Fokus\FkElement;
+use App\Entity\Fokus\FkInventory;
 use App\Entity\Fokus\FkKeyType;
 use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkNature;
@@ -144,6 +145,46 @@ class DataFokus
             'rooms' => $this->sanitizeData->cleanFullFokus($data->rooms, 0),
             'owner' => $this->sanitizeData->cleanFullFokus($data->owner),
             'is_furnished' => $data->isFurnished[0]
+        ];
+    }
+
+    public function setDataInventory(?FkInventory $obj, $data): array
+    {
+        $input = $data->input;
+        $comparativeValue = 0;
+        if($data->input == 2){
+            $input = $data->property->lastInventoryUid;
+
+            switch ($data->comparative) {
+                case [2]: $comparativeValue = 1; break;
+                case [0]: $comparativeValue = 2; break;
+                case [0,1]: $comparativeValue = 3; break;
+                case [0,1,2]: $comparativeValue = 4; break;
+                case [0,2]: $comparativeValue = 5; break;
+                case [1,2]: $comparativeValue = 6; break;
+                case [1]: $comparativeValue = 7; break;
+                default:break;
+            }
+        }else if($data->input == 1){
+            $input = $data->model;
+        }
+
+        $tenants = [];
+        foreach($data->tenants as $tenant){
+            $tenants[] = $tenant->reference;
+        }
+
+        $date = $this->sanitizeData->createDateTime($data->date);
+
+        return [
+            'uid' => $obj->getId() ?: null,
+            'property_uid' => $data->property->uid,
+            'date' => $date ? $date->getTimestamp() : "",
+            'type' => $data->type,
+            'comparative' => $comparativeValue,
+            'tenants' => json_encode($tenants),
+            'user_id' => $data->userId,
+            'input' => $input,
         ];
     }
 }

@@ -216,4 +216,21 @@ class FokusApi
     {
         return $this->callApi("GET", "delete_property/" . $id);
     }
+
+    // ------- Inventories
+
+    public function inventoryCreate($data)
+    {
+        return $this->callApi("POST", "add_inventory/", $data);
+    }
+
+    public function inventoryUpdate($data, $id)
+    {
+        return $this->callApi("PUT", "edit_inventory/" . $id, $data);
+    }
+
+    public function inventoryDelete($id)
+    {
+        return $this->callApi("GET", "delete_inventory/" . $id);
+    }
 }
