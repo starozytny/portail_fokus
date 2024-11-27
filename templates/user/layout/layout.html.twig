@@ -14,6 +14,11 @@
         matchRoute: ['user_inventories_index']
     },
     {
+        name: "Ajouter un état des lieux", icon: "add",
+        path: path('user_inventories_index', {ajouter: 1}),
+        matchRoute: ['']
+    },
+    {
         name: "Liste des biens", icon: "layer",
         path: path('user_properties_index'),
         matchRoute: ['user_properties_index']

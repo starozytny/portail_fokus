@@ -6,6 +6,7 @@ import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
+import Formulaire from "@commonFunctions/formulaire";
 
 import { InventoriesList } from "@userPages/Inventories/InventoriesList";
 import { InventoryFormulaire } from "@userPages/Inventories/InventoryForm";
@@ -46,7 +47,18 @@ export class Inventories extends Component {
 	}
 
 	componentDidMount = () => {
+		const { addContext } = this.props;
+
 		this.handleGetData();
+		if(addContext === "1"){
+			Formulaire.loader(true);
+			setTimeout(() => {
+				if(this.form && this.form.current){
+					this.handleModal('form', null);
+					Formulaire.loader(false);
+				}
+			}, 1000)
+		}
 	}
 
 	handleGetData = () => {
@@ -117,7 +129,8 @@ export class Inventories extends Component {
 					tenants: tenants,
 					models: models,
 					currentPage: currentPage,
-					loadingData: false })
+					loadingData: false
+				});
 			})
 		;
 	}
