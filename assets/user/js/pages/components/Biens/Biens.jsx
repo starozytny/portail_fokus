@@ -26,7 +26,7 @@ export class Biens extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-            perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
+            perPage: List.getSessionPerpage(SESSION_PERPAGE, props.onSelector ? 5 : 20),
 			currentPage: 0,
 			sorter: Sort.compareAddr1,
 			loadingData: true,
@@ -123,7 +123,7 @@ export class Biens extends Component {
 	}
 
 	render () {
-		const { highlight } = this.props;
+		const { highlight, onSelector, propertiesSelected } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
 
 		return <>
@@ -146,8 +146,10 @@ export class Biens extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<BiensList data={currentData}
+							   propertiesSelected={propertiesSelected}
 							   highlight={parseInt(highlight)}
-							   onModal={this.handleModal} />
+							   onModal={this.handleModal}
+							   onSelector={onSelector} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />

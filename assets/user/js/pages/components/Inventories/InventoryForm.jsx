@@ -45,7 +45,8 @@ export function InventoryFormulaire ({ context, element, identifiant, properties
         type={element ? Formulaire.setValue(element.type) : ""}
         comparative={element ? comparativeValue : []}
         model={element ? Formulaire.setValue(element.model) : ""}
-        property={element ? Formulaire.setValue(element.property) : ""}
+		property={element ? Formulaire.setValue(element.property) : null}
+		propertyUid={element ? Formulaire.setValue(element.propertyUid) : ""}
         inventoryTenants={element ? Formulaire.setValue(element.tenants) : ""}
 
 		identifiant={identifiant}
@@ -67,7 +68,7 @@ class Form extends Component {
 			type: props.type,
 			comparative: props.comparative,
 			model: props.model,
-			property: props.property,
+			propertyUid: props.propertyUid,
 			inventoryTenants: props.inventoryTenants,
 			errors: []
 		}
@@ -125,7 +126,7 @@ class Form extends Component {
 
 	render () {
 		const { context, identifiant, users, models, properties } = this.props;
-		const { errors, userId, input, date, type, comparative, model, property, tenants } = this.state;
+		const { errors, userId, input, date, type, comparative, model, property, propertyUid, tenants } = this.state;
 
 		let usersItems = [];
 		users.forEach(us => {
@@ -221,7 +222,9 @@ class Form extends Component {
 
 			{createPortal(<Modal ref={this.property} identifiant='inventory-property' maxWidth={1280} margin={2} zIndex={41} bgColor="bg-gray-100"
 								 title="Sélectionner un bien"
-								 content={<Biens donnees={JSON.stringify(properties)} />}
+								 content={<Biens donnees={JSON.stringify(properties)}
+												 propertiesSelected={propertyUid !== "" ? [propertyUid] : []}
+												 onSelector={true} />}
 			/>, document.body)}
 		</>
 	}

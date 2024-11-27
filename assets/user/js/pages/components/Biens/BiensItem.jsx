@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
+import { Selector } from "@tailwindComponents/Elements/Selector";
 import { ButtonIcon, ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
-export function BiensItem ({ elem, highlight, onModal })
+export function BiensItem ({ elem, highlight, onModal, onSelector, propertiesSelected })
 {
     const refItem = useRef(null);
 
@@ -32,12 +33,20 @@ export function BiensItem ({ elem, highlight, onModal })
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1">
-                    <div className="font-medium">
-                        <div>{elem.addr1}</div>
-                        <div>{elem.addr2}</div>
-                        <div>{elem.addr3}</div>
+                    <div className="flex flex-row gap-2">
+                        {onSelector
+                            ? <Selector elem={elem} elements={propertiesSelected} onSelectors={onSelector} typeCheck={2} />
+                            : null
+                        }
+                        <div>
+                            <div className="font-medium">
+                                <div>{elem.addr1}</div>
+                                <div>{elem.addr2}</div>
+                                <div>{elem.addr3}</div>
+                            </div>
+                            <div>{elem.zipcode} {elem.city}</div>
+                        </div>
                     </div>
-                    <div>{elem.zipcode} {elem.city}</div>
                 </div>
                 <div className="col-2">
                     <div className="font-semibold">{elem.reference}</div>
@@ -62,10 +71,15 @@ export function BiensItem ({ elem, highlight, onModal })
                     {parseInt(elem.rooms) !== 0 && <div>{elem.rooms} {parseInt(elem.rooms) > 1 ? "pièces" : "pièce"}</div>}
                 </div>
                 <div className="col-4 actions">
-                    <ButtonIcon type="default" icon="receipt" onClick={() => onModal('details', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
-                    {elem.canActions
-                        ? <ButtonIconDropdown icon="more" items={menu} />
-                        : <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                    {onSelector
+                        ? null
+                        : <>
+                            <ButtonIcon type="default" icon="receipt" onClick={() => onModal('details', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
+                            {elem.canActions
+                                ? <ButtonIconDropdown icon="more" items={menu} />
+                                : <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                            }
+                        </>
                     }
                 </div>
             </div>

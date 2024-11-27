@@ -10,7 +10,11 @@ export class Selector extends Component {
                 if(el === props.elem.id){
                     isChecked = true;
                 }
-            }else{
+            } else if(props.typeCheck === 2){
+                if(el === props.elem.uid){
+                    isChecked = true;
+                }
+            } else{
                 if(el.id === props.elem.id){
                     isChecked = true;
                 }
