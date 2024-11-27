@@ -154,18 +154,23 @@ export class Biens extends Component {
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
-					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
-											   title="Supprimer ce bien" msgSuccess="Bien supprimé"
-											   onUpdateList={this.handleUpdateList}>
-						Êtes-vous sûr de vouloir supprimer définitivement ce bien : <b>{element ? element.addr1 : ""}</b> ?
-					</ModalDelete>, document.body)}
+					{onSelector
+						? null
+						: <>
+							{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+													   title="Supprimer ce bien" msgSuccess="Bien supprimé"
+													   onUpdateList={this.handleUpdateList}>
+								Êtes-vous sûr de vouloir supprimer définitivement ce bien : <b>{element ? element.addr1 : ""}</b> ?
+							</ModalDelete>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5} zIndex={42}
-										 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
-										 isForm={true}
-										 content={<BienFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																  identifiant="form-property" key={element ? element.id : 0} />}
-					/>, document.body)}
+							{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5} zIndex={42}
+												 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
+												 isForm={true}
+												 content={<BienFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																		  identifiant="form-property" key={element ? element.id : 0} />}
+							/>, document.body)}
+						</>
+					}
 				</>
 			}
 		</>

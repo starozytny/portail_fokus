@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
 import { Badge } from "@tailwindComponents/Elements/Badge";
+import { Selector } from "@tailwindComponents/Elements/Selector";
 import { ButtonIcon, ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
-export function TenantsItem ({ elem, highlight, onModal })
+export function TenantsItem ({ elem, highlight, onModal, onSelector, tenantsSelected })
 {
     const refItem = useRef(null);
 
@@ -33,21 +34,29 @@ export function TenantsItem ({ elem, highlight, onModal })
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1">
-                    <div className="font-medium">{elem.lastName} {elem.firstName}</div>
-                    {elem.phone || elem.email
-                        ? <div className="text-sm text-gray-600 break-all	">
-                            <div>{elem.phone}</div>
-                            <div>{elem.email ? elem.email.split(';').map((it, index) => {
-                                return <div key={index}>{it}</div>
-                            }) : null}</div>
+                    <div className="flex flex-row gap-2">
+                        {onSelector
+                            ? <Selector elem={elem} elements={tenantsSelected} onSelectors={onSelector} />
+                            : null
+                        }
+                        <div onClick={onSelector ? () => onSelector(elem) : null}>
+                            <div className="font-medium">{elem.lastName} {elem.firstName}</div>
+                            {elem.phone || elem.email
+                                ? <div className="text-sm text-gray-600 break-all	">
+                                    <div>{elem.phone}</div>
+                                    <div>{elem.email ? elem.email.split(';').map((it, index) => {
+                                        return <div key={index}>{it}</div>
+                                    }) : null}</div>
+                                </div>
+                                : null
+                            }
                         </div>
-                        : null
-                    }
+                    </div>
                 </div>
-                <div className="col-2">
+                <div className="col-2" onClick={onSelector ? () => onSelector(elem) : null}>
                     <Badge type="blue">{elem.reference}</Badge>
                 </div>
-                <div className="col-3 text-sm text-gray-600">
+                <div className="col-3 text-sm text-gray-600" onClick={onSelector ? () => onSelector(elem) : null}>
                     <div className="font-medium">
                         <div>{elem.addr1}</div>
                         <div>{elem.addr2}</div>
@@ -56,10 +65,15 @@ export function TenantsItem ({ elem, highlight, onModal })
                     <div>{elem.zipcode} {elem.city}</div>
                 </div>
                 <div className="col-4 actions">
-                    <ButtonIcon type="default" icon="receipt" onClick={() => onModal('details', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
-                    {elem.canActions
-                        ? <ButtonIconDropdown icon="more" items={menu} />
-                        : <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                    {onSelector
+                        ? null
+                        : <>
+                            <ButtonIcon type="default" icon="receipt" onClick={() => onModal('details', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
+                            {elem.canActions
+                                ? <ButtonIconDropdown icon="more" items={menu} />
+                                : <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                            }
+                        </>
                     }
                 </div>
             </div>

@@ -35,10 +35,10 @@ export function BiensItem ({ elem, highlight, onModal, onSelector, propertiesSel
                 <div className="col-1">
                     <div className="flex flex-row gap-2">
                         {onSelector
-                            ? <Selector elem={elem} elements={propertiesSelected} onSelectors={onSelector} typeCheck={2} />
+                            ? <Selector elem={elem} elements={propertiesSelected} onSelectors={onSelector} />
                             : null
                         }
-                        <div>
+                        <div onClick={onSelector ? () => onSelector(elem) : null}>
                             <div className="font-medium">
                                 <div>{elem.addr1}</div>
                                 <div>{elem.addr2}</div>
@@ -48,14 +48,14 @@ export function BiensItem ({ elem, highlight, onModal, onSelector, propertiesSel
                         </div>
                     </div>
                 </div>
-                <div className="col-2">
+                <div className="col-2" onClick={onSelector ? () => onSelector(elem) : null}>
                     <div className="font-semibold">{elem.reference}</div>
                     <div className="text-sm text-gray-600">
                         <div>Propriétaire : {elem.owner ? elem.owner : "Non renseigné"}</div>
                         <div>Locataire : {elem.currentTenant ? <DisplayTenant tenant={elem.currentTenant} /> : "Non renseigné"}</div>
                     </div>
                 </div>
-                <div className="col-3 text-sm text-gray-600">
+                <div className="col-3 text-sm text-gray-600" onClick={onSelector ? () => onSelector(elem) : null}>
                     {elem.building && <div>Bâtiment : {elem.building}</div>}
                     {elem.type && <div>Type : {elem.type}</div>}
                     {elem.isFurnished && parseInt(elem.isFurnished) !== 0 && <div>Meublé</div>}

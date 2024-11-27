@@ -354,7 +354,10 @@ export function Radiobox ({
 		let styleLabel = "block text-sm font-medium leading-6 " + labelClass;
 		if (styleType === "fat") {
 			styleLabel = "block text-sm font-medium leading-6 cursor-pointer px-3 py-2 rounded-full ring-1 ring-inset "
-				+ (isChecked ? "bg-blue-700 ring-blue-700 text-slate-50" : "bg-white hover:bg-gray-50 ring-gray-300 text-gray-900")
+				+ (isChecked
+					? "bg-blue-700 ring-blue-700 text-slate-50"
+					: (error ? "bg-white hover:bg-gray-50 ring-red-300 text-gray-900" : "bg-white hover:bg-gray-50 ring-gray-300 text-gray-900")
+				)
 				+ " " + labelClass
 		}
 
@@ -947,10 +950,10 @@ function getError (errors, identifiant) {
 
 export function ErrorContent ({ error }) {
 	return (error
-			? <div className="text-red-500 mt-1 text-sm">
-				<span className="icon-error inline-block translate-y-0.5" />
-				<span className="ml-1">{error}</span>
-			</div>
-			: null
+		? <div className="text-red-500 mt-1 text-sm">
+			<span className="icon-error inline-block translate-y-0.5" />
+			<span className="ml-1">{error}</span>
+		</div>
+		: null
 	)
 }

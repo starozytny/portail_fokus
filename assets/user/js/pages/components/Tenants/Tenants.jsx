@@ -26,7 +26,7 @@ export class Tenants extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-            perPage: List.getSessionPerpage(SESSION_PERPAGE, 20),
+            perPage: List.getSessionPerpage(SESSION_PERPAGE, props.onSelector ? 5 : 20),
 			currentPage: 0,
 			sorter: Sort.compareLastName,
 			loadingData: true,
@@ -43,52 +43,56 @@ export class Tenants extends Component {
 	}
 
 	handleGetData = () => {
-		const { numSociety, highlight } = this.props;
+		const { numSociety, highlight, donnees } = this.props;
 		const { perPage, sorter } = this.state;
 
-		const self = this;
-		axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
-			.then(function (response) {
-				let data = [];
-				let dataImmuable = JSON.parse(response.data.donnees);
+		if(donnees){
+			List.setData(this, donnees, perPage, sorter, highlight)
+		}else{
+			const self = this;
+			axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
+				.then(function (response) {
+					let data = [];
+					let dataImmuable = JSON.parse(response.data.donnees);
 
-				JSON.parse(response.data.donnees).forEach(elem => {
-					let elemInventories = [];
-					let canActions = true;
-					JSON.parse(response.data.inventories).forEach(inventory => {
-						if(inventory.tenants !== ""){
-							let removeDollars = inventory.tenants.replaceAll("$", "")
-							JSON.parse(removeDollars).forEach(tenant => {
-								let nRef = elem.reference.replaceAll("$", "")
-								if(tenant === nRef){
+					JSON.parse(response.data.donnees).forEach(elem => {
+						let elemInventories = [];
+						let canActions = true;
+						JSON.parse(response.data.inventories).forEach(inventory => {
+							if(inventory.tenants !== ""){
+								let removeDollars = inventory.tenants.replaceAll("$", "")
+								JSON.parse(removeDollars).forEach(tenant => {
+									let nRef = elem.reference.replaceAll("$", "")
+									if(tenant === nRef){
+										canActions = false;
+
+										elemInventories.push(inventory)
+									}
+								})
+								if(elem.is_imported !== "0" ){
 									canActions = false;
-
-									elemInventories.push(inventory)
 								}
-							})
-							if(elem.is_imported !== "0" ){
-								canActions = false;
 							}
-						}
+						})
+
+						elem.canActions = canActions;
+						elem.inventories = elemInventories;
+
+						data.push(elem);
 					})
 
-					elem.canActions = canActions;
-					elem.inventories = elemInventories;
+					data.sort(sorter);
+					dataImmuable.sort(sorter);
 
-					data.push(elem);
+					let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
+
+					self.setState({
+						data: data, dataImmuable: dataImmuable, currentData: currentData,
+						currentPage: currentPage,
+						loadingData: false })
 				})
-
-				data.sort(sorter);
-				dataImmuable.sort(sorter);
-
-				let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
-
-				self.setState({
-					data: data, dataImmuable: dataImmuable, currentData: currentData,
-					currentPage: currentPage,
-					loadingData: false })
-			})
-		;
+			;
+		}
 	}
 
 	handleUpdateData = (currentData) => {
@@ -123,7 +127,7 @@ export class Tenants extends Component {
 	}
 
 	render () {
-		const { highlight } = this.props;
+		const { highlight, onSelector, tenantsSelected } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
 
 		return <>
@@ -146,24 +150,31 @@ export class Tenants extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<TenantsList data={currentData}
+								 tenantsSelected={tenantsSelected}
 								 highlight={parseInt(highlight)}
-								 onModal={this.handleModal} />
+								 onModal={this.handleModal}
+								 onSelector={onSelector} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
-					{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
-											   title="Supprimer ce locataire" msgSuccess="Locataire supprimé"
-											   onUpdateList={this.handleUpdateList}>
-						Êtes-vous sûr de vouloir supprimer définitivement ce locataire : <b>{element ? element.name : ""}</b> ?
-					</ModalDelete>, document.body)}
+					{onSelector
+						? null
+						: <>
+							{createPortal(<ModalDelete refModal={this.delete} element={element} routeName={URL_DELETE_ELEMENT}
+													   title="Supprimer ce locataire" msgSuccess="Locataire supprimé"
+													   onUpdateList={this.handleUpdateList}>
+								Êtes-vous sûr de vouloir supprimer définitivement ce locataire : <b>{element ? element.name : ""}</b> ?
+							</ModalDelete>, document.body)}
 
-					{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5}
-										 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}
-										 isForm={true}
-										 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																	identifiant="form-tenant" key={element ? element.id : 0} />}
-					/>, document.body)}
+							{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5}
+												 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}
+												 isForm={true}
+												 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																			identifiant="form-tenant" key={element ? element.id : 0} />}
+							/>, document.body)}
+						</>
+					}
 				</>
 			}
 		</>

@@ -9,9 +9,10 @@ import Validateur from "@commonFunctions/validateur";
 
 import { Button } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
-import { Checkbox, Input, Radiobox, Select } from "@tailwindComponents/Elements/Fields";
+import { Checkbox, ErrorContent, Input, Radiobox, Select } from "@tailwindComponents/Elements/Fields";
 
 import { Biens } from "@userPages/Biens/Biens";
+import { Tenants } from "@userPages/Tenants/Tenants";
 
 const URL_INDEX_ELEMENTS = "user_properties_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_properties_create";
@@ -20,6 +21,7 @@ const URL_UPDATE_ELEMENT = "intern_api_fokus_properties_update";
 export function InventoryFormulaire ({ context, element, identifiant, properties, users, models, tenants }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
+	let inventoryTenants = [];
 	let comparativeValue = [0];
 	if (context === "update") {
 		url = Routing.generate(URL_UPDATE_ELEMENT, { id: element.id });
@@ -34,6 +36,16 @@ export function InventoryFormulaire ({ context, element, identifiant, properties
 			case 7: comparativeValue = [1]; break;
 			default:break;
 		}
+
+		if(element.tenants){
+			JSON.parse(element.tenants).forEach(teRef => {
+				tenants.forEach(te => {
+					if(te.reference === teRef){
+						inventoryTenants.push(te);
+					}
+				})
+			})
+		}
 	}
 
 	return  <Form
@@ -46,8 +58,7 @@ export function InventoryFormulaire ({ context, element, identifiant, properties
         comparative={element ? comparativeValue : []}
         model={element ? Formulaire.setValue(element.model) : ""}
 		property={element ? Formulaire.setValue(element.property) : null}
-		propertyUid={element ? Formulaire.setValue(element.propertyUid) : ""}
-        inventoryTenants={element ? Formulaire.setValue(element.tenants) : ""}
+        inventoryTenants={inventoryTenants}
 
 		identifiant={identifiant}
 		properties={properties}
@@ -68,12 +79,13 @@ class Form extends Component {
 			type: props.type,
 			comparative: props.comparative,
 			model: props.model,
-			propertyUid: props.propertyUid,
-			inventoryTenants: props.inventoryTenants,
+			property: props.property,
+			tenants: props.inventoryTenants,
 			errors: []
 		}
 
 		this.property = React.createRef();
+		this.tenants = React.createRef();
 	}
 
 	handleModal = (identifiant, elem) => {
@@ -92,11 +104,41 @@ class Form extends Component {
 		this.setState({ [name]: value })
 	}
 
+	handleSelectProperty = (property) => {
+		this.setState({ property: this.state.property === null || this.state.property.id !== property.id ? property : null });
+		if(this.property.current){
+			this.property.current.handleClose();
+		}
+	}
+
+	handleSelectTenant = (tenant) => {
+		const { tenants } = this.state;
+
+		let find = false;
+		tenants.forEach(te => {
+			if(te.id === tenant.id){
+				find = true;
+			}
+		})
+
+		let nTenants = tenants;
+		if(find){
+			nTenants = tenants.filter(v => { return v.id !== tenant.id });
+		}else{
+			nTenants.push(tenant);
+		}
+
+		this.setState({ tenants: nTenants });
+		if(this.tenants.current){
+			this.tenants.current.handleClose();
+		}
+	}
+
 	handleSubmit = (e) => {
 		e.preventDefault();
 
 		const { context, url } = this.props;
-		const { userId, input, type } = this.state;
+		const { userId, input, type, property, tenants } = this.state;
 
 		this.setState({ errors: [] });
 
@@ -104,9 +146,12 @@ class Form extends Component {
 			{ type: "text", id: 'userId', value: userId },
 			{ type: "text", id: 'input', value: input },
 			{ type: "text", id: 'type', value: type },
+			{ type: "text", id: 'property', value: property },
+			{ type: "array", id: 'tenants', value: tenants },
 		];
 
-		let validate = Validateur.validateur(paramsToValidate)
+		let validate = Validateur.validateur(paramsToValidate);
+		console.log(validate);
 		if (!validate.code) {
 			Formulaire.showErrors(this, validate);
 		} else {
@@ -126,7 +171,7 @@ class Form extends Component {
 
 	render () {
 		const { context, identifiant, users, models, properties } = this.props;
-		const { errors, userId, input, date, type, comparative, model, property, propertyUid, tenants } = this.state;
+		const { errors, userId, input, date, type, comparative, model, property, tenants } = this.state;
 
 		let usersItems = [];
 		users.forEach(us => {
@@ -159,12 +204,70 @@ class Form extends Component {
 
 		let params0 = { errors: errors, onChange: this.handleChange };
 
+		let errorProperty, errorTenants;
+		if (errors && errors.length !== 0) {
+			errors.map(err => {
+				if (err.name === "property") {
+					errorProperty = err.message
+				}
+				if (err.name === "tenants") {
+					errorTenants = err.message
+				}
+			})
+		}
+
+
 		return <>
 			<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
 				<div className="flex flex-col gap-4">
 					<div>
-						<Button type="default" onClick={() => this.handleModal('property')}>Sélectionner un bien</Button>
+						<label className="block text-sm font-medium leading-6 text-gray-800">Bien</label>
+						{property
+							? <div className="flex">
+								<div className="w-full relative border-2 border-blue-500 rounded-md p-2 bg-blue-50 text-sm">
+									<div><u>Référence</u> : <span className="font-medium">{property.reference}</span></div>
+									<div>
+										<div>{property.addr1}</div>
+										<div>{property.addr2}</div>
+										<div>{property.addr3}</div>
+										<div>{property.zipcode} {property.city}</div>
+									</div>
+								</div>
+								<div className="min-w-[68px] group cursor-pointer hover:border-red-300 hover:bg-red-50 border-2 pl-8 pr-4 flex items-center justify-center rounded-r-md -ml-4"
+									 onClick={() => this.handleSelectProperty(property)}>
+									<span className="icon-cancel group-hover:text-red-500 !font-medium"></span>
+								</div>
+							</div>
+							: <div>
+								<Button type="default" onClick={() => this.handleModal('property')}>Sélectionner un bien</Button>
+							</div>
+						}
+						{errorProperty ? <ErrorContent error={errorProperty} /> : null }
 					</div>
+					<div>
+						<label className="block text-sm font-medium leading-6 text-gray-800">Locataire.s</label>
+						<div className="flex flex-col gap-2">
+							<div>
+								<Button type="default" onClick={() => this.handleModal('tenants')}>Sélectionner un/des locataire.s</Button>
+							</div>
+							<div className="flex flex-col gap-2">
+								{tenants.map(tenant => {
+									return <div className="flex" key={tenant.id}>
+										<div className="w-full relative border-2 border-blue-500 rounded-md p-2 bg-blue-50 text-sm">
+											<div><u>Référence</u> : <span className="font-medium">{tenant.reference}</span></div>
+											<div>{tenant.lastName} {tenant.firstName}</div>
+										</div>
+										<div className="min-w-[68px] group cursor-pointer hover:border-red-300 hover:bg-red-50 border-2 pl-8 pr-4 flex items-center justify-center rounded-r-md -ml-4"
+											 onClick={() => this.handleSelectTenant(tenant)}>
+											<span className="icon-cancel group-hover:text-red-500 !font-medium"></span>
+										</div>
+									</div>
+								})}
+							</div>
+						</div>
+						{errorTenants ? <ErrorContent error={errorTenants} /> : null }
+					</div>
+
 					<div className="flex gap-4">
 						<div className="w-full">
 							<Select identifiant="userId" valeur={userId} items={usersItems} {...params0}>
@@ -214,7 +317,7 @@ class Form extends Component {
 			</div>
 
 			<div className="bg-gray-50 px-4 py-3 flex flex-row justify-end gap-2 sm:px-6 border-t rounded-b-lg">
-				<CloseModalBtn identifiant={identifiant} />
+			<CloseModalBtn identifiant={identifiant} />
 				<Button type="blue" onClick={this.handleSubmit}>
 					{context === "create" ? "Enregistrer" : "Enregistrer les modifications"}
 				</Button>
@@ -223,8 +326,15 @@ class Form extends Component {
 			{createPortal(<Modal ref={this.property} identifiant='inventory-property' maxWidth={1280} margin={2} zIndex={41} bgColor="bg-gray-100"
 								 title="Sélectionner un bien"
 								 content={<Biens donnees={JSON.stringify(properties)}
-												 propertiesSelected={propertyUid !== "" ? [propertyUid] : []}
-												 onSelector={true} />}
+												 propertiesSelected={property ? [property] : []}
+												 onSelector={this.handleSelectProperty} key={property ? property.id : 0} />}
+			/>, document.body)}
+
+			{createPortal(<Modal ref={this.tenants} identifiant='inventory-tenants' maxWidth={1280} margin={2} zIndex={41} bgColor="bg-gray-100"
+								 title="Sélectionner un/des locataire.s"
+								 content={<Tenants donnees={JSON.stringify(this.props.tenants)}
+												   tenantsSelected={tenants}
+												   onSelector={this.handleSelectTenant} key={tenants.length} />}
 			/>, document.body)}
 		</>
 	}

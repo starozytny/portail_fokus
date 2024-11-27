@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { TenantsItem } from "@userPages/Tenants/TenantsItem";
 
-export function TenantsList ({ data, highlight, onModal }) {
+export function TenantsList ({ data, highlight, onModal, onSelector, tenantsSelected }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-tenants">
@@ -22,7 +22,8 @@ export function TenantsList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <TenantsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <TenantsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal}
+                                            onSelector={onSelector} tenantsSelected={tenantsSelected} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

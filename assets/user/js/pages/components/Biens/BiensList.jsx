@@ -22,9 +22,8 @@ export function BiensList ({ data, propertiesSelected, highlight, onModal, onSel
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <BiensItem key={elem.id} elem={elem} highlight={highlight}
-                                          propertiesSelected={propertiesSelected}
-                                          onModal={onModal} onSelector={onSelector} />
+                        return <BiensItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal}
+                                          onSelector={onSelector} propertiesSelected={propertiesSelected} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
