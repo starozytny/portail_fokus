@@ -8,7 +8,6 @@ import { BienData } from "@userPages/Biens/BienDetails";
 import { TenantData } from "@userPages/Tenants/TenantDetails";
 
 export function InventoryDetails ({ elem }) {
-    console.log(elem);
     return <div className="flex flex-col gap-4 md:grid md:grid-cols-3">
         <div>
             <div className="bg-white border rounded-md">

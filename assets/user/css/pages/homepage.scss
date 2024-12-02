@@ -1,5 +1,8 @@
 @use "../vars/vars";
 
+@use "property";
+@use "tenant";
+
 #fullcalendar-custom{
 
   .fc-view-harness.fc-view-harness-active{

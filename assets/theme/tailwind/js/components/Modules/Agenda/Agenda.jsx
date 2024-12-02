@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
 import axios from "axios";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
@@ -15,10 +16,12 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 import Formulaire from "@commonFunctions/formulaire";
 
-import { LoaderElements } from "@tailwindComponents/Elements/Loader";
-import { createPortal } from "react-dom";
 import { Modal } from "@tailwindComponents/Elements/Modal";
+import { Button } from "@tailwindComponents/Elements/Button";
+import { LoaderElements } from "@tailwindComponents/Elements/Loader";
+
 import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
+import { InventoryFormulaire } from "@userPages/Inventories/InventoryForm";
 
 const URL_GET_DATA = "intern_api_agenda_events_list";
 const URL_GET_DATA_FOKUS = "intern_api_fokus_inventories_list";
@@ -33,89 +36,85 @@ export class Agenda extends Component {
 			oriData: [],
 			data: [],
 			loadingData: true,
-			element: null
+			element: null,
+			properties: [],
+			users: [],
+			tenants: [],
+			models: [],
 		}
 
 		this.details = React.createRef();
+		this.form = React.createRef();
 	}
 
 	componentDidMount = () => {
-		const { isFokus, numSociety } = this.props;
+		const { numSociety } = this.props;
 
-		if(isFokus === "1"){
-			const self = this;
-			axios({ method: "GET", url: Routing.generate(URL_GET_DATA_FOKUS, {numSociety: numSociety}), data: {} })
-				.then(function (response) {
-					let data = JSON.parse(response.data.donnees);
+		const self = this;
+		axios({ method: "GET", url: Routing.generate(URL_GET_DATA_FOKUS, {numSociety: numSociety}), data: {} })
+			.then(function (response) {
+				let data = JSON.parse(response.data.donnees);
 
-					let properties = JSON.parse(response.data.properties);
-					let users = JSON.parse(response.data.users);
-					let models = JSON.parse(response.data.models);
-					let tenants = JSON.parse(response.data.tenants);
+				let properties = JSON.parse(response.data.properties);
+				let users = JSON.parse(response.data.users);
+				let models = JSON.parse(response.data.models);
+				let tenants = JSON.parse(response.data.tenants);
 
-					let nData = [];
-					data.forEach(elem => {
-						if(elem.date !== "" && elem.date !== 0){
-							elem.property = null;
-							elem.user = null;
-							elem.model = null;
-							elem.tenantsData = [];
+				let nData = [];
+				data.forEach(elem => {
+					if(elem.date !== "" && elem.date !== 0){
+						elem.property = null;
+						elem.user = null;
+						elem.model = null;
+						elem.tenantsData = [];
 
-							properties.forEach(pr => {
-								if(pr.uid === elem.propertyUid){
-									elem.property = pr;
+						properties.forEach(pr => {
+							if(pr.uid === elem.propertyUid){
+								elem.property = pr;
+							}
+						})
+
+						users.forEach(us => {
+							if(us.id === elem.userId){
+								elem.user = us;
+							}
+						})
+
+						if(elem.input < 0){
+							models.forEach(mo => {
+								if(mo.id === Math.abs(elem.input)){
+									elem.model = mo;
 								}
 							})
+						}
 
-							users.forEach(us => {
-								if(us.id === elem.userId){
-									elem.user = us;
-								}
-							})
-
-							if(elem.input < 0){
-								models.forEach(mo => {
-									if(mo.id === Math.abs(elem.input)){
-										elem.model = mo;
+						if(elem.tenants){
+							JSON.parse(elem.tenants).forEach(te => {
+								tenants.forEach(tenant => {
+									if(te === tenant.reference){
+										elem.tenantsData.push(tenant)
 									}
 								})
-							}
-
-							if(elem.tenants){
-								JSON.parse(elem.tenants).forEach(te => {
-									tenants.forEach(tenant => {
-										if(te === tenant.reference){
-											elem.tenantsData.push(tenant)
-										}
-									})
-								})
-							}
-
-							nData.push(createEventStructureFromFokus(elem));
+							})
 						}
-					})
-					self.setState({ oriData: data, data: nData, loadingData: false })
+
+						nData.push(createEventStructureFromFokus(elem));
+					}
 				})
-				.catch(function (error) {
-					Formulaire.displayErrors(self, error);
+				self.setState({
+					oriData: data,
+					data: nData,
+					properties: properties,
+					users: users,
+					tenants: tenants,
+					models: models,
+					loadingData: false
 				})
-			;
-		}else{
-			const self = this;
-			axios({ method: "GET", url: Routing.generate(URL_GET_DATA), data: {} })
-				.then(function (response) {
-					let data = response.data;
-					let nData = [];
-					data.forEach(elem => {
-						nData.push(createEventStructure(elem));
-					})
-					self.setState({ oriData: data, data: nData, loadingData: false })
-				})
-				.catch(function (error) {
-					Formulaire.displayErrors(self, error);
-				})
-			;
-		}
+			})
+			.catch(function (error) {
+				Formulaire.displayErrors(self, error);
+			})
+		;
 	}
 
 	handleEventDidMount = (e) => {
@@ -136,12 +135,14 @@ export class Agenda extends Component {
 		this.details.current.handleClick();
 	}
 
-	handleUpdatePage = (e) => {
-		location.href = Routing.generate(URL_UPDATE_ELEMENT, { id: e.event.id })
+	handleUpdate = () => {
+		this.details.current.handleClose();
+		this.form.current.handleClick();
 	}
 
 	render () {
-		const { loadingData, initialView, data, element } = this.state;
+		const { userId } = this.props;
+		const { loadingData, initialView, data, element, properties, users, tenants, models } = this.state;
 
 		return <div>
 			{loadingData
@@ -173,6 +174,16 @@ export class Agenda extends Component {
 			{createPortal(<Modal ref={this.details} identifiant='details-edl' maxWidth={1024} margin={5}
 								 title={element ? `Détails de ${element.uid}` : ""}
 								 content={element ? <InventoryDetails elem={element} key={element.id} /> : null}
+								 footer={<Button type="blue" onClick={this.handleUpdate}>Modifier</Button>}
+			/>, document.body)}
+
+			{createPortal(<Modal ref={this.form} identifiant='form-edl' maxWidth={568} margin={5}
+								 title={element ? `Modifier ${element.id}` : "Ajouter un état des lieux"}
+								 isForm={true}
+								 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null}
+															   userId={parseInt(userId)}
+															   properties={properties} users={users} tenants={tenants} models={models}
+															   identifiant="form-edl" key={element ? element.id : 0} />}
 			/>, document.body)}
 		</div>
 	}

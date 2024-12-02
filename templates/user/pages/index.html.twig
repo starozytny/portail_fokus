@@ -11,7 +11,7 @@
 {% block main_content %}
     <div id="agenda_list"
          data-num-society="{{ app.request.session.get('numSociety') }}"
-         data-is-fokus="1"
+         data-user-id="{{ app.user.id }}"
     >
         {% include "layout/components/tailwind/loaders/loader.html.twig" %}
     </div>
