@@ -1,0 +1,72 @@
+@use "../vars/vars";
+
+#fullcalendar-custom{
+
+  .fc-view-harness.fc-view-harness-active{
+    min-height: 150vh;
+  }
+
+  .fc-toolbar{
+    flex-direction: column;
+
+    & > *{
+      margin-bottom: 12px;
+    }
+  }
+
+  .fc-list-table {
+    border-collapse:separate;
+    border-spacing:0 12px;
+  }
+
+  .fc-list{
+    tbody{
+      transform: translateY(-13px);
+    }
+  }
+
+  .fc-list-day{
+    & > .fc-list-event{
+      transform: translateY(-12px);
+    }
+  }
+
+  .fc-v-event .fc-event-main,
+  .fc-v-event .fc-event-title,
+  .fc-timegrid-event-harness > .fc-timegrid-event{
+    overflow: auto;
+    @include vars.scrollbar();
+  }
+
+  .fc-timegrid-event-harness > .fc-timegrid-event,
+  .fc-list-event{
+
+    &.entrant{
+      background-color: rgb(253 224 71);
+      border-color: rgb(250 204 21);
+    }
+
+    &.sortant{
+      background-color: rgb(252 165 165);
+      border-color: rgb(248 113 113);
+    }
+  }
+
+  .fc-list-event{
+    margin-bottom: 12px;
+  }
+
+  @media (min-width:768px) {
+    .fc-view-harness.fc-view-harness-active{
+      min-height: 90vh;
+    }
+
+    .fc-toolbar {
+      flex-direction: row;
+
+      & > * {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

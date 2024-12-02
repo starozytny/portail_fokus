@@ -6,6 +6,6 @@ import { Agenda } from "@tailwindComponents/Modules/Agenda/Agenda";
 
 let el = document.getElementById("agenda_list");
 if(el){
-	createRoot(el).render(<Agenda />)
+	createRoot(el).render(<Agenda {...el.dataset} />)
 }
 
