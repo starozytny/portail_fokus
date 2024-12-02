@@ -84,6 +84,7 @@ Encore
     .addEntry('admin_fokus_biens', './assets/admin/js/pages/fokus_biens.js')
 
     .addEntry('user_app', './assets/user/js/app.js')
+    .addEntry('user_homepage', './assets/user/js/pages/homepage.js')
     .addEntry('user_profil', './assets/user/js/pages/profil.js')
     .addEntry('user_property', './assets/user/js/pages/property.js')
     .addEntry('user_tenant', './assets/user/js/pages/tenant.js')

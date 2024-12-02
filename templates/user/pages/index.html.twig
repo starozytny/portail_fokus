@@ -3,8 +3,18 @@
 {% block title %}Espace professionnel de Fokus, application d'état des lieux{% endblock %}
 {% set page_title %}Dashboard{% endset %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('user_homepage') }}
+{% endblock %}
+
 {% block main_content %}
-<div class="example-wrapper">
-    <h1>Hello world</h1>
-</div>
+    <div id="agenda_list">
+        {% include "layout/components/tailwind/loaders/loader.html.twig" %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('user_homepage') }}
 {% endblock %}
