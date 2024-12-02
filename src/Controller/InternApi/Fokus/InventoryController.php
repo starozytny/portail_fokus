@@ -21,31 +21,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/intern/api/fokus/inventories', name: 'intern_api_fokus_inventories_')]
 class InventoryController extends AbstractController
 {
-    #[Route('/agenda/{numSociety}', name: 'agenda', options: ['expose' => true], methods: 'GET')]
-    public function agenda($numSociety, FokusService $fokusService, ApiResponse $apiResponse,
-                           SerializerInterface $serializer): Response
-    {
-        /** @var FkUser $user */
-        $user = $this->getUser();
-        $client = $fokusService->getAdClientByNumSociety($numSociety);
-
-        $em = $fokusService->getEntityNameManager($client->getManager());
-        if($user->getRights() == 1){
-            $data = $em->getRepository(FkInventory::class)->findBy(['state' => FkInventory::STATUS_PROCESSING], ['date' => 'DESC']);
-        }else{
-            $data = $em->getRepository(FkInventory::class)->findBy(['state' => FkInventory::STATUS_PROCESSING, 'userId' => $user->getId()], ['date' => 'DESC']);
-        }
-        $properties = $em->getRepository(FkProperty::class)->findAll();
-
-        $data = $serializer->serialize($data, 'json', ['groups' => FkInventory::LIST]);
-        $properties = $serializer->serialize($properties, 'json', ['groups' => FkProperty::LIST]);
-
-        return $apiResponse->apiJsonResponseCustom([
-            'donnees' => $data,
-            'properties' => $properties,
-        ]);
-    }
-
     #[Route('/list/{numSociety}', name: 'list', options: ['expose' => true], methods: 'GET')]
     public function list(Request $request, $numSociety, FokusService $fokusService, ApiResponse $apiResponse,
                          SerializerInterface $serializer): Response

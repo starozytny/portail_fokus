@@ -16,9 +16,12 @@ import interactionPlugin from '@fullcalendar/interaction';
 import Formulaire from "@commonFunctions/formulaire";
 
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
+import { createPortal } from "react-dom";
+import { Modal } from "@tailwindComponents/Elements/Modal";
+import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
 
 const URL_GET_DATA = "intern_api_agenda_events_list";
-const URL_GET_DATA_FOKUS = "intern_api_fokus_inventories_agenda";
+const URL_GET_DATA_FOKUS = "intern_api_fokus_inventories_list";
 const URL_UPDATE_ELEMENT = "admin_agenda_update";
 
 export class Agenda extends Component {
@@ -27,9 +30,13 @@ export class Agenda extends Component {
 
 		this.state = {
 			initialView: (window.matchMedia("(min-width: 768px)").matches) ? "timeGridWeek" : "timeGridDay",
+			oriData: [],
 			data: [],
-			loadingData: true
+			loadingData: true,
+			element: null
 		}
+
+		this.details = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -40,21 +47,54 @@ export class Agenda extends Component {
 			axios({ method: "GET", url: Routing.generate(URL_GET_DATA_FOKUS, {numSociety: numSociety}), data: {} })
 				.then(function (response) {
 					let data = JSON.parse(response.data.donnees);
+
 					let properties = JSON.parse(response.data.properties);
+					let users = JSON.parse(response.data.users);
+					let models = JSON.parse(response.data.models);
+					let tenants = JSON.parse(response.data.tenants);
+
 					let nData = [];
 					data.forEach(elem => {
 						if(elem.date !== "" && elem.date !== 0){
 							elem.property = null;
+							elem.user = null;
+							elem.model = null;
+							elem.tenantsData = [];
+
 							properties.forEach(pr => {
 								if(pr.uid === elem.propertyUid){
 									elem.property = pr;
 								}
 							})
 
+							users.forEach(us => {
+								if(us.id === elem.userId){
+									elem.user = us;
+								}
+							})
+
+							if(elem.input < 0){
+								models.forEach(mo => {
+									if(mo.id === Math.abs(elem.input)){
+										elem.model = mo;
+									}
+								})
+							}
+
+							if(elem.tenants){
+								JSON.parse(elem.tenants).forEach(te => {
+									tenants.forEach(tenant => {
+										if(te === tenant.reference){
+											elem.tenantsData.push(tenant)
+										}
+									})
+								})
+							}
+
 							nData.push(createEventStructureFromFokus(elem));
 						}
 					})
-					self.setState({ data: nData, loadingData: false })
+					self.setState({ oriData: data, data: nData, loadingData: false })
 				})
 				.catch(function (error) {
 					Formulaire.displayErrors(self, error);
@@ -69,7 +109,7 @@ export class Agenda extends Component {
 					data.forEach(elem => {
 						nData.push(createEventStructure(elem));
 					})
-					self.setState({ data: nData, loadingData: false })
+					self.setState({ oriData: data, data: nData, loadingData: false })
 				})
 				.catch(function (error) {
 					Formulaire.displayErrors(self, error);
@@ -82,13 +122,26 @@ export class Agenda extends Component {
 		addEventElement(e.el, e.event);
 	}
 
+	handleDetails = (elem) => {
+		const { oriData } = this.state;
+
+		let element = null;
+		oriData.forEach(el => {
+			if(el.id === parseInt(elem.event.id)){
+				element = el;
+			}
+		})
+
+		this.setState({ element: element })
+		this.details.current.handleClick();
+	}
+
 	handleUpdatePage = (e) => {
 		location.href = Routing.generate(URL_UPDATE_ELEMENT, { id: e.event.id })
 	}
 
 	render () {
-		const { isFokus } = this.props;
-		const { loadingData, initialView, data } = this.state;
+		const { loadingData, initialView, data, element } = this.state;
 
 		return <div>
 			{loadingData
@@ -99,7 +152,7 @@ export class Agenda extends Component {
 						initialView={initialView}
 						plugins={[interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin]}
 						headerToolbar={{
-							left: 'timeGridDay,dayGridMonth,timeGridWeek',
+							left: 'timeGridDay,timeGridWeek',
 							center: 'title',
 							right: 'prev,next'
 						}}
@@ -112,10 +165,15 @@ export class Agenda extends Component {
 						droppable={true}
 						events={data}
 						eventDidMount={this.handleEventDidMount}
-						eventClick={this.handleUpdatePage}
+						eventClick={this.handleDetails}
 					/>
 				</div>
 			}
+
+			{createPortal(<Modal ref={this.details} identifiant='details-edl' maxWidth={1024} margin={5}
+								 title={element ? `Détails de ${element.uid}` : ""}
+								 content={element ? <InventoryDetails elem={element} key={element.id} /> : null}
+			/>, document.body)}
 		</div>
 	}
 }

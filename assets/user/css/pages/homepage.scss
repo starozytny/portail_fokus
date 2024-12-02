@@ -42,7 +42,7 @@
   .fc-list-event{
 
     &.entrant{
-      background-color: rgb(253 224 71);
+      background-color: rgb(254 240 138);
       border-color: rgb(250 204 21);
     }
 
@@ -54,6 +54,10 @@
 
   .fc-list-event{
     margin-bottom: 12px;
+  }
+
+  .fc-daygrid-event{
+    display: block;
   }
 
   @media (min-width:768px) {
