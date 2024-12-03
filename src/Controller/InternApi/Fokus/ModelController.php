@@ -65,7 +65,7 @@ class ModelController extends AbstractController
         $dataToSend = $dataFokus->setDataModel($data);
 
         $existe = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Ce modèle existe déjà."

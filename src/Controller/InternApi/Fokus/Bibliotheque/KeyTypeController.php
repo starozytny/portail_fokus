@@ -29,7 +29,7 @@ class KeyTypeController extends AbstractController
         $dataToSend = $dataFokus->setDataKey($data);
 
         $existe = $em->getRepository(FkKeyType::class)->findOneBy(['name' => $dataToSend['name']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cette clé existe déjà."

@@ -29,7 +29,7 @@ class AspectController extends AbstractController
         $dataToSend = $dataFokus->setDataAspect($data);
 
         $existe = $em->getRepository(FkAspect::class)->findOneBy(['name' => $dataToSend['name']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cet aspect existe déjà."

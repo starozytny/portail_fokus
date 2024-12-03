@@ -29,7 +29,7 @@ class ElementController extends AbstractController
         $dataToSend = $dataFokus->setDataElement($data);
 
         $existe = $em->getRepository(FkElement::class)->findOneBy(['name' => $dataToSend['name']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cet élément existe déjà."

@@ -30,7 +30,7 @@ class CounterTypeController extends AbstractController
         $dataToSend = $dataFokus->setDataCounter($data);
 
         $existe = $em->getRepository(FkCounterType::class)->findOneBy(['name' => $dataToSend['name']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Ce compteur existe déjà."

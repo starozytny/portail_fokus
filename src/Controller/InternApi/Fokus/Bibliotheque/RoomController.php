@@ -29,7 +29,7 @@ class RoomController extends AbstractController
         $dataToSend = $dataFokus->setDataRoom($data);
 
         $existe = $em->getRepository(FkRoom::class)->findOneBy(['name' => $dataToSend['name']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cette pièce existe déjà."

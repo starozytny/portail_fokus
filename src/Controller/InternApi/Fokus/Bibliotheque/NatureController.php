@@ -29,7 +29,7 @@ class NatureController extends AbstractController
         $dataToSend = $dataFokus->setDataNature($data);
 
         $existe = $em->getRepository(FkNature::class)->findOneBy(['name' => $dataToSend['name']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cette nature existe déjà."

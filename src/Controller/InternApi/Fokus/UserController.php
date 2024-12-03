@@ -68,8 +68,9 @@ class UserController extends AbstractController
 
         $dataToSend = $dataFokus->setDataUser($data);
 
+
         $existe = $em->getRepository(FkUser::class)->findOneBy(['username' => $dataToSend['username']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'username',
                 'message' => "Cet utilisateur existe déjà."

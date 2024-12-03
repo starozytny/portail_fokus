@@ -62,7 +62,7 @@ class PropertyController extends AbstractController
         $dataToSend = $dataFokus->setDataProperty($data);
 
         $existe = $em->getRepository(FkProperty::class)->findOneBy(['reference' => $dataToSend['reference']]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Ce bien existe déjà."

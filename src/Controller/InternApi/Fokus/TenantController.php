@@ -65,7 +65,7 @@ class TenantController extends AbstractController
             'lastName' => $dataToSend['last_name'],
             'addr1' => $dataToSend['addr1'],
         ]);
-        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+        if(($type == "create" && $existe) || ($type == "update" && $existe && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Ce locataire existe déjà."
