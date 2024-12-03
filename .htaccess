@@ -21,7 +21,7 @@ SetHandler application/x-httpd-php81
 </FilesMatch>
 AddHandler application/x-httpd-php81 .php
 
-suPHP_ConfigPath /home/francis/admin.fokus.immo/php.ini
+suPHP_ConfigPath /home/francis/shanbo.fokus.immo/
 
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
@@ -63,8 +63,8 @@ RewriteCond %{REQUEST_FILENAME}.gz -f
 #All conditions met so add .gz to URL filename (invisibly)
 RewriteRule ^(.+) $1.gz [QSA,L]
 
-RewriteCond %{HTTP_HOST} ^www.admin.fokus.immo$
-RewriteRule ^(.*) http://admin.fokus.immo/$1 [QSA,L,R=301]
+RewriteCond %{HTTP_HOST} ^www.shanbo.fokus.immo$
+RewriteRule ^(.*) http://shanbo.fokus.immo/$1 [QSA,L,R=301]
 
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
