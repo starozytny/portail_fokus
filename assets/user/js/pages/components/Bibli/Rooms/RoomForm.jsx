@@ -53,6 +53,7 @@ class Form extends Component {
 
 		let paramsToValidate = [
 			{ type: "text", id: 'name', value: name },
+			{ type: "length", id: 'name', value: name, min: 1, max: 40 },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)
@@ -66,6 +67,8 @@ class Form extends Component {
 					location.href = Routing.generate(URL_INDEX_ELEMENTS, { pageId: pageId, h: response.data.id });
 				})
 				.catch(function (error) {
+					console.log(error)
+					console.log(error.response)
 					Formulaire.displayErrors(self, error);
 					Formulaire.loader(false);
 				})
