@@ -108,14 +108,26 @@ class Form extends Component {
 		e.preventDefault();
 
 		const { context, url } = this.props;
-		const { addr1, zipcode, city } = this.state;
+		const { reference, addr1, addr2, addr3, zipcode, city, type, floor, door, building, owner } = this.state;
 
 		this.setState({ errors: [] });
 
 		let paramsToValidate = [
+			{ type: "text", id: 'reference', value: reference },
 			{ type: "text", id: 'addr1', value: addr1 },
 			{ type: "text", id: 'zipcode', value: zipcode },
 			{ type: "text", id: 'city', value: city },
+			{ type: "length", id: 'reference', value: reference, min: 1, max: 10 },
+			{ type: "length", id: 'addr1', value: addr1, min: 1, max: 64 },
+			{ type: "length", id: 'addr2', value: addr2, min: 0, max: 64 },
+			{ type: "length", id: 'addr3', value: addr3, min: 0, max: 64 },
+			{ type: "length", id: 'zipcode', value: zipcode, min: 0, max: 10 },
+			{ type: "length", id: 'city', value: city, min: 0, max: 64 },
+			{ type: "length", id: 'type', value: type, min: 0, max: 24 },
+			{ type: "length", id: 'floor', value: floor, min: 0, max: 24 },
+			{ type: "length", id: 'door', value: door, min: 0, max: 20 },
+			{ type: "length", id: 'building', value: building, min: 0, max: 40 },
+			{ type: "length", id: 'owner', value: owner, min: 0, max: 32 },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)

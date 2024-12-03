@@ -53,6 +53,7 @@ class Form extends Component {
 
 		let paramsToValidate = [
 			{ type: "text", id: 'name', value: name },
+			{ type: "length", id: 'name', value: name, min: 1, max: 40 },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)

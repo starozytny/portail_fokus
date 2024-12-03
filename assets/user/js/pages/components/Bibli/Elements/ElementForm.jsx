@@ -150,6 +150,7 @@ class Form extends Component {
 			{ type: "text", id: 'ortho', value: ortho },
 			{ type: "text", id: 'category', value: category },
 			{ type: "text", id: 'family', value: family },
+			{ type: "length", id: 'name', value: name, min: 1, max: 40 },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)

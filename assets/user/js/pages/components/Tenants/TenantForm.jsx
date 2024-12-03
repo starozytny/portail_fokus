@@ -83,12 +83,22 @@ class Form extends Component {
 		e.preventDefault();
 
 		const { context, url } = this.props;
-		const { lastName } = this.state;
+		const { lastName, reference, firstName, phone, email, addr1, addr2, addr3, zipcode, city } = this.state;
 
 		this.setState({ errors: [] });
 
 		let paramsToValidate = [
 			{ type: "text", id: 'lastName', value: lastName },
+			{ type: "length", id: 'reference', value: reference, min: 0, max: 5 },
+			{ type: "length", id: 'lastName', value: lastName, min: 1, max: 80 },
+			{ type: "length", id: 'firstName', value: firstName, min: 0, max: 80 },
+			{ type: "length", id: 'phone', value: phone, min: 0, max: 15 },
+			{ type: "length", id: 'email', value: email, min: 0, max: 80 },
+			{ type: "length", id: 'addr1', value: addr1, min: 0, max: 80 },
+			{ type: "length", id: 'addr2', value: addr2, min: 0, max: 80 },
+			{ type: "length", id: 'addr3', value: addr3, min: 0, max: 80 },
+			{ type: "length", id: 'zipcode', value: zipcode, min: 0, max: 5 },
+			{ type: "length", id: 'city', value: city, min: 0, max: 40 },
 		];
 
 		let validate = Validateur.validateur(paramsToValidate)
