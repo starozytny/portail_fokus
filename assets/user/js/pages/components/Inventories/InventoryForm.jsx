@@ -21,12 +21,12 @@ const URL_INDEX_ELEMENTS = "user_properties_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_inventories_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_inventories_update";
 
-export function InventoryFormulaire ({ context, element, identifiant, userId, properties, users, models, tenants }) {
+export function InventoryFormulaire ({ context, element, identifiant, userId, dateClicked, properties, users, models, tenants }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	let inventoryTenants = [];
 	let comparativeValue = [0];
-	let date = "";
+	let date = dateClicked ? dateClicked : "";
 	if (context === "update") {
 		url = Routing.generate(URL_UPDATE_ELEMENT, { id: element.id });
 

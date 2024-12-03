@@ -41,6 +41,7 @@ export class Agenda extends Component {
 			users: [],
 			tenants: [],
 			models: [],
+			dateClicked: "",
 		}
 
 		this.details = React.createRef();
@@ -140,9 +141,16 @@ export class Agenda extends Component {
 		this.form.current.handleClick();
 	}
 
+	handleClick = (e) => {
+		this.setState({ dateClicked: moment(e.date).format('YYYY-MM-DDTHH:mm') })
+		this.form.current.handleClick();
+	}
+
 	render () {
 		const { userId } = this.props;
-		const { loadingData, initialView, data, element, properties, users, tenants, models } = this.state;
+		const { loadingData, initialView, data, element, properties, users, tenants, models, dateClicked } = this.state;
+
+		console.log(dateClicked);
 
 		return <div>
 			{loadingData
@@ -167,6 +175,7 @@ export class Agenda extends Component {
 						events={data}
 						eventDidMount={this.handleEventDidMount}
 						eventClick={this.handleDetails}
+						dateClick={this.handleClick}
 					/>
 				</div>
 			}
@@ -181,9 +190,9 @@ export class Agenda extends Component {
 								 title={element ? `Modifier ${element.id}` : "Ajouter un état des lieux"}
 								 isForm={true}
 								 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null}
-															   userId={parseInt(userId)}
+															   userId={parseInt(userId)} dateClicked={dateClicked}
 															   properties={properties} users={users} tenants={tenants} models={models}
-															   identifiant="form-edl" key={element ? element.id : 0} />}
+															   identifiant="form-edl" key={element ? element.id : dateClicked} />}
 			/>, document.body)}
 		</div>
 	}

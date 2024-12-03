@@ -63,6 +63,12 @@
     display: block;
   }
 
+  .fc-timegrid-slots{
+    td.fc-timegrid-slot-lane:hover{
+      background: #eaeaea;
+    }
+  }
+
   @media (min-width:768px) {
     .fc-view-harness.fc-view-harness-active{
       min-height: 90vh;
