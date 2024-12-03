@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
-import { ButtonIcon, ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
+import { ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
 export function ModelsItem ({ elem, highlight, onModal })
 {
@@ -32,7 +32,7 @@ export function ModelsItem ({ elem, highlight, onModal })
             </div> },
     ]
 
-    let content = JSON.parse(elem.content);
+    let content = elem.content ? JSON.parse(elem.content) : [];
 
     return <div className={`item${setHighlightClass(nHighlight)} border-t hover:bg-slate-50`} ref={refItem}>
         <div className="item-content">
