@@ -2,17 +2,7 @@
 
 namespace App\Service\Data;
 
-use App\Entity\Fokus\FkAspect;
-use App\Entity\Fokus\FkCounterType;
-use App\Entity\Fokus\FkElement;
 use App\Entity\Fokus\FkInventory;
-use App\Entity\Fokus\FkKeyType;
-use App\Entity\Fokus\FkModel;
-use App\Entity\Fokus\FkNature;
-use App\Entity\Fokus\FkProperty;
-use App\Entity\Fokus\FkRoom;
-use App\Entity\Fokus\FkTenant;
-use App\Entity\Fokus\FkUser;
 use App\Service\SanitizeData;
 
 class DataFokus
@@ -21,13 +11,12 @@ class DataFokus
         private readonly SanitizeData $sanitizeData,
     ) {}
 
-    public function setDataUser(?FkUser $obj, $data): array
+    public function setDataUser($data): array
     {
         $username = $this->sanitizeData->trimData($data->username);
         $userTag = $this->sanitizeData->trimData($data->userTag);
 
         return [
-            'id' => $obj->getId() ?: null,
             'username' => mb_strtoupper($username),
             'first_name' => $this->sanitizeData->cleanForFokus($data->firstname),
             'last_name' => $this->sanitizeData->cleanForFokus($data->lastname),
@@ -37,48 +26,43 @@ class DataFokus
         ];
     }
 
-    public function setDataRoom(?FkRoom $obj, $data): array
+    public function setDataRoom($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
         ];
     }
 
-    public function setDataKey(?FkKeyType $obj, $data): array
+    public function setDataKey($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
         ];
     }
 
-    public function setDataCounter(?FkCounterType $obj, $data): array
+    public function setDataCounter($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
             'unit' => $this->sanitizeData->cleanFullFokus($data->unit),
         ];
     }
 
-    public function setDataNature(?FkNature $obj, $data): array
+    public function setDataNature($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
         ];
     }
 
-    public function setDataAspect(?FkAspect $obj, $data): array
+    public function setDataAspect($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
         ];
     }
 
-    public function setDataElement(?FkElement $obj, $data): array
+    public function setDataElement($data): array
     {
         $gender = $this->sanitizeData->cleanForFokus($data->gender);
         $ortho = $this->sanitizeData->cleanForFokus($data->ortho);
@@ -93,7 +77,6 @@ class DataFokus
         }
 
         return [
-            'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
             'category' => $data->category,
             'family' => $data->family,
@@ -102,19 +85,17 @@ class DataFokus
         ];
     }
 
-    public function setDataModel(?FkModel $obj, $data): array
+    public function setDataModel($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'name' => $this->sanitizeData->cleanForFokus($data->name),
             'content' => json_encode($data->content),
         ];
     }
 
-    public function setDataTenant(?FkTenant $obj, $data): array
+    public function setDataTenant($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'last_name' => $this->sanitizeData->cleanFullFokus($data->lastName),
             'first_name' => $this->sanitizeData->cleanFullFokus($data->firstName),
             'phone' => $this->sanitizeData->toFormatPhone($data->phone),
@@ -127,10 +108,9 @@ class DataFokus
         ];
     }
 
-    public function setDataProperty(?FkProperty $obj, $data): array
+    public function setDataProperty($data): array
     {
         return [
-            'id' => $obj->getId() ?: null,
             'reference' => $this->sanitizeData->cleanFullFokus($data->reference),
             'addr1' => $this->sanitizeData->cleanFullFokus($data->addr1),
             'addr2' => $this->sanitizeData->cleanFullFokus($data->addr2),
@@ -148,7 +128,7 @@ class DataFokus
         ];
     }
 
-    public function setDataInventory(?FkInventory $obj, $data): array
+    public function setDataInventory($data): array
     {
         $input = $data->input;
         $comparativeValue = 0;
@@ -177,7 +157,6 @@ class DataFokus
         $date = $this->sanitizeData->createDateTime($data->date);
 
         return [
-            'uid' => $obj->getUid() ?: null,
             'property_uid' => $data->property->uid,
             'date' => $date ? $date->getTimestamp() : "",
             'type' => $data->type,
@@ -188,7 +167,7 @@ class DataFokus
         ];
     }
 
-    public function setDataInventoryDate(?FkInventory $obj, $data): array
+    public function setDataInventoryDate($data, FkInventory $obj): array
     {
         return [
             'property_uid' => $obj->getPropertyUid(),

@@ -26,20 +26,20 @@ class ElementController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataElement($obj, $data);
+        $dataToSend = $dataFokus->setDataElement($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkElement::class)->findOneBy(['name' => $dataToSend['name']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Cet élément existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->bibliCreate('element', $dataToSend);
         } else {
             $result = $fokusApi->bibliUpdate('element', $dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkElement::class)->findOneBy(['name' => $dataToSend['name']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Cet élément existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){

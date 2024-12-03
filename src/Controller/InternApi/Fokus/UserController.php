@@ -66,20 +66,20 @@ class UserController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataUser($obj, $data);
+        $dataToSend = $dataFokus->setDataUser($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkUser::class)->findOneBy(['username' => $dataToSend['username']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'username',
-                    'message' => "Cet utilisateur existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->userCreate($dataToSend);
         } else {
             $result = $fokusApi->userUpdate($dataToSend, $obj);
+        }
+
+        $existe = $em->getRepository(FkUser::class)->findOneBy(['username' => $dataToSend['username']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'username',
+                'message' => "Cet utilisateur existe déjà."
+            ]]);
         }
 
         if($result === false){
@@ -93,7 +93,7 @@ class UserController extends AbstractController
             }
         }
 
-        if($user->getId() == $dataToSend['id']) {
+        if($user->getId() == $obj->getId()) {
             $sessionData = $fokusApi->getSessionData();
             $fokusApi->setSessionData($dataToSend['username'], $dataToSend['password'] ?: $sessionData[2]);
         }

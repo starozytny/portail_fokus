@@ -62,20 +62,20 @@ class ModelController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataModel($obj, $data);
+        $dataToSend = $dataFokus->setDataModel($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Ce modèle existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->modelCreate($dataToSend);
         } else {
             $result = $fokusApi->modelUpdate($dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Ce modèle existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){

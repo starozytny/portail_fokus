@@ -59,20 +59,20 @@ class PropertyController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataProperty($obj, $data);
+        $dataToSend = $dataFokus->setDataProperty($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkProperty::class)->findOneBy(['reference' => $dataToSend['reference']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Ce bien existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->propertyCreate($dataToSend);
         } else {
             $result = $fokusApi->propertyUpdate($dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkProperty::class)->findOneBy(['reference' => $dataToSend['reference']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Ce bien existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){

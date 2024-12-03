@@ -26,20 +26,20 @@ class AspectController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataAspect($obj, $data);
+        $dataToSend = $dataFokus->setDataAspect($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkAspect::class)->findOneBy(['name' => $dataToSend['name']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Cet aspect existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->bibliCreate('aspect', $dataToSend);
         } else {
             $result = $fokusApi->bibliUpdate('aspect', $dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkAspect::class)->findOneBy(['name' => $dataToSend['name']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Cet aspect existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){

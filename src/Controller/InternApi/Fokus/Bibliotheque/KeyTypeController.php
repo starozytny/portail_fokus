@@ -26,20 +26,20 @@ class KeyTypeController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataKey($obj, $data);
+        $dataToSend = $dataFokus->setDataKey($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkKeyType::class)->findOneBy(['name' => $dataToSend['name']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Cette clé existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->bibliCreate('key', $dataToSend);
         } else {
             $result = $fokusApi->bibliUpdate('key', $dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkKeyType::class)->findOneBy(['name' => $dataToSend['name']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Cette clé existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){

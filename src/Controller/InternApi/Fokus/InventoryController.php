@@ -67,7 +67,7 @@ class InventoryController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataInventory($obj, $data);
+        $dataToSend = $dataFokus->setDataInventory($data);
 
         if($type == "create") {
             $result = $fokusApi->inventoryCreate($dataToSend);
@@ -154,7 +154,7 @@ class InventoryController extends AbstractController
 
         $obj = $em->getRepository(FkInventory::class)->find($id);
 
-        $dataToSend = $dataFokus->setDataInventoryDate($obj, $data);
+        $dataToSend = $dataFokus->setDataInventoryDate($data, $obj);
 
         $result = $fokusApi->inventoryUpdateDate($dataToSend, $obj->getId());
 

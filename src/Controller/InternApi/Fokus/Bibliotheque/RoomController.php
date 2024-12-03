@@ -26,20 +26,20 @@ class RoomController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataRoom($obj, $data);
+        $dataToSend = $dataFokus->setDataRoom($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkRoom::class)->findOneBy(['name' => $dataToSend['name']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Cette pièce existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->bibliCreate('room', $dataToSend);
         } else {
             $result = $fokusApi->bibliUpdate('room', $dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkRoom::class)->findOneBy(['name' => $dataToSend['name']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Cette pièce existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){

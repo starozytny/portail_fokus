@@ -58,24 +58,24 @@ class TenantController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataTenant($obj, $data);
+        $dataToSend = $dataFokus->setDataTenant($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkTenant::class)->findOneBy([
-                'firstName' => $dataToSend['first_name'],
-                'lastName' => $dataToSend['last_name'],
-                'addr1' => $dataToSend['addr1'],
-            ]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Ce locataire existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->tenantCreate($dataToSend);
         } else {
             $result = $fokusApi->tenantUpdate($dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkTenant::class)->findOneBy([
+            'firstName' => $dataToSend['first_name'],
+            'lastName' => $dataToSend['last_name'],
+            'addr1' => $dataToSend['addr1'],
+        ]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Ce locataire existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){

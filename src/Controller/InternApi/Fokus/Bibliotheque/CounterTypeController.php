@@ -27,20 +27,20 @@ class CounterTypeController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataCounter($obj, $data);
+        $dataToSend = $dataFokus->setDataCounter($data);
 
         if($type == "create") {
-            $existe = $em->getRepository(FkCounterType::class)->findOneBy(['name' => $dataToSend['name']]);
-            if($existe && $existe->getId() !== $dataToSend['id']) {
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'name',
-                    'message' => "Ce compteur existe déjà."
-                ]]);
-            }
-
             $result = $fokusApi->bibliCreate('counter', $dataToSend);
         } else {
             $result = $fokusApi->bibliUpdate('counter', $dataToSend, $obj->getId());
+        }
+
+        $existe = $em->getRepository(FkCounterType::class)->findOneBy(['name' => $dataToSend['name']]);
+        if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
+            return $apiResponse->apiJsonResponseValidationFailed([[
+                'name' => 'name',
+                'message' => "Ce compteur existe déjà."
+            ]]);
         }
 
         if($result === false || $result == 409){
