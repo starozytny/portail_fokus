@@ -21,6 +21,8 @@ SetHandler application/x-httpd-php81
 </FilesMatch>
 AddHandler application/x-httpd-php81 .php
 
+suPHP_ConfigPath /home/francis/admin.fokus.immo/php.ini
+
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-FRAME-OPTIONS "DENY"
