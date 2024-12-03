@@ -197,7 +197,7 @@ class FokusApi
 
     public function tenantDelete($id)
     {
-        return $this->callApi("GET", "delete_tenant/" . $id);
+        return $this->callApi("DELETE", "delete_tenant/" . $id);
     }
 
     // ------- Properties
@@ -214,7 +214,7 @@ class FokusApi
 
     public function propertyDelete($id)
     {
-        return $this->callApi("GET", "delete_property/" . $id);
+        return $this->callApi("DELETE", "delete_property/" . $id);
     }
 
     // ------- Inventories

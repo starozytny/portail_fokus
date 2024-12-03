@@ -117,7 +117,7 @@ class Form extends Component {
 			{ type: "text", id: 'addr1', value: addr1 },
 			{ type: "text", id: 'zipcode', value: zipcode },
 			{ type: "text", id: 'city', value: city },
-			{ type: "length", id: 'reference', value: reference, min: 1, max: 10 },
+			{ type: "uniqueLength", id: 'reference', value: reference, size: 10 },
 			{ type: "length", id: 'addr1', value: addr1, min: 1, max: 64 },
 			{ type: "length", id: 'addr2', value: addr2, min: 0, max: 64 },
 			{ type: "length", id: 'addr3', value: addr3, min: 0, max: 64 },

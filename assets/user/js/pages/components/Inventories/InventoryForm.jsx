@@ -195,7 +195,7 @@ class Form extends Component {
 		if (models.length > 0) {
 			inputItems = [...inputItems, { value: 1, label: 'Établir structure', identifiant: 'etablir-structure' }]
 		}
-		if (property && property.lastInventoryUid && property.lastInventoryUid !== "" && property.lastInventoryUid !== "0") {
+		if (property && property.lastInventoryUid && property.lastInventoryUid !== "" && property.lastInventoryUid !== 0) {
 			inputItems = [...inputItems, { value: 2, label: 'EDL Précédent', identifiant: 'edl-precedent' }]
 		}
 

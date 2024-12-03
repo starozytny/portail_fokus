@@ -64,8 +64,8 @@ export class Biens extends Component {
 						let elemInventories = [];
 						let canActions = true;
 						JSON.parse(response.data.inventories).forEach(inventory => {
-							if(inventory.propertyUid === elem.uid || elem.isImported !== "0"
-								|| elem.lastInventoryUid !== "0" || elem.lastInventoryUid === ""
+							if(inventory.propertyUid === elem.uid || elem.isImported !== 0
+								|| elem.lastInventoryUid !== 0 || elem.lastInventoryUid === ""
 							){
 								canActions = false;
 							}
@@ -74,6 +74,11 @@ export class Biens extends Component {
 								elemInventories.push(inventory)
 							}
 						})
+
+						if(elem.id === 237){
+							console.log(canActions);
+							console.log(canActions);
+						}
 
 						elem.canActions = canActions;
 						elem.inventories = elemInventories;
