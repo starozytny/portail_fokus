@@ -73,7 +73,7 @@ class SanitizeData
         return $return;
     }
 
-    public function cleanForFokus($value, $return = null): ?string
+    public function cleanForFokus($value, $return = ""): ?string
     {
         if($value != "" && $value != null){
             $value = trim($value);
@@ -83,7 +83,7 @@ class SanitizeData
         return $return;
     }
 
-    public function cleanFullFokus($value, $return = null): ?string
+    public function cleanFullFokus($value, $return = ""): ?string
     {
         if($value != "" && $value != null){
             $value = trim($value);
@@ -94,7 +94,7 @@ class SanitizeData
         return $return;
     }
 
-    public function toFormatPhone($value, $return = null): ?string
+    public function toFormatPhone($value, $return = ""): ?string
     {
         if($value != "" && $value != null){
             $value = trim($value);

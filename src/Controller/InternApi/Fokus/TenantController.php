@@ -85,7 +85,7 @@ class TenantController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('[TF0001] Une erreur est survenue.');
         }
 
-        $obj = $em->getRepository(FkTenant::class)->findOneBy(['id' => $result]);
+        $obj = $em->getRepository(FkTenant::class)->findOneBy(['id' => $type == "create" ? $result : $obj->getId()]);
 
         $this->addFlash('info', 'Données mises à jour.');
         return $apiResponse->apiJsonResponse($obj, FkTenant::LIST);
