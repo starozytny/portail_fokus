@@ -173,7 +173,7 @@ export class Agenda extends Component {
 	}
 
 	render () {
-		const { userId } = this.props;
+		const { userId, rights } = this.props;
 		const { loadingData, initialView, data, element, properties, users, tenants, models, dateClicked, nowEvent, oldEvent } = this.state;
 
 		return <div>
@@ -224,7 +224,7 @@ export class Agenda extends Component {
 								 title={element ? `Modifier ${element.id}` : "Ajouter un état des lieux"}
 								 isForm={true}
 								 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null}
-															   userId={parseInt(userId)} dateClicked={dateClicked}
+															   userId={parseInt(userId)} rights={rights} dateClicked={dateClicked}
 															   properties={properties} users={users} tenants={tenants} models={models}
 															   identifiant="form-edl" key={element ? element.id : dateClicked} />}
 			/>, document.body)}

@@ -12,7 +12,7 @@ import Validateur from "@commonFunctions/validateur";
 
 import { Button } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
-import { Checkbox, ErrorContent, Input, Radiobox, Select } from "@tailwindComponents/Elements/Fields";
+import { Checkbox, ErrorContent, Input, InputView, Radiobox, Select } from "@tailwindComponents/Elements/Fields";
 
 import { Biens } from "@userPages/Biens/Biens";
 import { Tenants } from "@userPages/Tenants/Tenants";
@@ -21,7 +21,7 @@ const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_inventories_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_inventories_update";
 
-export function InventoryFormulaire ({ context, element, identifiant, userId, dateClicked, properties, users, models, tenants }) {
+export function InventoryFormulaire ({ context, element, rights, identifiant, userId, dateClicked, properties, users, models, tenants }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	let inventoryTenants = [];
@@ -74,6 +74,8 @@ export function InventoryFormulaire ({ context, element, identifiant, userId, da
 		users={users}
 		models={models}
 		tenants={tenants}
+
+		rights={rights}
     />
 }
 
@@ -178,12 +180,17 @@ class Form extends Component {
 	}
 
 	render () {
-		const { context, identifiant, users, models, properties } = this.props;
+		const { context, rights, identifiant, users, models, properties } = this.props;
 		const { errors, userId, input, date, type, comparative, model, property, tenants } = this.state;
 
+		let userName = userId;
 		let usersItems = [];
 		users.forEach(us => {
-			usersItems.push({ value: us.id, label: us.lastName + " " + us.firstName, identifiant: 'user-' + us.id })
+			usersItems.push({ value: us.id, label: us.lastName + " " + us.firstName, identifiant: 'user-' + us.id });
+
+			if(userId !== "" && us.id === parseInt(userId)){
+				userName = us.lastName + " " + us.firstName;
+			}
 		});
 
 		let modelsItems = [];
@@ -223,7 +230,6 @@ class Form extends Component {
 				}
 			})
 		}
-
 
 		return <>
 			<div className="px-4 pb-4 pt-5 sm:px-6 sm:pb-4">
@@ -278,9 +284,14 @@ class Form extends Component {
 
 					<div className="flex gap-4">
 						<div className="w-full">
-							<Select identifiant="userId" valeur={userId} items={usersItems} {...params0}>
-								Attribution
-							</Select>
+							{rights !== "1"
+								? <InputView identifiant="userId" valeur={userName} {...params0}>
+									Attribution
+								</InputView>
+								: <Select identifiant="userId" valeur={userId} items={usersItems} {...params0}>
+									Attribution
+								</Select>
+							}
 						</div>
 						<div className="w-full">
 							<Select identifiant="input" valeur={input} items={inputItems} {...params0}>

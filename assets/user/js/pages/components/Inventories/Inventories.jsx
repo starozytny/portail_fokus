@@ -170,7 +170,7 @@ export class Inventories extends Component {
 	}
 
 	render () {
-		const { highlight, status, userId } = this.props;
+		const { highlight, status, userId, rights } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, properties, users, tenants, models } = this.state;
 
 		return <>
@@ -221,7 +221,7 @@ export class Inventories extends Component {
 										 title={element ? `Modifier ${element.id}` : "Ajouter un état des lieux"}
 										 isForm={true}
 										 content={<InventoryFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																	   userId={parseInt(userId)}
+																	   userId={parseInt(userId)} rights={rights}
 																	   properties={properties} users={users} tenants={tenants} models={models}
 																	   identifiant="form-edl" key={element ? element.id : 0} />}
 					/>, document.body)}

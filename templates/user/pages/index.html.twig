@@ -12,6 +12,7 @@
     <div id="agenda_list"
          data-num-society="{{ app.request.session.get('numSociety') }}"
          data-user-id="{{ app.user.id }}"
+         data-rights="{{ app.user.rights }}"
     >
         {% include "layout/components/tailwind/loaders/loader.html.twig" %}
     </div>
