@@ -229,6 +229,11 @@ class FokusApi
         return $this->callApi("PUT", "edit_inventory/" . $id, $data);
     }
 
+    public function inventoryUpdateDate($data, $id)
+    {
+        return $this->callApi("PUT", "edit_inventory/" . $id, $data);
+    }
+
     public function inventoryDelete($id)
     {
         return $this->callApi("GET", "delete_inventory/" . $id);

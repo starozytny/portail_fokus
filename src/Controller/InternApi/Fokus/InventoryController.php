@@ -144,4 +144,28 @@ class InventoryController extends AbstractController
 
         return $response;
     }
+
+    #[Route('/move/{id}', name: 'move', options: ['expose' => true], methods: 'PUT')]
+    public function move(Request $request, $id, FokusService $fokusService, FokusApi $fokusApi, ApiResponse $apiResponse,
+                         DataFokus $dataFokus): Response
+    {
+        $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
+        $data = json_decode($request->getContent());
+
+        $obj = $em->getRepository(FkInventory::class)->find($id);
+
+        $dataToSend = $dataFokus->setDataInventoryDate($obj, $data);
+
+        $result = $fokusApi->inventoryUpdateDate($dataToSend, $obj->getId());
+
+        if($result === false || $result == 409){
+            if($result == 409){
+                return $apiResponse->apiJsonResponseBadRequest('Un état des lieux existe déjà pour ce bien.');
+            }
+            return $apiResponse->apiJsonResponseBadRequest('[MF0001] Une erreur est survenue.');
+        }
+
+        $this->addFlash('info', 'Données mises à jour.');
+        return $apiResponse->apiJsonResponseSuccessful("ok");
+    }
 }

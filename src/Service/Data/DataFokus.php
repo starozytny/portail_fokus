@@ -177,7 +177,7 @@ class DataFokus
         $date = $this->sanitizeData->createDateTime($data->date);
 
         return [
-            'uid' => $obj->getId() ?: null,
+            'uid' => $obj->getUid() ?: null,
             'property_uid' => $data->property->uid,
             'date' => $date ? $date->getTimestamp() : "",
             'type' => $data->type,
@@ -185,6 +185,18 @@ class DataFokus
             'tenants' => json_encode($tenants),
             'user_id' => $data->userId,
             'input' => $input,
+        ];
+    }
+
+    public function setDataInventoryDate(?FkInventory $obj, $data): array
+    {
+        return [
+            'property_uid' => $obj->getPropertyUid(),
+            'date' => $data->timestamp,
+            'type' => $obj->getType(),
+            'tenants' => $obj->getTenants(),
+            'user_id' => $obj->getUserId(),
+            'input' => $obj->getInput(),
         ];
     }
 }

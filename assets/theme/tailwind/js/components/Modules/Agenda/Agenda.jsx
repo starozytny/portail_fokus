@@ -23,9 +23,11 @@ import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
 import { InventoryFormulaire } from "@userPages/Inventories/InventoryForm";
 
+const URL_INDEX_ELEMENTS = "user_properties_index";
 const URL_GET_DATA = "intern_api_agenda_events_list";
-const URL_GET_DATA_FOKUS = "intern_api_fokus_inventories_list";
 const URL_UPDATE_ELEMENT = "admin_agenda_update";
+const URL_GET_DATA_FOKUS = "intern_api_fokus_inventories_list";
+const URL_MOVE_ELEMENT = "intern_api_fokus_inventories_move";
 
 export class Agenda extends Component {
 	constructor (props) {
@@ -42,9 +44,12 @@ export class Agenda extends Component {
 			tenants: [],
 			models: [],
 			dateClicked: "",
+			nowEvent: null,
+			oldEvent: null
 		}
 
 		this.details = React.createRef();
+		this.move = React.createRef();
 		this.form = React.createRef();
 	}
 
@@ -146,11 +151,30 @@ export class Agenda extends Component {
 		this.form.current.handleClick();
 	}
 
+	handleMove = (e) => {
+		this.setState({ nowEvent: e.event, oldEvent: e.oldEvent });
+		this.move.current.handleClick();
+	}
+
+	handleSubmitMove = (e) => {
+		const { nowEvent, oldEvent } = this.state;
+
+		const self = this;
+		Formulaire.loader(true);
+		axios({ method: "PUT", url: Routing.generate(URL_MOVE_ELEMENT, {id: oldEvent.id}), data: {timestamp: moment(nowEvent.start).format('X')} })
+			.then(function (response) {
+				location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: oldEvent.id });
+			})
+			.catch(function (error) {
+				Formulaire.displayErrors(self, error);
+				Formulaire.loader(false);
+			})
+		;
+	}
+
 	render () {
 		const { userId } = this.props;
-		const { loadingData, initialView, data, element, properties, users, tenants, models, dateClicked } = this.state;
-
-		console.log(dateClicked);
+		const { loadingData, initialView, data, element, properties, users, tenants, models, dateClicked, nowEvent, oldEvent } = this.state;
 
 		return <div>
 			{loadingData
@@ -175,6 +199,7 @@ export class Agenda extends Component {
 						events={data}
 						eventDidMount={this.handleEventDidMount}
 						eventClick={this.handleDetails}
+						eventDrop={this.handleMove}
 						dateClick={this.handleClick}
 					/>
 				</div>
@@ -184,6 +209,15 @@ export class Agenda extends Component {
 								 title={element ? `Détails de ${element.uid}` : ""}
 								 content={element ? <InventoryDetails elem={element} key={element.id} /> : null}
 								 footer={<Button type="blue" onClick={this.handleUpdate}>Modifier</Button>}
+			/>, document.body)}
+
+			{createPortal(<Modal ref={this.move} identifiant='move-edl' maxWidth={568}
+								 title={nowEvent && oldEvent ? `Déplacer l'état des lieux : ${oldEvent.title}` : ""}
+								 content={nowEvent && oldEvent ? <div>
+									 Souhaitez-vous déplacer l'état des
+									 lieux : <i>{oldEvent.title}</i> au <b>{moment(nowEvent.start).format('LLL')}</b>
+								 </div> : null}
+								 footer={<Button type="blue" onClick={this.handleSubmitMove}>Confirmer le déplacement</Button>}
 			/>, document.body)}
 
 			{createPortal(<Modal ref={this.form} identifiant='form-edl' maxWidth={568} margin={5}
@@ -197,27 +231,6 @@ export class Agenda extends Component {
 		</div>
 	}
 }
-
-function createEventStructure (elem) {
-	let params = {
-		id: elem.id,
-		title: elem.name,
-		start: moment(elem.startAt).format('YYYY-MM-DD HH:mm'),
-		allDay: elem.allDay,
-		extendedProps: {
-			localisation: elem.localisation,
-			content: elem.content,
-		},
-		classNames: "event"
-	};
-
-	if (!elem.allDay && elem.endAt) {
-		params = { ...params, ...{ endAt: moment(elem.endAt).format('YYYY-MM-DD HH:mm') } }
-	}
-
-	return params
-}
-
 
 function createEventStructureFromFokus (elem) {
 	let start = moment(elem.date * 1000).format('YYYY-MM-DD HH:mm');
