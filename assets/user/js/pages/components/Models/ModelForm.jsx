@@ -204,8 +204,6 @@ class Form extends Component {
 
 										{content.map((elem, index) => {
 
-											console.log(elem);
-
 											let itemsElement = [];
 
 											let elementCat = [];

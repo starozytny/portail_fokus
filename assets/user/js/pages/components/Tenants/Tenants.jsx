@@ -67,7 +67,7 @@ export class Tenants extends Component {
 							if(inventory.tenants !== ""){
 								let removeDollars = inventory.tenants.replaceAll("$", "")
 								JSON.parse(removeDollars).forEach(tenant => {
-									let nRef = elem.reference.replaceAll("$", "")
+									let nRef = elem.reference ? elem.reference.replaceAll("$", "") : "";
 									if(tenant === nRef){
 										canActions = false;
 
