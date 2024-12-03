@@ -82,7 +82,7 @@ class ModelController extends AbstractController
             if($result == 409){
                 return $apiResponse->apiJsonResponseBadRequest('Ce modèle existe déjà.');
             }
-            return $apiResponse->apiJsonResponseBadRequest('[AF0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[MF0001] Une erreur est survenue.');
         }
 
         $obj = $em->getRepository(FkModel::class)->findOneBy(['name' => $dataToSend['name']]);

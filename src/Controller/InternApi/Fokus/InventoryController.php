@@ -79,7 +79,7 @@ class InventoryController extends AbstractController
             if($result == 409){
                 return $apiResponse->apiJsonResponseBadRequest('Un état des lieux existe déjà pour ce bien.');
             }
-            return $apiResponse->apiJsonResponseBadRequest('[AF0001] Une erreur est survenue.');
+            return $apiResponse->apiJsonResponseBadRequest('[IF0001] Une erreur est survenue.');
         }
 
         $obj = $em->getRepository(FkInventory::class)->findOneBy(['id' => $result]);
