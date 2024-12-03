@@ -5,7 +5,7 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
 import { ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
-export function ModelsItem ({ elem, highlight, onModal })
+export function ModelsItem ({ elem, rights, highlight, onModal })
 {
     const refItem = useRef(null);
 
@@ -17,20 +17,25 @@ export function ModelsItem ({ elem, highlight, onModal })
         { data: <div className={styleItemDropdown} onClick={() => onModal("details", elem)}>
                 <span className="icon-vision" />
                 <span className="pl-1">Détails</span>
-            </div> },
-        { data: <div className={styleItemDropdown} onClick={() => onModal("duplicate", elem)}>
-                <span className="icon-copy" />
-                <span className="pl-1">Dupliquer</span>
-            </div> },
-        { data: <div className={styleItemDropdown} onClick={() => onModal("form", elem)}>
-                <span className="icon-pencil" />
-                <span className="pl-1">Modifier</span>
-            </div> },
-        { data: <div className={styleItemDropdown} onClick={() => onModal("delete", elem)}>
-                <span className="icon-trash" />
-                <span className="pl-1">Supprimer</span>
-            </div> },
-    ]
+            </div> }
+    ];
+
+    if(rights !== "2"){
+        menu = [...menu, ...[
+            { data: <div className={styleItemDropdown} onClick={() => onModal("duplicate", elem)}>
+                    <span className="icon-copy" />
+                    <span className="pl-1">Dupliquer</span>
+                </div> },
+            { data: <div className={styleItemDropdown} onClick={() => onModal("form", elem)}>
+                    <span className="icon-pencil" />
+                    <span className="pl-1">Modifier</span>
+                </div> },
+            { data: <div className={styleItemDropdown} onClick={() => onModal("delete", elem)}>
+                    <span className="icon-trash" />
+                    <span className="pl-1">Supprimer</span>
+                </div> },
+        ]]
+    }
 
     let content = elem.content ? JSON.parse(elem.content) : [];
 

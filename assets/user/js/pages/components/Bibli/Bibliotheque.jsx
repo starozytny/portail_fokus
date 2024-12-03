@@ -65,6 +65,7 @@ export class Bibliotheque extends Component {
 	}
 
 	render () {
+		const { rights } = this.props;
 		const { loadingData, pageId, highlight, rooms, keysType, countersType, natures, aspects, elements, categories, elementsNatures } = this.state;
 
 		let menu = [
@@ -76,7 +77,7 @@ export class Bibliotheque extends Component {
 			{ id: 5, label: "Éléments" },
 		]
 
-		let paramsPage = { pageId: pageId, highlight: highlight };
+		let paramsPage = { rights: rights, pageId: pageId, highlight: highlight };
 
 		let content, pageName;
 		switch (pageId){

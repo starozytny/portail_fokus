@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { NaturesItem } from "@userPages/Bibli/Natures/NaturesItem";
 
-export function NaturesList ({ data, highlight, onModal }) {
+export function NaturesList ({ data, rights, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-natures">
@@ -20,7 +20,7 @@ export function NaturesList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <NaturesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <NaturesItem key={elem.id} elem={elem} rights={rights} highlight={highlight} onModal={onModal} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

@@ -7,7 +7,7 @@ import { Badge } from "@tailwindComponents/Elements/Badge";
 import { ButtonIcon } from "@tailwindComponents/Elements/Button";
 import { Selector } from "@tailwindComponents/Elements/Selector";
 
-export function ElementsItem ({ elem, element, categories, elementsNatures, natures, highlight, onModal, elementsSelected, onSelector })
+export function ElementsItem ({ elem, element, rights, categories, elementsNatures, natures, highlight, onModal, elementsSelected, onSelector })
 {
     const refItem = useRef(null);
 
@@ -65,11 +65,14 @@ export function ElementsItem ({ elem, element, categories, elementsNatures, natu
                         {onSelector
                             ? null
                             : (elem.isNative || elem.isUsed
-                                    ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
-                                    : <>
+                                ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
+                                : (rights !== "2"
+                                    ? <>
                                         <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
                                         <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
                                     </>
+                                    : null
+                                )
                             )
                         }
                     </div>

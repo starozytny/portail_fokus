@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { ModelsItem } from "@userPages/Models/ModelsItem";
 
-export function ModelsList ({ data, highlight, onModal }) {
+export function ModelsList ({ data, rights, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-models">
@@ -21,7 +21,7 @@ export function ModelsList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <ModelsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <ModelsItem key={elem.id} elem={elem} rights={rights} highlight={highlight} onModal={onModal} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

@@ -85,7 +85,7 @@ export class Keys extends Component {
 	}
 
 	render () {
-		const { pageId, highlight } = this.props;
+		const { pageId, highlight, rights } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -99,11 +99,14 @@ export class Keys extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
-						<div className="md:w-[258px]">
-							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
-								Ajouter une clé
-							</Button>
-						</div>
+						{rights !== "2"
+							? <div className="md:w-[258px]">
+								<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+									Ajouter une clé
+								</Button>
+							</div>
+							: null
+						}
 						<div className="w-full flex flex-row">
 							<Filter haveSearch={true} filters={filters} items={filtersItems} onFilters={this.handleFilters} />
 							<Search haveFilter={true} onSearch={this.handleSearch} placeholder="Rechercher pas intitulé.." />
@@ -115,6 +118,7 @@ export class Keys extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<KeysList data={currentData}
+							  rights={rights}
 							  highlight={parseInt(highlight)}
 							  onModal={this.handleModal} />
 

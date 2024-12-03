@@ -85,7 +85,7 @@ export class Rooms extends Component {
 	}
 
 	render () {
-		const { pageId, highlight, roomsSelected, onAddRoom } = this.props;
+		const { pageId, highlight, roomsSelected, onAddRoom, rights } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -99,7 +99,7 @@ export class Rooms extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
-						{onAddRoom
+						{onAddRoom || rights === "2"
 							? null
 							: <div className="md:w-[258px]">
 								<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
@@ -118,6 +118,7 @@ export class Rooms extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<RoomsList data={currentData}
+							   rights={rights}
 							   roomsSelected={roomsSelected}
 							   highlight={parseInt(highlight)}
 							   onModal={this.handleModal}

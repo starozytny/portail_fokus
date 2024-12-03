@@ -6,6 +6,7 @@
     <div id="models_list"
          data-num-society="{{ app.request.session.get('numSociety') }}"
          data-highlight="{{ app.request.query.get('h') }}"
+         data-rights="{{ app.user.rights }}"
     >
         {% include "layout/components/tailwind/loaders/loader.html.twig" %}
     </div>

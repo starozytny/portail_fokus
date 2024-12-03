@@ -131,7 +131,7 @@ export class Models extends Component {
 	}
 
 	render () {
-		const { highlight } = this.props;
+		const { highlight, rights } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, rooms, categories, elements, elementsNatures, natures } = this.state;
 
 		let itemsElement = [];
@@ -144,11 +144,14 @@ export class Models extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
-						<div className="md:w-[258px]">
-							<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
-								Ajouter un modèle
-							</Button>
-						</div>
+						{rights !== "2"
+							? <div className="md:w-[258px]">
+								<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
+									Ajouter un modèle
+								</Button>
+							</div>
+							: null
+						}
 						<div className="w-full flex flex-row">
 							<Search onSearch={this.handleSearch} placeholder="Rechercher par intitule.." />
 						</div>
@@ -159,6 +162,7 @@ export class Models extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<ModelsList data={currentData}
+								rights={rights}
 								highlight={parseInt(highlight)}
 								onModal={this.handleModal} />
 

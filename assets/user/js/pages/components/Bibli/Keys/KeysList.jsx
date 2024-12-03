@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { KeysItem } from "@userPages/Bibli/Keys/KeysItem";
 
-export function KeysList ({ data, highlight, onModal }) {
+export function KeysList ({ data, rights, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-keys">
@@ -20,7 +20,7 @@ export function KeysList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <KeysItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <KeysItem key={elem.id} elem={elem} rights={rights} highlight={highlight} onModal={onModal} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

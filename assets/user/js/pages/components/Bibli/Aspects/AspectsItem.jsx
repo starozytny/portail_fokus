@@ -6,7 +6,7 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 import { Badge } from "@tailwindComponents/Elements/Badge";
 import { ButtonIcon } from "@tailwindComponents/Elements/Button";
 
-export function AspectsItem ({ elem, highlight, onModal })
+export function AspectsItem ({ elem, rights, highlight, onModal })
 {
     const refItem = useRef(null);
 
@@ -21,10 +21,13 @@ export function AspectsItem ({ elem, highlight, onModal })
                 <div className="col-2 actions">
                     {elem.isNative || elem.isUsed
                         ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
-                        : <>
-                            <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
-                            <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
-                        </>
+                        : (rights !== "2"
+                            ? <>
+                                <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                                <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
+                            </>
+                            : null
+                        )
                     }
                 </div>
             </div>

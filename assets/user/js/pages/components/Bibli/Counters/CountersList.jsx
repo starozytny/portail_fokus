@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { CountersItem } from "@userPages/Bibli/Counters/CountersItem";
 
-export function CountersList ({ data, highlight, onModal }) {
+export function CountersList ({ data, rights, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-counters">
@@ -21,7 +21,7 @@ export function CountersList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <CountersItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <CountersItem key={elem.id} elem={elem} rights={rights} highlight={highlight} onModal={onModal} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>

@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { ElementsItem } from "@userPages/Bibli/Elements/ElementsItem";
 
-export function ElementsList ({ data, element, categories, elementsNatures, natures, highlight, onModal, elementsSelected, onSelector }) {
+export function ElementsList ({ data, element, rights, categories, elementsNatures, natures, highlight, onModal, elementsSelected, onSelector }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-elements">
@@ -23,7 +23,7 @@ export function ElementsList ({ data, element, categories, elementsNatures, natu
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <ElementsItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal}
+                        return <ElementsItem key={elem.id} elem={elem} rights={rights} highlight={highlight} onModal={onModal}
                                              categories={categories} elementsNatures={elementsNatures} natures={natures}
                                              elementsSelected={elementsSelected} onSelector={onSelector} element={element} />
                     })

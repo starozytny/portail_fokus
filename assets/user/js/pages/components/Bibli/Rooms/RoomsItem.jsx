@@ -6,7 +6,7 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 import { Badge } from "@tailwindComponents/Elements/Badge";
 import { ButtonIcon } from "@tailwindComponents/Elements/Button";
 
-export function RoomsItem ({ elem, highlight, onModal, roomsSelected, onAddRoom })
+export function RoomsItem ({ elem, rights, highlight, onModal, roomsSelected, onAddRoom })
 {
     const refItem = useRef(null);
 
@@ -44,11 +44,14 @@ export function RoomsItem ({ elem, highlight, onModal, roomsSelected, onAddRoom 
                     {onAddRoom
                         ? null
                         : (elem.isNative || elem.isUsed
-                                ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
-                            : <>
-                                <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
-                                <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
-                            </>
+                            ? <Badge type={elem.isNative ? "indigo" : "blue"}>{elem.isNative ? "Natif" : "Utilisé"}</Badge>
+                            : (rights === "2"
+                                ? null
+                                : <>
+                                    <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
+                                    <ButtonIcon type="default" icon="trash" onClick={() => onModal('delete', elem)}>Supprimer</ButtonIcon>
+                                </>
+                            )
                         )
                     }
                 </div>

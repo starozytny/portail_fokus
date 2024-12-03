@@ -85,7 +85,7 @@ export class Elements extends Component {
 	}
 
 	render () {
-		const { pageId, highlight, categories, elementsNatures, natures, elementsSelected, onSelector } = this.props;
+		const { pageId, highlight, categories, elementsNatures, natures, elementsSelected, onSelector, rights } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters } = this.state;
 
 		let filtersItems = [
@@ -99,7 +99,7 @@ export class Elements extends Component {
 				? <LoaderElements />
 				: <>
 					<div className="mb-2 flex flex-col gap-4 md:flex-row">
-						{onSelector
+						{onSelector || rights === "2"
 							? null
 							: <div className="md:w-[258px]">
 								<Button type="blue" iconLeft="add" width="w-full" onClick={() => this.handleModal('form', null)}>
@@ -118,6 +118,7 @@ export class Elements extends Component {
 										 onPerPage={this.handlePerPage} />
 
 					<ElementsList data={currentData}
+								  rights={rights}
 								  element={this.props.element}
 								  categories={categories}
 								  elementsNatures={elementsNatures}
