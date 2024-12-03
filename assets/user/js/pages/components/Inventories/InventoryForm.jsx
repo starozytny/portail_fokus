@@ -4,6 +4,9 @@ import { createPortal } from "react-dom";
 import axios from 'axios';
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
+import moment from "moment";
+import 'moment/locale/fr';
+
 import Formulaire from "@commonFunctions/formulaire";
 import Validateur from "@commonFunctions/validateur";
 
@@ -23,6 +26,7 @@ export function InventoryFormulaire ({ context, element, identifiant, userId, pr
 
 	let inventoryTenants = [];
 	let comparativeValue = [0];
+	let date = "";
 	if (context === "update") {
 		url = Routing.generate(URL_UPDATE_ELEMENT, { id: element.id });
 
@@ -46,6 +50,11 @@ export function InventoryFormulaire ({ context, element, identifiant, userId, pr
 				})
 			})
 		}
+
+		let timestamp = Formulaire.setValue(element.date === 0 ? "" : element.date);
+		if(timestamp !== ""){
+			date = moment(timestamp * 1000).format('YYYY-MM-DDTHH:mm');
+		}
 	}
 
 	return  <Form
@@ -53,7 +62,7 @@ export function InventoryFormulaire ({ context, element, identifiant, userId, pr
         url={url}
 		userId={element ? Formulaire.setValue(element.userId) : userId}
         input={element ? Formulaire.setValue(element.input) : 0}
-        date={element ? Formulaire.setValue(element.date === 0 ? "" : element.date) : ""}
+        date={date}
         type={element ? Formulaire.setValue(element.type) : ""}
         comparative={element ? comparativeValue : []}
         model={element ? Formulaire.setValue(element.model) : ""}
