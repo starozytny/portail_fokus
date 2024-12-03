@@ -74,7 +74,10 @@ export function BiensItem ({ elem, highlight, onModal, onSelector, propertiesSel
                     {onSelector
                         ? null
                         : <>
-                            <ButtonIcon type="default" icon="receipt" onClick={() => onModal('details', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
+                            {elem.inventories.length > 0
+                                ? <ButtonIcon type="default" icon="receipt" onClick={() => onModal('details', elem)} tooltipWidth={82}>Voir les Edls</ButtonIcon>
+                                : null
+                            }
                             {elem.canActions
                                 ? <ButtonIconDropdown icon="more" items={menu} />
                                 : <ButtonIcon type="default" icon="pencil" onClick={() => onModal('form', elem)}>Modifier</ButtonIcon>
