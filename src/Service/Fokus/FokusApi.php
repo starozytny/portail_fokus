@@ -236,7 +236,7 @@ class FokusApi
 
     public function inventoryDelete($id)
     {
-        return $this->callApi("GET", "delete_inventory/" . $id);
+        return $this->callApi("DELETE", "delete_inventory/" . $id);
     }
 
     public function inventoryDocument($uid)

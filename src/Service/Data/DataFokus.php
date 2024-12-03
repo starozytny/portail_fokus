@@ -128,7 +128,7 @@ class DataFokus
         ];
     }
 
-    public function setDataInventory($data): array
+    public function setDataInventory($data, ?FkInventory $obj): array
     {
         $input = $data->input;
         $comparativeValue = 0;
@@ -157,8 +157,9 @@ class DataFokus
         $date = $this->sanitizeData->createDateTime($data->date);
 
         return [
+            'uid' => $obj->getUid() ?: round(microtime(true) * 1000),
             'property_uid' => $data->property->uid,
-            'date' => $date ? $date->getTimestamp() : "",
+            'date' => $date ? $date->getTimestamp() : 0,
             'type' => $data->type,
             'comparative' => $comparativeValue,
             'tenants' => json_encode($tenants),

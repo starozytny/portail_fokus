@@ -17,7 +17,7 @@ import { Checkbox, ErrorContent, Input, Radiobox, Select } from "@tailwindCompon
 import { Biens } from "@userPages/Biens/Biens";
 import { Tenants } from "@userPages/Tenants/Tenants";
 
-const URL_INDEX_ELEMENTS = "user_properties_index";
+const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_inventories_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_inventories_update";
 

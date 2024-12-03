@@ -21,7 +21,7 @@ import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pa
 
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
-const URL_DELETE_ELEMENT = "intern_api_fokus_properties_delete";
+const URL_DELETE_ELEMENT = "intern_api_fokus_inventories_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_inventories";
 

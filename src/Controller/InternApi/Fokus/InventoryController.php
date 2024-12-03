@@ -67,7 +67,7 @@ class InventoryController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('Les données sont vides.');
         }
 
-        $dataToSend = $dataFokus->setDataInventory($data);
+        $dataToSend = $dataFokus->setDataInventory($data, $obj);
 
         if($type == "create") {
             $result = $fokusApi->inventoryCreate($dataToSend);
@@ -82,7 +82,7 @@ class InventoryController extends AbstractController
             return $apiResponse->apiJsonResponseBadRequest('[IF0001] Une erreur est survenue.');
         }
 
-        $obj = $em->getRepository(FkInventory::class)->findOneBy(['id' => $result]);
+        $obj = $em->getRepository(FkInventory::class)->findOneBy(['id' => $type == "create" ? $result : $obj->getId()]);
 
         $this->addFlash('info', 'Données mises à jour.');
         return $apiResponse->apiJsonResponse($obj, FkInventory::LIST);
