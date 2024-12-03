@@ -23,7 +23,7 @@ import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
 import { InventoryFormulaire } from "@userPages/Inventories/InventoryForm";
 
-const URL_INDEX_ELEMENTS = "user_properties_index";
+const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_agenda_events_list";
 const URL_UPDATE_ELEMENT = "admin_agenda_update";
 const URL_GET_DATA_FOKUS = "intern_api_fokus_inventories_list";
