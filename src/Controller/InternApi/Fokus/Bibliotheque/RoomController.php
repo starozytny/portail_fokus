@@ -28,18 +28,18 @@ class RoomController extends AbstractController
 
         $dataToSend = $dataFokus->setDataRoom($data);
 
-        if($type == "create") {
-            $result = $fokusApi->bibliCreate('room', $dataToSend);
-        } else {
-            $result = $fokusApi->bibliUpdate('room', $dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkRoom::class)->findOneBy(['name' => $dataToSend['name']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cette pièce existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->bibliCreate('room', $dataToSend);
+        } else {
+            $result = $fokusApi->bibliUpdate('room', $dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){

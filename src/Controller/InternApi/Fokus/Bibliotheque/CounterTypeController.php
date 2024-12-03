@@ -29,18 +29,18 @@ class CounterTypeController extends AbstractController
 
         $dataToSend = $dataFokus->setDataCounter($data);
 
-        if($type == "create") {
-            $result = $fokusApi->bibliCreate('counter', $dataToSend);
-        } else {
-            $result = $fokusApi->bibliUpdate('counter', $dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkCounterType::class)->findOneBy(['name' => $dataToSend['name']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Ce compteur existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->bibliCreate('counter', $dataToSend);
+        } else {
+            $result = $fokusApi->bibliUpdate('counter', $dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){

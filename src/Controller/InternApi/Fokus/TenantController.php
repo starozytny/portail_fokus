@@ -60,12 +60,6 @@ class TenantController extends AbstractController
 
         $dataToSend = $dataFokus->setDataTenant($data);
 
-        if($type == "create") {
-            $result = $fokusApi->tenantCreate($dataToSend);
-        } else {
-            $result = $fokusApi->tenantUpdate($dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkTenant::class)->findOneBy([
             'firstName' => $dataToSend['first_name'],
             'lastName' => $dataToSend['last_name'],
@@ -76,6 +70,12 @@ class TenantController extends AbstractController
                 'name' => 'name',
                 'message' => "Ce locataire existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->tenantCreate($dataToSend);
+        } else {
+            $result = $fokusApi->tenantUpdate($dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){

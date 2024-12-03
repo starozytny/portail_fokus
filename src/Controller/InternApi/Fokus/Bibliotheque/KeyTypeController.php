@@ -28,18 +28,18 @@ class KeyTypeController extends AbstractController
 
         $dataToSend = $dataFokus->setDataKey($data);
 
-        if($type == "create") {
-            $result = $fokusApi->bibliCreate('key', $dataToSend);
-        } else {
-            $result = $fokusApi->bibliUpdate('key', $dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkKeyType::class)->findOneBy(['name' => $dataToSend['name']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cette clé existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->bibliCreate('key', $dataToSend);
+        } else {
+            $result = $fokusApi->bibliUpdate('key', $dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){

@@ -68,18 +68,18 @@ class UserController extends AbstractController
 
         $dataToSend = $dataFokus->setDataUser($data);
 
-        if($type == "create") {
-            $result = $fokusApi->userCreate($dataToSend);
-        } else {
-            $result = $fokusApi->userUpdate($dataToSend, $obj);
-        }
-
         $existe = $em->getRepository(FkUser::class)->findOneBy(['username' => $dataToSend['username']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'username',
                 'message' => "Cet utilisateur existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->userCreate($dataToSend);
+        } else {
+            $result = $fokusApi->userUpdate($dataToSend, $obj);
         }
 
         if($result === false){

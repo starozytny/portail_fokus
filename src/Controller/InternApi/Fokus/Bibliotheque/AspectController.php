@@ -28,18 +28,18 @@ class AspectController extends AbstractController
 
         $dataToSend = $dataFokus->setDataAspect($data);
 
-        if($type == "create") {
-            $result = $fokusApi->bibliCreate('aspect', $dataToSend);
-        } else {
-            $result = $fokusApi->bibliUpdate('aspect', $dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkAspect::class)->findOneBy(['name' => $dataToSend['name']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cet aspect existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->bibliCreate('aspect', $dataToSend);
+        } else {
+            $result = $fokusApi->bibliUpdate('aspect', $dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){

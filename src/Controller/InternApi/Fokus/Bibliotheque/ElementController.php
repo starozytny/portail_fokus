@@ -28,18 +28,18 @@ class ElementController extends AbstractController
 
         $dataToSend = $dataFokus->setDataElement($data);
 
-        if($type == "create") {
-            $result = $fokusApi->bibliCreate('element', $dataToSend);
-        } else {
-            $result = $fokusApi->bibliUpdate('element', $dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkElement::class)->findOneBy(['name' => $dataToSend['name']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cet élément existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->bibliCreate('element', $dataToSend);
+        } else {
+            $result = $fokusApi->bibliUpdate('element', $dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){

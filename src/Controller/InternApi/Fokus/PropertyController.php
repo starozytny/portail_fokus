@@ -61,18 +61,18 @@ class PropertyController extends AbstractController
 
         $dataToSend = $dataFokus->setDataProperty($data);
 
-        if($type == "create") {
-            $result = $fokusApi->propertyCreate($dataToSend);
-        } else {
-            $result = $fokusApi->propertyUpdate($dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkProperty::class)->findOneBy(['reference' => $dataToSend['reference']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Ce bien existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->propertyCreate($dataToSend);
+        } else {
+            $result = $fokusApi->propertyUpdate($dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){

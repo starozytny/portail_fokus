@@ -28,18 +28,18 @@ class NatureController extends AbstractController
 
         $dataToSend = $dataFokus->setDataNature($data);
 
-        if($type == "create") {
-            $result = $fokusApi->bibliCreate('nature', $dataToSend);
-        } else {
-            $result = $fokusApi->bibliUpdate('nature', $dataToSend, $obj->getId());
-        }
-
         $existe = $em->getRepository(FkNature::class)->findOneBy(['name' => $dataToSend['name']]);
         if(($type == "create" && $existe) || ($type == "update" && $existe->getId() != $obj->getId())) {
             return $apiResponse->apiJsonResponseValidationFailed([[
                 'name' => 'name',
                 'message' => "Cette nature existe déjà."
             ]]);
+        }
+
+        if($type == "create") {
+            $result = $fokusApi->bibliCreate('nature', $dataToSend);
+        } else {
+            $result = $fokusApi->bibliUpdate('nature', $dataToSend, $obj->getId());
         }
 
         if($result === false || $result == 409){
