@@ -2,9 +2,9 @@ import "../../css/pages/fokus_biens.scss"
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Biens } from "@adminPages/Fokus/Biens/Biens";
+import { Properties } from "@adminPages/Fokus/Properties/Properties";
 
 let el = document.getElementById("biens_list");
 if(el){
-    createRoot(el).render(<Biens {...el.dataset} isAssignation={false} />)
+    createRoot(el).render(<Properties {...el.dataset} isAssignation={false} />)
 }

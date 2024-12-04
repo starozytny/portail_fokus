@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Alert } from "@tailwindComponents/Elements/Alert";
 
-import { BiensItem } from "@adminPages/Fokus/Biens/BiensItem";
+import { PropertiesItem } from "@adminPages/Fokus/Properties/PropertiesItem";
 
-export function BiensList ({ data, element, isAssignation, highlight, onModal }) {
+export function PropertiesList ({ data, element, isAssignation, highlight, onModal }) {
     return <div className="list my-4">
         <div className={`list-table ${isAssignation ? "bg-gray-100" : "bg-white"} rounded-md shadow`}>
             <div className="items items-properties">
@@ -23,9 +23,9 @@ export function BiensList ({ data, element, isAssignation, highlight, onModal })
                 {data.length > 0
                     ? data.map((elem) => {
                         return !element || (element && elem.id !== element.id)
-                            ? <BiensItem key={elem.id} elem={elem} element={element}
-                                         isAssignation={isAssignation} highlight={highlight}
-                                         onModal={onModal}  />
+                            ? <PropertiesItem key={elem.id} elem={elem} element={element}
+                                              isAssignation={isAssignation} highlight={highlight}
+                                              onModal={onModal}  />
                             : null
                         ;
                     })
@@ -38,7 +38,7 @@ export function BiensList ({ data, element, isAssignation, highlight, onModal })
     </div>
 }
 
-BiensList.propTypes = {
+PropertiesList.propTypes = {
     data: PropTypes.array.isRequired,
     highlight: PropTypes.number,
 }
