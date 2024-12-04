@@ -1,77 +1,49 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+imports:
+    - { resource: 'services_db_fokus.yaml' }
+
 parameters:
     root_directory: '%kernel.project_dir%/'
     public_directory: '%kernel.project_dir%/public/'
     private_directory: '%kernel.project_dir%/documents/'
     config_directory: '%kernel.project_dir%/config/'
     env_file: '%kernel.project_dir%/.env.local'
+
 services:
+    # default configuration for services in *this* file
     _defaults:
-        autowire: true
-        autoconfigure: true
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $publicDirectory: '%public_directory%'
             $privateDirectory: '%private_directory%'
             $configDirectory: '%config_directory%'
             $envFile: '%env_file%'
             $appEnv: '%env(APP_ENV)%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: ../src/
+        resource: '../src/'
         exclude:
-            - ../src/DependencyInjection/
-            - ../src/Entity/
-            - ../src/Kernel.php
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
     App\Security\FokusPasswordHasher:
         arguments:
             $salt: '%env(PASSWORD_SALT)%'
+
     App\Service\Fokus\FokusApi:
         arguments:
             $ciphering: '%env(CIPHERING)%'
             $cipheringIv: '%env(CIPHERING_IV)%'
             $cipheringPassphrase: '%env(CIPHERING_PASSPHRASE)%'
             $apiFokusUrl: '%env(API_FOKUS_URL)%'
-    App\Security\FokusUserProvider:
-        arguments:
-            $entityManagers:
-                - '@doctrine.orm.default_entity_manager'
-                - '@doctrine.orm.fokus003_entity_manager'
-                - '@doctrine.orm.fokus005_entity_manager'
-                - '@doctrine.orm.fokus008_entity_manager'
-                - '@doctrine.orm.fokus023_entity_manager'
-                - '@doctrine.orm.fokus033_entity_manager'
-                - '@doctrine.orm.fokus040_entity_manager'
-                - '@doctrine.orm.fokus041_entity_manager'
-                - '@doctrine.orm.fokus048_entity_manager'
-                - '@doctrine.orm.fokus050_entity_manager'
-                - '@doctrine.orm.fokus054_entity_manager'
-                - '@doctrine.orm.fokus055_entity_manager'
-                - '@doctrine.orm.fokus057_entity_manager'
-                - '@doctrine.orm.fokus059_entity_manager'
-                - '@doctrine.orm.fokus064_entity_manager'
-                - '@doctrine.orm.fokus065_entity_manager'
-                - '@doctrine.orm.fokus072_entity_manager'
-                - '@doctrine.orm.fokus073_entity_manager'
-                - '@doctrine.orm.fokus077_entity_manager'
-                - '@doctrine.orm.fokus080_entity_manager'
-                - '@doctrine.orm.fokus083_entity_manager'
-                - '@doctrine.orm.fokus084_entity_manager'
-                - '@doctrine.orm.fokus087_entity_manager'
-                - '@doctrine.orm.fokus088_entity_manager'
-                - '@doctrine.orm.fokus091_entity_manager'
-                - '@doctrine.orm.fokus092_entity_manager'
-                - '@doctrine.orm.fokus093_entity_manager'
-                - '@doctrine.orm.fokus094_entity_manager'
-                - '@doctrine.orm.fokus095_entity_manager'
-                - '@doctrine.orm.fokus096_entity_manager'
-                - '@doctrine.orm.fokus097_entity_manager'
-                - '@doctrine.orm.fokus098_entity_manager'
-                - '@doctrine.orm.fokus105_entity_manager'
-                - '@doctrine.orm.fokus113_entity_manager'
-                - '@doctrine.orm.fokus115_entity_manager'
-                - '@doctrine.orm.fokus116_entity_manager'
-                - '@doctrine.orm.fokus121_entity_manager'
-                - '@doctrine.orm.fokus126_entity_manager'
-                - '@doctrine.orm.fokus127_entity_manager'
-                - '@doctrine.orm.fokus132_entity_manager'
-                - '@doctrine.orm.fokus133_entity_manager'
-                - '@doctrine.orm.fokus134_entity_manager'
-                - '@doctrine.orm.fokus998_entity_manager'

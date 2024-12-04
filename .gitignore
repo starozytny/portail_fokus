@@ -37,6 +37,7 @@ winpty.exe.stackdump
 /documents/data/*
 
 /config/databaseConfig.json
+/config/services_db_fokus.yaml
 /config/packages/doctrine.yaml
 
 /public/tinymce/*

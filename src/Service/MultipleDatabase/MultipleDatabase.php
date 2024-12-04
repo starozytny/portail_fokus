@@ -37,10 +37,41 @@ class MultipleDatabase
 
         //write services for fokus
         if($isFokus){
-            $serviceFile = $this->configDirectory . "services.yaml";
-            $data = Yaml::parseFile($serviceFile);
-            $data['services']['App\Security\FokusUserProvider']['arguments']['$entityManagers'][] = "@doctrine.orm.".$nameManager."_entity_manager";
-            $yaml = Yaml::dump($data, 5, 4);
+            $serviceFile = $this->configDirectory . "services_db_fokus.yaml";
+            $yamlData = Yaml::parseFile($serviceFile);
+
+            if (!isset($yamlData['services']['App\Security\FokusUserProvider']['calls'])) {
+                $yamlData['services']['App\Security\FokusUserProvider']['calls'] = [];
+            }
+
+            // Déterminer si une méthode "setEntityManagers" existe déjà
+            $setEntityManagersIndex = null;
+            foreach ($yamlData['services']['App\Security\FokusUserProvider']['calls'] as $index => $call) {
+                if (isset($call['method']) && $call['method'] === 'setEntityManagers') {
+                    $setEntityManagersIndex = $index;
+                    break;
+                }
+            }
+
+            $newEntityManager = "@doctrine.orm.".$nameManager."_entity_manager";
+
+            if ($setEntityManagersIndex !== null) {
+                $currentManagers = &$yamlData['services']['App\Security\FokusUserProvider']['calls'][$setEntityManagersIndex]['arguments']['$entityManagers'];
+                if (!in_array($newEntityManager, $currentManagers, true)) {
+                    $currentManagers[] = $newEntityManager;
+                }
+            } else {
+                $yamlData['services']['App\Security\FokusUserProvider']['calls'][] = [
+                    'method' => 'setEntityManagers',
+                    'arguments' => [
+                        '$entityManagers' => [
+                            $newEntityManager,
+                        ],
+                    ],
+                ];
+            }
+
+            $yaml = Yaml::dump($yamlData, 7);
             file_put_contents($serviceFile, $yaml);
         }
 
