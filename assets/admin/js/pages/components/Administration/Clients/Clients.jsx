@@ -100,7 +100,7 @@ export class Clients extends Component {
 
 		const self = this;
 		Formulaire.loader(true);
-		axios({ method: "POST", url: Routing.generate(URL_ACTIVATE_ELEMENT, { id: element.id }), data: {} })
+		axios({ method: "PUT", url: Routing.generate(URL_ACTIVATE_ELEMENT, { id: element.id }), data: {} })
 			.then(function (response) {
 				Toastr.toast('info', 'Société activée !');
 				location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: element.id });

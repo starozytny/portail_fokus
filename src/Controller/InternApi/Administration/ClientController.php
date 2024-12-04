@@ -41,6 +41,7 @@ class ClientController extends AbstractController
 
         $obj = $em->getRepository(AdClients::class)->find($id);
 
+        $this->addFlash("info", "Société activée.");
         return $apiResponse->apiJsonResponse($obj, AdClients::LIST);
     }
 }

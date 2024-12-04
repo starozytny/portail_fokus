@@ -11,8 +11,6 @@ function getData (self, url, perPage, sorter, highlight = null, filters = null, 
             let data = response.data;
             let dataImmuable = response.data;
 
-            console.log(response.data);
-
             if(filters) {
                 data = filterFunction(filters, dataImmuable);
             }
