@@ -14,7 +14,7 @@ import { Button } from "@tailwindComponents/Elements/Button";
 import { CloseModalBtn, Modal } from "@tailwindComponents/Elements/Modal";
 import { Checkbox, ErrorContent, Input, InputView, Radiobox, Select } from "@tailwindComponents/Elements/Fields";
 
-import { Biens } from "@userPages/Biens/Biens";
+import { Properties } from "@userPages/Properties/Properties";
 import { Tenants } from "@userPages/Tenants/Tenants";
 
 const URL_INDEX_ELEMENTS = "user_inventories_index";
@@ -344,9 +344,9 @@ class Form extends Component {
 
 			{createPortal(<Modal ref={this.property} identifiant='inventory-property' maxWidth={1280} margin={2} zIndex={41} bgColor="bg-gray-100"
 								 title="Sélectionner un bien"
-								 content={<Biens donnees={JSON.stringify(properties)}
-												 propertiesSelected={property ? [property] : []}
-												 onSelector={this.handleSelectProperty} key={property ? property.id : 0} />}
+								 content={<Properties donnees={JSON.stringify(properties)}
+													  propertiesSelected={property ? [property] : []}
+													  onSelector={this.handleSelectProperty} key={property ? property.id : 0} />}
 			/>, document.body)}
 
 			{createPortal(<Modal ref={this.tenants} identifiant='inventory-tenants' maxWidth={1280} margin={2} zIndex={41} bgColor="bg-gray-100"

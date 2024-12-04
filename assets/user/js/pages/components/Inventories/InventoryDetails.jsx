@@ -4,7 +4,7 @@ import Sanitaze from "@commonFunctions/sanitaze";
 
 import { Badge } from "@tailwindComponents/Elements/Badge";
 
-import { BienData } from "@userPages/Biens/BienDetails";
+import { PropertyData } from "@userPages/Properties/PropertyDetails";
 import { TenantData } from "@userPages/Tenants/TenantDetails";
 
 export function InventoryDetails ({ elem }) {
@@ -53,7 +53,7 @@ export function InventoryDetails ({ elem }) {
                     Bien
                 </div>
 
-                <BienData elem={elem.property} currentTenant={null} />
+                <PropertyData elem={elem.property} currentTenant={null} />
             </div>
             <div className="bg-white border rounded-md">
                 <div className="text-lg font-semibold border-b px-4 pt-2 pb-1 bg-color0 rounded-t-md text-white">

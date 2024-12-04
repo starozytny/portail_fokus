@@ -18,7 +18,7 @@ class PropertyController extends AbstractController
 
         $clients = $em->getRepository(AdClients::class)->findBy([], ['numSociety' => 'ASC']);
 
-        return $this->render('admin/pages/fokus/biens/index.html.twig', ['clients' => $clients]);
+        return $this->render('admin/pages/fokus/properties/index.html.twig', ['clients' => $clients]);
     }
 
     #[Route('/{numSociety}', name: 'list', options: ['expose' => true])]
@@ -28,6 +28,6 @@ class PropertyController extends AbstractController
 
         $client = $emA->getRepository(AdClients::class)->findOneBy(['numSociety' => $numSociety]);
 
-        return $this->render('admin/pages/fokus/biens/list.html.twig', ['client' => $client]);
+        return $this->render('admin/pages/fokus/properties/list.html.twig', ['client' => $client]);
     }
 }

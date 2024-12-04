@@ -26,6 +26,7 @@ Encore
         '@commonHooks': path.resolve(__dirname, './assets/common/js/hooks'),
         '@appFolder': path.resolve(__dirname, './assets/app/js'),
         '@userComponents': path.resolve(__dirname, './assets/user/js/components'),
+        '@userFunctions': path.resolve(__dirname, './assets/user/js/functions'),
         '@userPages': path.resolve(__dirname, './assets/user/js/pages/components'),
         '@adminPages': path.resolve(__dirname, './assets/admin/js/pages/components'),
         '@nodeModulesFolder': path.resolve(__dirname, './node_modules'),
@@ -81,7 +82,7 @@ Encore
     .addEntry('admin_administration_clients', './assets/admin/js/pages/administration_clients.js')
 
     .addEntry('admin_fokus_users', './assets/admin/js/pages/fokus_users.js')
-    .addEntry('admin_fokus_biens', './assets/admin/js/pages/fokus_biens.js')
+    .addEntry('admin_fokus_properties', './assets/admin/js/pages/fokus_properties.js')
 
     .addEntry('user_app', './assets/user/js/app.js')
     .addEntry('user_homepage', './assets/user/js/pages/homepage.js')

@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
-import axios from "axios";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
+import PropertiesFunctions from "@userFunctions/properties";
 
-import { BiensList } from "@userPages/Biens/BiensList";
-import { BienFormulaire } from "@userPages/Biens/BienForm";
-import { BienDetails } from "@userPages/Biens/BienDetails";
+import { PropertiesList } from "@userPages/Properties/PropertiesList";
+import { PropertyFormulaire } from "@userPages/Properties/PropertyForm";
+import { PropertyDetails } from "@userPages/Properties/PropertyDetails";
 
 import { Button } from "@tailwindComponents/Elements/Button";
 import { Modal } from "@tailwindComponents/Elements/Modal";
@@ -23,7 +23,7 @@ const URL_DELETE_ELEMENT = "intern_api_fokus_properties_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_biens";
 
-export class Biens extends Component {
+export class Properties extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -54,53 +54,7 @@ export class Biens extends Component {
 		if(donnees){
 			List.setData(this, donnees, perPage, sorter, highlight)
 		}else{
-			const self = this;
-			axios({ method: "GET", url: Routing.generate(URL_GET_DATA, {numSociety: numSociety}), data: {} })
-				.then(function (response) {
-					let data = [];
-					let dataImmuable = [];
-
-					JSON.parse(response.data.donnees).forEach(elem => {
-						let elemInventories = [];
-						let canActions = true;
-						JSON.parse(response.data.inventories).forEach(inventory => {
-							if(inventory.propertyUid === elem.uid || elem.isImported !== 0
-								|| elem.lastInventoryUid !== 0 || elem.lastInventoryUid === ""
-							){
-								canActions = false;
-							}
-
-							if(inventory.propertyUid === elem.uid){
-								elemInventories.push(inventory)
-							}
-						})
-
-						if(elem.id === 237){
-							console.log(canActions);
-							console.log(canActions);
-						}
-
-						elem.canActions = canActions;
-						elem.inventories = elemInventories;
-
-						data.push(elem);
-						dataImmuable.push(elem);
-					})
-
-					data.sort(sorter);
-					dataImmuable.sort(sorter);
-
-					let [currentData, currentPage] = List.setCurrentPage(highlight, data, perPage);
-
-					self.setState({
-						data: data, dataImmuable: dataImmuable, currentData: currentData,
-						users: JSON.parse(response.data.users),
-						models: JSON.parse(response.data.models),
-						tenants: JSON.parse(response.data.tenants),
-						currentPage: currentPage,
-						loadingData: false })
-				})
-			;
+			PropertiesFunctions.getData(this, Routing.generate(URL_GET_DATA, {numSociety: numSociety}), perPage, sorter, highlight);
 		}
 	}
 
@@ -158,11 +112,11 @@ export class Biens extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage} />
 
-					<BiensList data={currentData}
-							   propertiesSelected={propertiesSelected}
-							   highlight={parseInt(highlight)}
-							   onModal={this.handleModal}
-							   onSelector={onSelector} />
+					<PropertiesList data={currentData}
+									propertiesSelected={propertiesSelected}
+									highlight={parseInt(highlight)}
+									onModal={this.handleModal}
+									onSelector={onSelector} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
@@ -179,15 +133,15 @@ export class Biens extends Component {
 							{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5} zIndex={42}
 												 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
 												 isForm={true}
-												 content={<BienFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																		  identifiant="form-property" key={element ? element.id : 0} />}
+												 content={<PropertyFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																			  identifiant="form-property" key={element ? element.id : 0} />}
 							/>, document.body)}
 
 							{createPortal(<Modal ref={this.details} identifiant='details-property' maxWidth={1024} margin={1}
 												 title={element ? `Détails de ${element.addr1}` : ""}
 												 content={element
-													 ? <BienDetails elem={element} key={element.id}
-																	users={users} models={models} tenants={tenants} />
+													 ? <PropertyDetails elem={element} key={element.id}
+																		users={users} models={models} tenants={tenants} />
 													 :	null
 												 }
 							/>, document.body)}

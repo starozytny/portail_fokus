@@ -2,14 +2,14 @@ import React from "react";
 
 import { InventoriesLight } from "@userPages/Inventories/Light/InventoriesLight";
 
-export function BienDetails ({ elem, users, models, tenants }) {
+export function PropertyDetails ({ elem, users, models, tenants }) {
     return <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4 md:col-span-2">
             <div className="bg-white border rounded-md">
                 <div className="text-lg font-semibold border-b px-4 pt-2 pb-1 bg-color0 rounded-t-md text-white">
                     Bien
                 </div>
-                <BienData elem={elem} currentTenant={elem.currentTenant} />
+                <PropertyData elem={elem} currentTenant={elem.currentTenant} />
             </div>
             <div className="bg-white border rounded-md">
                 <div className="text-lg font-semibold border-b px-4 pt-2 pb-1 bg-color0 rounded-t-md text-white">
@@ -23,7 +23,7 @@ export function BienDetails ({ elem, users, models, tenants }) {
     </div>
 }
 
-export function BienData ({ elem, currentTenant }) {
+export function PropertyData ({ elem, currentTenant }) {
     return <div className="p-4 flex flex-col gap-2 divide-y lg:divide-y-0 lg:divide-x lg:flex-row">
         <div className="w-full">
             <div><u>Référence</u> : <span className="font-semibold">{elem.reference}</span></div>

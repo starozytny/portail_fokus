@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 
 import { Alert } from "@tailwindComponents/Elements/Alert";
 
-import { BiensItem } from "@adminPages/Fokus/Biens/BiensItem";
+import { PropertiesItem } from "@userPages/Properties/PropertiesItem";
 
-export function BiensList ({ data, element, isAssignation, highlight, onModal }) {
+export function PropertiesList ({ data, propertiesSelected, highlight, onModal, onSelector }) {
     return <div className="list my-4">
-        <div className={`list-table ${isAssignation ? "bg-gray-100" : "bg-white"} rounded-md shadow`}>
+        <div className="list-table bg-white rounded-md shadow">
             <div className="items items-properties">
                 <div className="item item-header uppercase text-sm text-gray-600">
                     <div className="item-content">
                         <div className="item-infos">
                             <div className="col-1">Adresse</div>
-                            <div className="col-2">Informations</div>
-                            <div className="col-3">Dernier EDL Uid</div>
+                            <div className="col-2">Références</div>
+                            <div className="col-3">Details</div>
                             <div className="col-4 actions" />
                         </div>
                     </div>
@@ -22,12 +22,8 @@ export function BiensList ({ data, element, isAssignation, highlight, onModal })
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return !element || (element && elem.id !== element.id)
-                            ? <BiensItem key={elem.id} elem={elem} element={element}
-                                         isAssignation={isAssignation} highlight={highlight}
-                                         onModal={onModal}  />
-                            : null
-                        ;
+                        return <PropertiesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal}
+                                               onSelector={onSelector} propertiesSelected={propertiesSelected} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
@@ -38,7 +34,7 @@ export function BiensList ({ data, element, isAssignation, highlight, onModal })
     </div>
 }
 
-BiensList.propTypes = {
+PropertiesList.propTypes = {
     data: PropTypes.array.isRequired,
     highlight: PropTypes.number,
 }
