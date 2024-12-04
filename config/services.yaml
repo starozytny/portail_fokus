@@ -75,4 +75,3 @@ services:
                 - '@doctrine.orm.fokus133_entity_manager'
                 - '@doctrine.orm.fokus134_entity_manager'
                 - '@doctrine.orm.fokus998_entity_manager'
-                - '@doctrine.orm.fokus997_entity_manager'
