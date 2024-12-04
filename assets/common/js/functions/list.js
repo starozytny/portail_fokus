@@ -25,8 +25,6 @@ function getData (self, url, perPage, sorter, highlight = null, filters = null, 
             self.setState({ data: data, dataImmuable: dataImmuable, currentData: currentData, currentPage: currentPage, loadingData: false })
         })
         .catch(function (error) {
-            console.log(error)
-            console.log(error.response)
             Formulaire.displayErrors(self, error);
         })
     ;
