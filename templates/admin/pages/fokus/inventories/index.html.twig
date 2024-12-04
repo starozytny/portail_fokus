@@ -1,0 +1,35 @@
+{% extends 'admin/pages/fokus/inventories/template.html.twig' %}
+
+{% set page_title %}Liste des états des lieux{% endset %}
+
+{% block main_content %}
+    <div class="mb-4 text-sm">
+        {% include "layout/components/tailwind/alerts/alert.html.twig" with {
+            alert_type: 'gray',
+            alert_title: 'Comment ça marche ?',
+            alert_text: 'Cliquez sur un client pour voir ses états des lieux.'
+        } %}
+    </div>
+    <div class="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
+        {% for elem in clients %}
+            <div class="{{ elem.isActivated ? "cursor-pointer bg-white hover:border-gray-400 transition-colors" : "cursor-not-allowed bg-gray-50" }}  p-4 rounded-md border"
+                 onclick="location.href = '{{ path('admin_fokus_properties_list', {numSociety: elem.numSociety}) }}'"
+            >
+                <div class="w-32 h-24 rounded-md overflow-hidden">
+                    {% if elem.logo %}
+                        <img src="data:image/png;base64, {{ elem.logo }}" alt="logo {{ elem.name }}" class="bg-gray-50 w-full h-full object-contain">
+                    {% else %}
+                        <div class="bg-gray-200 w-full h-full flex items-center justify-center text-xs">Aucun logo</div>
+                    {% endif %}
+                </div>
+                <div class="mt-4">
+                    <div class="font-medium">{{ elem.name }}</div>
+                    <div class="text-sm text-gray-600">{{ elem.numSociety }}</div>
+                    {% if elem.isActivated == false %}
+                        <div class="text-red-500 font-semibold text-sm">Société non activée pour le portail</div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

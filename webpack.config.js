@@ -83,6 +83,7 @@ Encore
 
     .addEntry('admin_fokus_users', './assets/admin/js/pages/fokus_users.js')
     .addEntry('admin_fokus_properties', './assets/admin/js/pages/fokus_properties.js')
+    .addEntry('admin_fokus_inventories', './assets/admin/js/pages/fokus_inventories.js')
 
     .addEntry('user_app', './assets/user/js/app.js')
     .addEntry('user_homepage', './assets/user/js/pages/homepage.js')

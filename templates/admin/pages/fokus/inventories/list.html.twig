@@ -1,0 +1,21 @@
+{% extends 'admin/pages/fokus/inventories/template.html.twig' %}
+
+{% set page_title %}Liste des états des lieux de {{ client.name }}{% endset %}
+
+{% set page_actions %}
+    {% include 'layout/components/tailwind/buttons/button.html.twig' with {
+        btn_link: path('admin_fokus_inventories_index'),
+        btn_type: 'default',
+        btn_icon: 'left-arrow',
+        btn_text: 'Retourner aux clients'
+    } %}
+{% endset %}
+
+{% block main_content %}
+    <div id="inventories_list"
+         data-num-society="{{ client.numSociety }}"
+         data-highlight="{{ app.request.query.get('h') }}"
+    >
+        {% include "layout/components/tailwind/loaders/loader.html.twig" %}
+    </div>
+{% endblock %}
