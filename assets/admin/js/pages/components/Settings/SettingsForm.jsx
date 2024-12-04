@@ -7,7 +7,7 @@ import Toastr from "@tailwindFunctions/toastr";
 import Formulaire from "@commonFunctions/formulaire";
 import Validateur from "@commonFunctions/validateur";
 
-import { Input, InputFile, Switcher } from "@tailwindComponents/Elements/Fields";
+import { Input, InputFile, InputView, Switcher } from "@tailwindComponents/Elements/Fields";
 import { Button } from "@tailwindComponents/Elements/Button";
 
 const URL_UPDATE_ELEMENT = "admin_settings_update";
@@ -27,6 +27,7 @@ export class SettingsFormulaire extends Component {
 			logoMail: element ? Formulaire.setValue(element.logoMail) : "",
 			multipleDatabase: element ? [element.multipleDatabase ? 1 : 0] : [0],
 			prefixDatabase: element ? Formulaire.setValue(element.prefixDatabase) : "",
+			prefixFokus: element ? Formulaire.setValue(element.prefixFokus) : "",
 		}
 
 		this.file = React.createRef();
@@ -46,7 +47,7 @@ export class SettingsFormulaire extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 
-		const { websiteName, emailGlobal, emailContact, emailRgpd, multipleDatabase, prefixDatabase } = this.state;
+		const { websiteName, emailGlobal, emailContact, emailRgpd, multipleDatabase, prefixDatabase, prefixFokus } = this.state;
 
 		this.setState({ errors: [] });
 
@@ -55,6 +56,7 @@ export class SettingsFormulaire extends Component {
 			{ type: "email", id: 'emailGlobal', value: emailGlobal },
 			{ type: "email", id: 'emailContact', value: emailContact },
 			{ type: "email", id: 'emailRgpd', value: emailRgpd },
+			{ type: "text", id: 'prefixFokus', value: prefixFokus },
 		];
 
 		if (multipleDatabase[0] === 1) {
@@ -93,7 +95,7 @@ export class SettingsFormulaire extends Component {
 	}
 
 	render () {
-		const { errors, websiteName, emailGlobal, emailContact, emailRgpd, logoMail, multipleDatabase, prefixDatabase } = this.state;
+		const { errors, websiteName, emailGlobal, emailContact, emailRgpd, logoMail, multipleDatabase, prefixDatabase, prefixFokus } = this.state;
 
 		let multipleItems = [{ value: 1, label: "Oui", identifiant: "oui" }];
 
@@ -154,18 +156,31 @@ export class SettingsFormulaire extends Component {
 							l'utilisation et la semi automatisation d'une base de donnée par société.
 						</div>
 					</div>
-					<div className="flex gap-2 bg-white p-4 rounded-md ring-1 ring-inset ring-gray-200 xl:col-span-2">
-						<div className="w-full">
-							<Switcher items={multipleItems} identifiant="multipleDatabase" valeur={multipleDatabase} {...params0}>
-								Multiple base de données
-							</Switcher>
-						</div>
-						{multipleDatabase[0]
-							? <div className="w-full">
-								<Input valeur={prefixDatabase} identifiant="prefixDatabase" {...params0}>Prefix</Input>
+					<div className="flex flex-col gap-4 bg-white p-4 rounded-md ring-1 ring-inset ring-gray-200 xl:col-span-2">
+						<div className="flex gap-2">
+							<div className="w-full">
+								<Switcher items={multipleItems} identifiant="multipleDatabase" valeur={multipleDatabase} {...params0}>
+									Multiple base de données
+								</Switcher>
 							</div>
-							: null
-						}
+							{multipleDatabase[0]
+								? <div className="w-full">
+									<Input valeur={prefixDatabase} identifiant="prefixDatabase" {...params0}>Prefix</Input>
+								</div>
+								: null
+							}
+						</div>
+						<div className="flex gap-2">
+							<div className="w-full">
+								<InputView identifiant="multipleDatabaseFokus" valeur="Oui">
+									Multiple base de données FOKUS
+								</InputView>
+							</div>
+							<div className="w-full">
+								<Input valeur={prefixFokus} identifiant="prefixFokus" {...params0}>Prefix FOKUS</Input>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			</div>

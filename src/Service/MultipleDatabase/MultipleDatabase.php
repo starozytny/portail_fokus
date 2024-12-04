@@ -20,7 +20,7 @@ class MultipleDatabase
         $this->em = $entityManager;
     }
 
-    public function createManager(Settings $settings, string $code, bool $force): bool
+    public function createManager(Settings $settings, string $code, bool $force, bool $isFokus, $suffixe = null): bool
     {
         if (!$force) {
             $society = $this->em->getRepository(Society::class)->findOneBy(['code' => $code]);
@@ -30,14 +30,23 @@ class MultipleDatabase
         }
 
         //vars
-        $nameManager = $settings->getPrefixDatabase().$code;
+        $nameManager = ($isFokus ? $settings->getPrefixFokus() : $settings->getPrefixDatabase()).$code;
         $nameEnvData = "%env(resolve:DATABASE_URL_CLIENT_".$code.")%";
         $databConfig = file_get_contents($this->configDirectory . 'databaseConfig.json');
         $db = json_decode($databConfig, true);
 
+        //write services for fokus
+        if($isFokus){
+            $serviceFile = $this->configDirectory . "services.yaml";
+            $data = Yaml::parseFile($serviceFile);
+            $data['services']['App\Security\FokusUserProvider']['arguments']['$entityManagers'][] = "@doctrine.orm.".$nameManager."_entity_manager";
+            $yaml = Yaml::dump($data, 5, 4);
+            file_put_contents($serviceFile, $yaml);
+        }
+
         //write env file
         $env = file_get_contents($this->envFile);
-        $env .= 'DATABASE_URL_CLIENT_'.$code.'="mysql://'.$db['db_username'].':'.$db['db_password'].'@'.$db['db_host'].'/'.$db['db_prefix'] . $nameManager.'?serverVersion=5.7&charset=utf8mb4"';
+        $env .= 'DATABASE_URL_CLIENT_'.$code.'="mysql://'.$db['db_username'].':'.$db['db_password'].'@'.$db['db_host'].'/'.$db['db_prefix'] . ($isFokus ? $code . $suffixe : $nameManager).'?serverVersion=5.7&charset=utf8mb4"';
         $env .= "\n";
         file_put_contents($this->envFile, $env);
 
