@@ -20,6 +20,8 @@ class ClientController extends AbstractController
         $em = $fokusService->getAdministrationEntityManager();
 
         $clients = $em->getRepository(AdClients::class)->findAll();
+        $clients = $fokusService->getClientsWithPropertyActivateSet($clients);
+
         return $apiResponse->apiJsonResponse($clients, AdClients::LIST);
     }
 
@@ -29,5 +31,16 @@ class ClientController extends AbstractController
         $client = $fokusService->getAdClientByNumSociety($numSociety);
 
         return $apiResponse->apiJsonResponseCustom(['credits' => $client->getCredits()]);
+    }
+
+    #[Route('/activate/{id}', name: 'activate', options: ['expose' => true], methods: 'PUT')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function activate($id, FokusService $fokusService, ApiResponse $apiResponse): Response
+    {
+        $em = $fokusService->getAdministrationEntityManager();
+
+        $obj = $em->getRepository(AdClients::class)->find($id);
+
+        return $apiResponse->apiJsonResponse($obj, AdClients::LIST);
     }
 }

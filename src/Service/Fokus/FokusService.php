@@ -38,4 +38,21 @@ class FokusService
 
         return $client;
     }
+
+    /**
+     * @param AdClients[] $clients
+     * @return AdClients[]
+     */
+    public function getClientsWithPropertyActivateSet(array $clients): array
+    {
+        foreach($clients as $client) {
+            $em = $this->getEntityNameManager($client->getManager());
+
+            if(!$em){
+                $client->setIsActivated(false);
+            }
+        }
+
+        return $clients;
+    }
 }

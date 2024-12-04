@@ -1,17 +1,25 @@
 import React, { Component } from "react";
+import { createPortal } from "react-dom";
 
+import axios from "axios";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
+import Toastr from "@tailwindFunctions/toastr";
+import Formulaire from "@commonFunctions/formulaire";
 
 import { ClientsList } from "@adminPages/Administration/Clients/ClientsList";
 
+import { Modal } from "@tailwindComponents/Elements/Modal";
+import { Button } from "@tailwindComponents/Elements/Button";
 import { Search } from "@tailwindComponents/Elements/Search";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
 
+const URL_INDEX_ELEMENTS = "admin_administration_clients_index";
 const URL_GET_DATA = "intern_api_administration_clients_list";
+const URL_ACTIVATE_ELEMENT = "intern_api_administration_clients_activate";
 
 let sorters = [
 	{ value: 0, label: 'Code', identifiant: 'sorter-code' },
@@ -38,6 +46,7 @@ export class Clients extends Component {
 		}
 
 		this.pagination = React.createRef();
+		this.activate = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -81,6 +90,28 @@ export class Clients extends Component {
 		List.changeSorter(this, this.state.data, this.state.perPage, sortersFunction, nb, SESSION_SORTER);
 	}
 
+	handleModal = (identifiant, elem) => {
+		this[identifiant].current.handleClick();
+		this.setState({ element: elem });
+	}
+
+	handleActivate = () => {
+		const { element } = this.state;
+
+		const self = this;
+		Formulaire.loader(true);
+		axios({ method: "POST", url: Routing.generate(URL_ACTIVATE_ELEMENT, { id: element.id }), data: {} })
+			.then(function (response) {
+				Toastr.toast('info', 'Société activée !');
+				location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: element.id });
+			})
+			.catch(function (error) {
+				Formulaire.displayErrors(self, error);
+				Formulaire.loader(false);
+			})
+		;
+	}
+
 	render () {
 		const { highlight } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, nbSorter } = this.state;
@@ -97,10 +128,22 @@ export class Clients extends Component {
 										 onClick={this.handlePaginationClick} nbSorter={nbSorter}
 										 onPerPage={this.handlePerPage} onSorter={this.handleSorter} />
 
-					<ClientsList data={currentData} highlight={parseInt(highlight)} />
+					<ClientsList data={currentData} highlight={parseInt(highlight)} onModal={this.handleModal} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
+
+					{createPortal(
+						<Modal ref={this.activate} identifiant="activate-society" maxWidth={568}
+							   title="Activer la société"
+							   content={<p>
+								   Êtes-vous sûr de vouloir activer la société <b>{element ? element.name : null}</b> ?
+								   <br/><br/>
+								   L'activation permet d'activer la société pour ce portail.
+								</p>}
+							   footer={<Button type="blue" onClick={this.handleActivate}>Confirmer</Button>} />,
+						document.body
+					)}
 				</>
 			}
 		</>
