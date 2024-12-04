@@ -82,7 +82,7 @@ Encore
     .addEntry('admin_administration_clients', './assets/admin/js/pages/administration_clients.js')
 
     .addEntry('admin_fokus_users', './assets/admin/js/pages/fokus_users.js')
-    .addEntry('admin_fokus_biens', './assets/admin/js/pages/fokus_biens.js')
+    .addEntry('admin_fokus_properties', './assets/admin/js/pages/fokus_properties.js')
 
     .addEntry('user_app', './assets/user/js/app.js')
     .addEntry('user_homepage', './assets/user/js/pages/homepage.js')
