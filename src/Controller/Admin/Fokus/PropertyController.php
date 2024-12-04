@@ -17,6 +17,7 @@ class PropertyController extends AbstractController
         $em = $fokusService->getAdministrationEntityManager();
 
         $clients = $em->getRepository(AdClients::class)->findBy([], ['numSociety' => 'ASC']);
+        $clients = $fokusService->getClientsWithPropertyActivateSet($clients);
 
         return $this->render('admin/pages/fokus/properties/index.html.twig', ['clients' => $clients]);
     }
@@ -27,6 +28,12 @@ class PropertyController extends AbstractController
         $emA = $fokusService->getAdministrationEntityManager();
 
         $client = $emA->getRepository(AdClients::class)->findOneBy(['numSociety' => $numSociety]);
+
+        $em = $fokusService->getEntityNameManager($client->getManager());
+        if(!$em){
+            $this->addFlash("error", "Société $numSociety non activée pour le portail.");
+            return $this->redirectToRoute('admin_fokus_properties_index');
+        }
 
         return $this->render('admin/pages/fokus/properties/list.html.twig', ['client' => $client]);
     }

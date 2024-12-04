@@ -84,7 +84,7 @@ class SocietyController extends AbstractController
 
         if($settings->isMultipleDatabase()){
             if($type == "create"){
-                $multipleDatabase->createManager($settings, $obj->getCode(), false);
+                $multipleDatabase->createManager($settings, $obj->getCode(), false, false);
                 $obj->setIsGenerated(true);
             }else{
                 $multipleDatabase->updateManager($settings, $oldCode, $obj->getCode());
@@ -129,7 +129,7 @@ class SocietyController extends AbstractController
                              MultipleDatabase $multipleDatabase, SettingsService $settingsService): Response
     {
         if(!$obj->isIsGenerated()){
-            $multipleDatabase->createManager($settingsService->getSettings(), $obj->getCode(), true);
+            $multipleDatabase->createManager($settingsService->getSettings(), $obj->getCode(), true, false);
 
             $obj->setIsGenerated(true);
             $repository->save($obj, true);

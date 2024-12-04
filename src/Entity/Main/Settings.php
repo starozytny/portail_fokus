@@ -49,6 +49,10 @@ class Settings
     #[Groups(['settings_form', 'settings_multiple_db'])]
     private ?string $prefixDatabase = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['settings_form'])]
+    private ?string $prefixFokus = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -146,6 +150,18 @@ class Settings
     public function setPrefixDatabase(?string $prefixDatabase): self
     {
         $this->prefixDatabase = $prefixDatabase;
+
+        return $this;
+    }
+
+    public function getPrefixFokus(): ?string
+    {
+        return $this->prefixFokus;
+    }
+
+    public function setPrefixFokus(?string $prefixFokus): static
+    {
+        $this->prefixFokus = $prefixFokus;
 
         return $this;
     }

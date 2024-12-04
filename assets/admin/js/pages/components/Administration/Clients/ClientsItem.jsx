@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import { setHighlightClass, useHighlight } from "@commonHooks/item";
 
-export function ClientsItem ({ elem, highlight })
+import { ButtonIcon } from "@tailwindComponents/Elements/Button";
+
+export function ClientsItem ({ elem, highlight, onModal })
 {
 	const refItem = useRef(null);
 
@@ -40,7 +42,12 @@ export function ClientsItem ({ elem, highlight })
 					<div>{elem.credits}/{elem.totalCredits}</div>
 				</div>
 				<div className="col-4 actions">
-					{elem.isLogilink ? "Gérance" : ""}
+					<div className="text-gray-600 text-sm">
+						{elem.isActivated
+							? null
+							: <ButtonIcon type="default" icon="alarm" onClick={() => onModal('activate', elem)}>Activer</ButtonIcon>
+						}
+					</div>
 				</div>
 			</div>
 		</div>

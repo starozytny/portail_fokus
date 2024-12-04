@@ -74,6 +74,10 @@ class AdClients
     #[Groups(['ad_client_list'])]
     private ?int $isLogilink = 0;
 
+    // propriétés non persistés
+    #[Groups(['ad_client_list'])]
+    private ?bool $isActivated = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -243,6 +247,18 @@ class AdClients
     public function setIsLogilink(int $isLogilink): static
     {
         $this->isLogilink = $isLogilink;
+
+        return $this;
+    }
+
+    public function getIsActivated(): ?bool
+    {
+        return $this->isActivated;
+    }
+
+    public function setIsActivated(?bool $value): static
+    {
+        $this->isActivated = $value;
 
         return $this;
     }

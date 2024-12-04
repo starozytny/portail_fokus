@@ -87,6 +87,9 @@ class AdminController extends AbstractController
             $prefix = $isMultipleDatabase ? $sanitizeData->trimData($data->prefixDatabase) : "";
             $prefix = $prefix ? strtolower($prefix) : "";
 
+            $prefixFokus = $sanitizeData->trimData($data->prefixFokus);
+            $prefixFokus = $prefixFokus ? strtolower($prefixFokus) : "";
+
             $settings = ($settings)
                 ->setWebsiteName($sanitizeData->trimData($data->websiteName))
                 ->setEmailGlobal($sanitizeData->trimData($data->emailGlobal))
@@ -96,6 +99,7 @@ class AdminController extends AbstractController
                 ->setUrlHomepage($this->generateUrl('app_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL))
                 ->setMultipleDatabase($isMultipleDatabase)
                 ->setPrefixDatabase($prefix)
+                ->setPrefixFokus($prefixFokus)
             ;
 
             if($isMultipleDatabase){

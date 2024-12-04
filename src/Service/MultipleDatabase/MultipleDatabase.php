@@ -20,7 +20,7 @@ class MultipleDatabase
         $this->em = $entityManager;
     }
 
-    public function createManager(Settings $settings, string $code, bool $force): bool
+    public function createManager(Settings $settings, string $code, bool $force, bool $isFokus, $suffixe = null): bool
     {
         if (!$force) {
             $society = $this->em->getRepository(Society::class)->findOneBy(['code' => $code]);
@@ -30,14 +30,54 @@ class MultipleDatabase
         }
 
         //vars
-        $nameManager = $settings->getPrefixDatabase().$code;
+        $nameManager = ($isFokus ? $settings->getPrefixFokus() : $settings->getPrefixDatabase()).$code;
         $nameEnvData = "%env(resolve:DATABASE_URL_CLIENT_".$code.")%";
         $databConfig = file_get_contents($this->configDirectory . 'databaseConfig.json');
         $db = json_decode($databConfig, true);
 
+        //write services for fokus
+        if($isFokus){
+            $serviceFile = $this->configDirectory . "services_db_fokus.yaml";
+            $yamlData = Yaml::parseFile($serviceFile);
+
+            if (!isset($yamlData['services']['App\Security\FokusUserProvider']['calls'])) {
+                $yamlData['services']['App\Security\FokusUserProvider']['calls'] = [];
+            }
+
+            // Déterminer si une méthode "setEntityManagers" existe déjà
+            $setEntityManagersIndex = null;
+            foreach ($yamlData['services']['App\Security\FokusUserProvider']['calls'] as $index => $call) {
+                if (isset($call['method']) && $call['method'] === 'setEntityManagers') {
+                    $setEntityManagersIndex = $index;
+                    break;
+                }
+            }
+
+            $newEntityManager = "@doctrine.orm.".$nameManager."_entity_manager";
+
+            if ($setEntityManagersIndex !== null) {
+                $currentManagers = &$yamlData['services']['App\Security\FokusUserProvider']['calls'][$setEntityManagersIndex]['arguments']['$entityManagers'];
+                if (!in_array($newEntityManager, $currentManagers, true)) {
+                    $currentManagers[] = $newEntityManager;
+                }
+            } else {
+                $yamlData['services']['App\Security\FokusUserProvider']['calls'][] = [
+                    'method' => 'setEntityManagers',
+                    'arguments' => [
+                        '$entityManagers' => [
+                            $newEntityManager,
+                        ],
+                    ],
+                ];
+            }
+
+            $yaml = Yaml::dump($yamlData, 7);
+            file_put_contents($serviceFile, $yaml);
+        }
+
         //write env file
         $env = file_get_contents($this->envFile);
-        $env .= 'DATABASE_URL_CLIENT_'.$code.'="mysql://'.$db['db_username'].':'.$db['db_password'].'@'.$db['db_host'].'/'.$db['db_prefix'] . $nameManager.'?serverVersion=5.7&charset=utf8mb4"';
+        $env .= 'DATABASE_URL_CLIENT_'.$code.'="mysql://'.$db['db_username'].':'.$db['db_password'].'@'.$db['db_host'].'/'.$db['db_prefix'] . ($isFokus ? $code . $suffixe : $nameManager).'?serverVersion='.$db['db_version'].'"';
         $env .= "\n";
         file_put_contents($this->envFile, $env);
 
@@ -51,6 +91,7 @@ class MultipleDatabase
         $data['doctrine']['orm']['entity_managers'][$nameManager] = [
             "naming_strategy" => "doctrine.orm.naming_strategy.underscore_number_aware",
             "connection" => $nameManager,
+            "report_fields_where_declared" => true,
             "mappings" => [
                 ucfirst($nameManager) => [
                     "is_bundle" => false,

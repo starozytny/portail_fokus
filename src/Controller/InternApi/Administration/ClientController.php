@@ -5,6 +5,8 @@ namespace App\Controller\InternApi\Administration;
 use App\Entity\Administration\AdClients;
 use App\Service\ApiResponse;
 use App\Service\Fokus\FokusService;
+use App\Service\MultipleDatabase\MultipleDatabase;
+use App\Service\SettingsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,6 +22,8 @@ class ClientController extends AbstractController
         $em = $fokusService->getAdministrationEntityManager();
 
         $clients = $em->getRepository(AdClients::class)->findAll();
+        $clients = $fokusService->getClientsWithPropertyActivateSet($clients);
+
         return $apiResponse->apiJsonResponse($clients, AdClients::LIST);
     }
 
@@ -29,5 +33,21 @@ class ClientController extends AbstractController
         $client = $fokusService->getAdClientByNumSociety($numSociety);
 
         return $apiResponse->apiJsonResponseCustom(['credits' => $client->getCredits()]);
+    }
+
+    #[Route('/activate/{id}', name: 'activate', options: ['expose' => true], methods: 'PUT')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function activate($id, FokusService $fokusService, ApiResponse $apiResponse,
+                             MultipleDatabase $multipleDatabase, SettingsService $settingsService): Response
+    {
+        $settings = $settingsService->getSettings();
+        $em = $fokusService->getAdministrationEntityManager();
+
+        $obj = $em->getRepository(AdClients::class)->find($id);
+
+        $multipleDatabase->createManager($settings, $obj->getNumSociety(), false, true, '_' . $obj->getSociety());
+
+        $this->addFlash("info", "Société activée.");
+        return $apiResponse->apiJsonResponse($obj, AdClients::LIST);
     }
 }

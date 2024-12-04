@@ -14,7 +14,10 @@ class FokusUserProvider implements UserProviderInterface
 {
     private array $entityManagers;
 
-    public function __construct(array $entityManagers)
+    public function __construct()
+    {}
+
+    public function setEntityManagers(array $entityManagers): void
     {
         $this->entityManagers = $entityManagers;
     }
