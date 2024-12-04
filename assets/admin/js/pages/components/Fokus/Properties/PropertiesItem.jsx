@@ -27,7 +27,8 @@ export function PropertiesItem ({ elem, element, isAssignation, highlight, onMod
         <div className="item-content">
             <div className="item-infos">
                 <div className="col-1">
-                    <div className="font-medium">
+                    <div className="text-sm text-gray-600">UID : {elem.uid}</div>
+                    <div className="mt-1 font-medium">
                         <div>{elem.addr1}</div>
                         <div>{elem.addr2}</div>
                         <div>{elem.addr3}</div>
@@ -35,7 +36,7 @@ export function PropertiesItem ({ elem, element, isAssignation, highlight, onMod
                     <div>{elem.zipcode} {elem.city}</div>
                 </div>
                 <div className="col-2">
-                    <div>{elem.reference}</div>
+                    <div className="font-semibold">{elem.reference}</div>
                     <div className="text-sm text-gray-600">
                         <div>Propriétaire : {elem.owner ? elem.owner : "Non renseigné"}</div>
                         <div>Locataire : {elem.currentTenant ? elem.currentTenant : "Non renseigné"}</div>

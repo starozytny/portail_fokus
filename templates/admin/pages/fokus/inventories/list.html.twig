@@ -15,6 +15,7 @@
     <div id="inventories_list"
          data-num-society="{{ client.numSociety }}"
          data-highlight="{{ app.request.query.get('h') }}"
+         data-status="{{ app.request.query.get('st') }}"
     >
         {% include "layout/components/tailwind/loaders/loader.html.twig" %}
     </div>
