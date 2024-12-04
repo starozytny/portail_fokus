@@ -26,7 +26,15 @@ export function InventoriesItem ({ elem, highlight, onModal })
             { data: <div className={styleItemDropdown} onClick={() => onModal("details", elem)}>
                     <span className="icon-vision" />
                     <span className="pl-1">Détails</span>
-                </div> }
+                </div> },
+            { data: <div className={styleItemDropdown} onClick={() => onModal("form", elem)}>
+                    <span className="icon-pencil" />
+                    <span className="pl-1">Modifier</span>
+                </div> },
+            { data: <div className={styleItemDropdown} onClick={() => onModal("delete", elem)}>
+                    <span className="icon-trash" />
+                    <span className="pl-1">Supprimer</span>
+                </div> },
         ];
     }else{
         menu = [
@@ -48,10 +56,9 @@ export function InventoriesItem ({ elem, highlight, onModal })
                     <div className={`font-semibold text-sm ${elem.date === 0 ? "text-red-500" : ""}`}>
                         {elem.date === 0 ? "Indéfinie" : Sanitaze.timestampToDateForm(elem.date)}
                     </div>
-                    <div className="mt-1 text-sm text-gray-600">UID : {elem.uid}</div>
                 </div>
                 <div className="col-2">
-                {elem.user
+                    {elem.user
                         ? <>
                             <Badge type="gray">{elem.user.userTag}</Badge>
                             <div className="text-sm text-gray-600 mt-1">{elem.user.lastName} {elem.user.firstName}</div>

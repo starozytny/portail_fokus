@@ -7,6 +7,7 @@ use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkProperty;
 use App\Entity\Fokus\FkTenant;
 use App\Entity\Fokus\FkUser;
+use App\Entity\Main\User;
 use App\Service\ApiResponse;
 use App\Service\Data\DataFokus;
 use App\Service\Fokus\FokusApi;
@@ -25,18 +26,20 @@ class InventoryController extends AbstractController
     public function list(Request $request, $numSociety, FokusService $fokusService, ApiResponse $apiResponse,
                          SerializerInterface $serializer): Response
     {
-        /** @var FkUser $user */
+        /** @var FkUser|User $user */
         $user = $this->getUser();
         $client = $fokusService->getAdClientByNumSociety($numSociety);
 
         $status = $request->query->get('st') ?: 0;
 
         $em = $fokusService->getEntityNameManager($client->getManager());
-        if($user->getRights() == 1){
+
+        if($user instanceof FkUser && $user->getRights() == 1 || $user instanceof User && $user->getHighRoleCode() == User::CODE_ROLE_ADMIN){
             $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status], ['date' => 'DESC']);
         }else{
             $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status, 'userId' => $user->getId()], ['date' => 'DESC']);
         }
+
         $properties = $em->getRepository(FkProperty::class)->findAll();
         $tenants = $em->getRepository(FkTenant::class)->findAll();
         $users = $em->getRepository(FkUser::class)->findBy([], ['lastName' => 'ASC']);
