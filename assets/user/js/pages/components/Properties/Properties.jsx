@@ -7,9 +7,9 @@ import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
 import PropertiesFunctions from "@userFunctions/properties";
 
-import { BiensList } from "@userPages/Biens/BiensList";
-import { BienFormulaire } from "@userPages/Biens/BienForm";
-import { BienDetails } from "@userPages/Biens/BienDetails";
+import { PropertiesList } from "@userPages/Properties/PropertiesList";
+import { PropertyFormulaire } from "@userPages/Properties/PropertyForm";
+import { PropertyDetails } from "@userPages/Properties/PropertyDetails";
 
 import { Button } from "@tailwindComponents/Elements/Button";
 import { Modal } from "@tailwindComponents/Elements/Modal";
@@ -23,7 +23,7 @@ const URL_DELETE_ELEMENT = "intern_api_fokus_properties_delete";
 
 const SESSION_PERPAGE = "project.perpage.fk_biens";
 
-export class Biens extends Component {
+export class Properties extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
@@ -112,11 +112,11 @@ export class Biens extends Component {
 										 onClick={this.handlePaginationClick}
 										 onPerPage={this.handlePerPage} />
 
-					<BiensList data={currentData}
-							   propertiesSelected={propertiesSelected}
-							   highlight={parseInt(highlight)}
-							   onModal={this.handleModal}
-							   onSelector={onSelector} />
+					<PropertiesList data={currentData}
+									propertiesSelected={propertiesSelected}
+									highlight={parseInt(highlight)}
+									onModal={this.handleModal}
+									onSelector={onSelector} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
@@ -133,15 +133,15 @@ export class Biens extends Component {
 							{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5} zIndex={42}
 												 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
 												 isForm={true}
-												 content={<BienFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																		  identifiant="form-property" key={element ? element.id : 0} />}
+												 content={<PropertyFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																			  identifiant="form-property" key={element ? element.id : 0} />}
 							/>, document.body)}
 
 							{createPortal(<Modal ref={this.details} identifiant='details-property' maxWidth={1024} margin={1}
 												 title={element ? `Détails de ${element.addr1}` : ""}
 												 content={element
-													 ? <BienDetails elem={element} key={element.id}
-																	users={users} models={models} tenants={tenants} />
+													 ? <PropertyDetails elem={element} key={element.id}
+																		users={users} models={models} tenants={tenants} />
 													 :	null
 												 }
 							/>, document.body)}

@@ -18,7 +18,7 @@ const URL_UPDATE_ELEMENT = "intern_api_fokus_properties_update";
 
 let saveZipcodes = [];
 
-export function BienFormulaire ({ context, element, identifiant }) {
+export function PropertyFormulaire ({ context, element, identifiant }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {

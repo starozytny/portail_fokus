@@ -57,7 +57,7 @@ export function PropertiesItem ({ elem, element, isAssignation, highlight, onMod
     </div>
 }
 
-BiensItem.propTypes = {
+PropertiesItem.propTypes = {
     elem: PropTypes.object.isRequired,
     highlight: PropTypes.number,
 }

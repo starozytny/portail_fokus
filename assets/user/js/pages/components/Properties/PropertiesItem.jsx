@@ -6,7 +6,7 @@ import { setHighlightClass, useHighlight } from "@commonHooks/item";
 import { Selector } from "@tailwindComponents/Elements/Selector";
 import { ButtonIcon, ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
-export function BiensItem ({ elem, highlight, onModal, onSelector, propertiesSelected })
+export function PropertiesItem ({ elem, highlight, onModal, onSelector, propertiesSelected })
 {
     const refItem = useRef(null);
 
@@ -90,7 +90,7 @@ export function BiensItem ({ elem, highlight, onModal, onSelector, propertiesSel
     </div>
 }
 
-BiensItem.propTypes = {
+PropertiesItem.propTypes = {
     elem: PropTypes.object.isRequired,
     highlight: PropTypes.number,
 }

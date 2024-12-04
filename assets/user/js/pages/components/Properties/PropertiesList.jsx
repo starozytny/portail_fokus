@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Alert } from "@tailwindComponents/Elements/Alert";
 
-import { BiensItem } from "@userPages/Biens/BiensItem";
+import { PropertiesItem } from "@userPages/Properties/PropertiesItem";
 
-export function BiensList ({ data, propertiesSelected, highlight, onModal, onSelector }) {
+export function PropertiesList ({ data, propertiesSelected, highlight, onModal, onSelector }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-properties">
@@ -22,8 +22,8 @@ export function BiensList ({ data, propertiesSelected, highlight, onModal, onSel
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <BiensItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal}
-                                          onSelector={onSelector} propertiesSelected={propertiesSelected} />
+                        return <PropertiesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal}
+                                               onSelector={onSelector} propertiesSelected={propertiesSelected} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
@@ -34,7 +34,7 @@ export function BiensList ({ data, propertiesSelected, highlight, onModal, onSel
     </div>
 }
 
-BiensList.propTypes = {
+PropertiesList.propTypes = {
     data: PropTypes.array.isRequired,
     highlight: PropTypes.number,
 }
