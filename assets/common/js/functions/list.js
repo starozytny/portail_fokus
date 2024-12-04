@@ -11,6 +11,8 @@ function getData (self, url, perPage, sorter, highlight = null, filters = null, 
             let data = response.data;
             let dataImmuable = response.data;
 
+            console.log(response.data);
+
             if(filters) {
                 data = filterFunction(filters, dataImmuable);
             }
@@ -22,7 +24,11 @@ function getData (self, url, perPage, sorter, highlight = null, filters = null, 
 
             self.setState({ data: data, dataImmuable: dataImmuable, currentData: currentData, currentPage: currentPage, loadingData: false })
         })
-        .catch(function (error) { Formulaire.displayErrors(self, error); })
+        .catch(function (error) {
+            console.log(error)
+            console.log(error.response)
+            Formulaire.displayErrors(self, error);
+        })
     ;
 }
 

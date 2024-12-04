@@ -75,11 +75,6 @@ export class Biens extends Component {
 							}
 						})
 
-						if(elem.id === 237){
-							console.log(canActions);
-							console.log(canActions);
-						}
-
 						elem.canActions = canActions;
 						elem.inventories = elemInventories;
 
