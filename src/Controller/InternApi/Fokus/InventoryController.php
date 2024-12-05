@@ -34,7 +34,7 @@ class InventoryController extends AbstractController
 
         $em = $fokusService->getEntityNameManager($client->getManager());
 
-        if($user instanceof FkUser && $user->getRights() == 1 || $user instanceof User && $user->getHighRoleCode() == User::CODE_ROLE_ADMIN){
+        if(($user instanceof FkUser && $user->getRights() == 1) || ($user instanceof User && $user->getIsAdmin())){
             $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status], ['date' => 'DESC']);
         }else{
             $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status, 'userId' => $user->getId()], ['date' => 'DESC']);
