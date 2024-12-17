@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/espace-pro', name: 'user_')]
@@ -21,7 +20,7 @@ class UserController extends AbstractController
     {
         $fileVersion = $this->getParameter('root_directory') . '/../fokus-web-v2/updater/version.txt';
         if(!$fileVersion){
-            throw new NotFoundHttpException("[0] Fichier introuvable.");
+            throw $this->createNotFoundException("[0] Fichier introuvable.");
         }
 
         $handleVersion = fopen($fileVersion, 'r');
@@ -32,7 +31,7 @@ class UserController extends AbstractController
         $file = $this->getParameter('root_directory') . '/../fokus-web-v2/updater/' . $filename;
 
         if(!$file){
-            throw new NotFoundHttpException("[1] Fichier introuvable.");
+            throw $this->createNotFoundException("[1] Fichier introuvable.");
         }
 
         $response = new Response($file);
@@ -52,7 +51,7 @@ class UserController extends AbstractController
         $file = $this->getParameter('root_directory') . '/../fokus-web-v2/updater/' . $filename;
 
         if(!$file){
-            throw new NotFoundHttpException("Fichier introuvable.");
+            throw $this->createNotFoundException("Fichier introuvable.");
         }
 
         $response = new Response($file);
