@@ -9,7 +9,6 @@ import { createRoot } from "react-dom/client";
 import Menu from "@tailwindFunctions/menu";
 
 import { ContactFormulaire } from "@appFolder/pages/components/Contact/ContactForm";
-import { Cookies, CookiesGlobalResponse } from "@tailwindComponents/Modules/Cookies/Cookies";
 import { Forget } from "@appFolder/pages/components/Security/Forget";
 
 Routing.setRoutingData(routes);
