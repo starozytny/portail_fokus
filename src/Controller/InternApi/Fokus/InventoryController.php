@@ -178,6 +178,8 @@ class InventoryController extends AbstractController
     {
         $result = $fokusApi->aiComparator($uidEntry, $uidOut);
 
-        return $apiResponse->apiJsonResponseSuccessful("ok");
+        return $apiResponse->apiJsonResponseCustom([
+            'answer' => nl2br($result)
+        ]);
     }
 }

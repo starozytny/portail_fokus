@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
 import axios from "axios";
+import parse from "html-react-parser";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
@@ -109,7 +110,11 @@ export class Inventories extends Component {
 			Formulaire.loader(true);
 			axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
 				.then(function (response) {
-					console.log(response.data);
+					if(response.data.answer){
+						self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+					}else{
+						self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
+					}
 				})
 				.catch(function (error) {
 					Formulaire.displayErrors(self, error);
@@ -184,7 +189,7 @@ export class Inventories extends Component {
 										 content={element ? <InventoryDetails elem={element} key={element.id} /> : null}
 					/>, document.body)}
 
-					{createPortal(<Modal ref={this.aiCompare} identifiant='ai-compare' maxWidth={1024} margin={5}
+					{createPortal(<Modal ref={this.aiCompare} identifiant='ai-compare' maxWidth={1024} margin={1}
 										 title={element ? `Comparateur par IA de ${element.uid}` : ""}
 										 content={null}
 					/>, document.body)}
