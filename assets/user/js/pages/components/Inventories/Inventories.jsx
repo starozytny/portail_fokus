@@ -59,7 +59,7 @@ export class Inventories extends Component {
 			Formulaire.loader(true);
 			setTimeout(() => {
 				if(this.form && this.form.current){
-					this.handleModal('form', null);
+					this.handleModal('form', null, true);
 					Formulaire.loader(false);
 				}
 			}, 1000)
@@ -99,7 +99,11 @@ export class Inventories extends Component {
 		List.changePerPage(this, this.state.data, perPage, this.state.sorter, SESSION_PERPAGE);
 	}
 
-	handleModal = (identifiant, elem, assign) => {
+	handleModal = (identifiant, elem, assign, retry = false) => {
+		if(retry && !this[identifiant].current){
+			this.handleModal(identifiant, elem, assign, true);
+		}
+
 		this[identifiant].current.handleClick();
 		this.setState({ element: elem, assign: assign })
 
