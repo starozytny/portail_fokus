@@ -248,6 +248,6 @@ class FokusApi
 
     public function aiComparator($uidEntry, $uidOut)
     {
-        return $this->callApi("GET", "ai_comparator/" . $uidEntry . "/" . $uidOut, [], false);
+        return $this->callApi("POST", "ai_comparator/" . $uidEntry . "/" . $uidOut, [], false);
     }
 }

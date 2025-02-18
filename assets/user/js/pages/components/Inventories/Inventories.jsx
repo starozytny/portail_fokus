@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
+import axios from "axios";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
@@ -22,6 +23,7 @@ import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pa
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_inventories_delete";
+const URL_AI_COMPARATIVE = "intern_api_fokus_inventories_ai_comparator";
 
 const SESSION_PERPAGE = "project.perpage.fk_inventories";
 
@@ -99,6 +101,24 @@ export class Inventories extends Component {
 	handleModal = (identifiant, elem, assign) => {
 		this[identifiant].current.handleClick();
 		this.setState({ element: elem, assign: assign })
+
+		if(identifiant === "aiCompare"){
+			this[identifiant].current.handleUpdateContent(<LoaderElements />);
+
+			let self = this;
+			Formulaire.loader(true);
+			axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
+				.then(function (response) {
+					console.log(response.data);
+				})
+				.catch(function (error) {
+					Formulaire.displayErrors(self, error);
+				})
+				.then(function () {
+					Formulaire.loader(false);
+				})
+			;
+		}
 	}
 
 	render () {
@@ -166,7 +186,7 @@ export class Inventories extends Component {
 
 					{createPortal(<Modal ref={this.aiCompare} identifiant='ai-compare' maxWidth={1024} margin={5}
 										 title={element ? `Comparateur par IA de ${element.uid}` : ""}
-										 content={element ? <span className="icon-chart-3"></span> : null}
+										 content={null}
 					/>, document.body)}
 				</>
 			}
