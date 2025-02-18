@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
+import axios from "axios";
+import parse from "html-react-parser";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
 import List from "@commonFunctions/list";
+import Formulaire from "@commonFunctions/formulaire";
 import InventoriesFunctions from "@userFunctions/inventories";
 
-import { InventoriesList } from "@userPages/Inventories/InventoriesList";
-import { InventoryDetails } from "@userPages/Inventories/InventoryDetails";
+import { InventoriesList } from "@adminPages/Fokus/Inventories/InventoriesList";
+import { InventoryDetails } from "@adminPages/Fokus/Inventories/InventoryDetails";
 
 import { Modal } from "@tailwindComponents/Elements/Modal";
 import { Search } from "@tailwindComponents/Elements/Search";
@@ -18,6 +21,7 @@ import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pa
 
 const URL_INDEX_ELEMENTS = "admin_fokus_inventories_list";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
+const URL_AI_COMPARATIVE = "intern_api_fokus_inventories_ai_comparator";
 
 const SESSION_PERPAGE = "project.perpage.fk_inventories";
 
@@ -33,11 +37,12 @@ export class Inventories extends Component {
 			properties: [],
 			users: [],
 			tenants: [],
-			models: [],
+			models: []
 		}
 
 		this.pagination = React.createRef();
 		this.details = React.createRef();
+		this.aiCompare = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -80,11 +85,33 @@ export class Inventories extends Component {
 	handleModal = (identifiant, elem, assign) => {
 		this[identifiant].current.handleClick();
 		this.setState({ element: elem, assign: assign })
+
+		if(identifiant === "aiCompare"){
+			this[identifiant].current.handleUpdateContent(<LoaderElements />);
+
+			let self = this;
+			Formulaire.loader(true);
+			axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
+				.then(function (response) {
+					if(response.data.answer){
+						self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+					}else{
+						self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
+					}
+				})
+				.catch(function (error) {
+					Formulaire.displayErrors(self, error);
+				})
+				.then(function () {
+					Formulaire.loader(false);
+				})
+			;
+		}
 	}
 
 	render () {
 		const { numSociety, highlight, status } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage, hasAi } = this.state;
 
 		return <>
 			{loadingData
@@ -119,7 +146,8 @@ export class Inventories extends Component {
 
 					<InventoriesList data={currentData}
 									 highlight={parseInt(highlight)}
-									 onModal={this.handleModal} />
+									 onModal={this.handleModal}
+									 hasAi={status === "2"} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
@@ -127,6 +155,11 @@ export class Inventories extends Component {
 					{createPortal(<Modal ref={this.details} identifiant='details-edl' maxWidth={1024} margin={5}
 										 title={element ? `Détails de ${element.uid}` : ""}
 										 content={element ? <InventoryDetails elem={element} key={element.id} /> : null}
+					/>, document.body)}
+
+					{createPortal(<Modal ref={this.aiCompare} identifiant='ai-compare' maxWidth={1024} margin={1}
+										 title={element ? `Comparateur par IA de ${element.uid}` : ""}
+										 content={null}
 					/>, document.body)}
 				</>
 			}

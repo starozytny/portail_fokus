@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Alert } from "@tailwindComponents/Elements/Alert";
 
-import { InventoriesItem } from "@userPages/Inventories/InventoriesItem";
+import { InventoriesItem } from "@adminPages/Fokus/Inventories/InventoriesItem";
 
-export function InventoriesList ({ data, highlight, onModal }) {
+export function InventoriesList ({ data, highlight, onModal, hasAi }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-inventories">
@@ -24,7 +24,7 @@ export function InventoriesList ({ data, highlight, onModal }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <InventoriesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
+                        return <InventoriesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} hasAi={hasAi} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
