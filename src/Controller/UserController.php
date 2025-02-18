@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\Fokus\FokusFtp;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/espace-pro', name: 'user_')]
@@ -79,17 +80,26 @@ class UserController extends AbstractController
         return $this->extracted($filePatch, $filename);
     }
 
+    #[Route('/application/documentation', name: 'application_documentation')]
+    public function documentation(FokusFtp $fokusFtp): Response
+    {
+        $localDir = $this->getParameter('private_directory');
+        $filePatch = $localDir . 'documentation.pdf';
+
+        return $this->extracted($filePatch, 'documentation_app.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
+    }
+
     /**
-     * @param string $filePatch
+     * @param string $file
      * @param string $filename
      * @return Response
      */
-    public function extracted(string $filePatch, string $filename): Response
+    public function extracted(string $file, string $filename, string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): Response
     {
-        if (!file_exists($filePatch)) {
+        if (!file_exists($file)) {
             throw $this->createNotFoundException("Fichier introuvable.");
         }
 
-        return $this->file($filePatch, $filename);
+        return $this->file($file, $filename, $disposition);
     }
 }
