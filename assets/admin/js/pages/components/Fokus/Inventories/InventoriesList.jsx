@@ -5,7 +5,7 @@ import { Alert } from "@tailwindComponents/Elements/Alert";
 
 import { InventoriesItem } from "@adminPages/Fokus/Inventories/InventoriesItem";
 
-export function InventoriesList ({ data, highlight, onModal, hasAi }) {
+export function InventoriesList ({ data, highlight, onModal }) {
     return <div className="list my-4">
         <div className="list-table bg-white rounded-md shadow">
             <div className="items items-inventories">
@@ -24,7 +24,7 @@ export function InventoriesList ({ data, highlight, onModal, hasAi }) {
 
                 {data.length > 0
                     ? data.map((elem) => {
-                        return <InventoriesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} hasAi={hasAi} />
+                        return <InventoriesItem key={elem.id} elem={elem} highlight={highlight} onModal={onModal} />
                     })
                     : <div className="item border-t">
                         <Alert type="gray">Aucun résultat.</Alert>
