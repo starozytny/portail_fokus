@@ -57,6 +57,7 @@ class InventoryController extends AbstractController
             'tenants' => $tenants,
             'users' => $users,
             'models' => $models,
+            'hasAi' => $client->getHasAi(),
         ]);
     }
 

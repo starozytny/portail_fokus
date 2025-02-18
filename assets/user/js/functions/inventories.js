@@ -9,6 +9,7 @@ function getData (self, url, perPage, sorter, highlight = null)
 			let data = [];
 			let dataImmuable = [];
 
+			let inventories = JSON.parse(response.data.donnees);
 			let properties = JSON.parse(response.data.properties);
 			let users = JSON.parse(response.data.users);
 			let models = JSON.parse(response.data.models);
@@ -17,11 +18,19 @@ function getData (self, url, perPage, sorter, highlight = null)
 			data.sort(sorter);
 			dataImmuable.sort(sorter);
 
-			JSON.parse(response.data.donnees).forEach(elem => {
+			inventories.forEach(elem => {
 				elem.property = null;
 				elem.user = null;
 				elem.model = null;
 				elem.tenantsData = [];
+				elem.uidEntryForAi = null;
+
+				if(elem.input !== 0 && elem.type === 0){
+					let entrant = inventories.find(el => el.uid === elem.input && el.type === 1 && el.propertyUid === elem.propertyUid);
+					if(entrant){
+						elem.uidEntryForAi = entrant.uid
+					}
+				}
 
 				properties.forEach(pr => {
 					if(pr.uid === elem.propertyUid){
@@ -70,6 +79,7 @@ function getData (self, url, perPage, sorter, highlight = null)
 				tenants: tenants,
 				models: models,
 				currentPage: currentPage,
+				hasAi: response.data.hasAi,
 				loadingData: false
 			});
 		})

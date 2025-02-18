@@ -74,6 +74,10 @@ class AdClients
     #[Groups(['ad_client_list'])]
     private ?int $isLogilink = 0;
 
+    #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['ad_client_list'])]
+    private ?int $hasAi = 0;
+
     // propriétés non persistés
     #[Groups(['ad_client_list'])]
     private ?bool $isActivated = true;
@@ -259,6 +263,18 @@ class AdClients
     public function setIsActivated(?bool $value): static
     {
         $this->isActivated = $value;
+
+        return $this;
+    }
+
+    public function getHasAi(): ?bool
+    {
+        return $this->hasAi;
+    }
+
+    public function setHasAi(?bool $value): static
+    {
+        $this->hasAi = $value;
 
         return $this;
     }

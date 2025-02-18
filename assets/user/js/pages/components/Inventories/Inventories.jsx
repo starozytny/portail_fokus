@@ -38,12 +38,14 @@ export class Inventories extends Component {
 			users: [],
 			tenants: [],
 			models: [],
+			hasAi: false
 		}
 
 		this.pagination = React.createRef();
 		this.delete = React.createRef();
 		this.form = React.createRef();
 		this.details = React.createRef();
+		this.aiCompare = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -101,7 +103,7 @@ export class Inventories extends Component {
 
 	render () {
 		const { highlight, status, userId, rights } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage, properties, users, tenants, models } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage, properties, users, tenants, models, hasAi } = this.state;
 
 		return <>
 			{loadingData
@@ -136,7 +138,8 @@ export class Inventories extends Component {
 
 					<InventoriesList data={currentData}
 									 highlight={parseInt(highlight)}
-									 onModal={this.handleModal} />
+									 onModal={this.handleModal}
+									 hasAi={status === "2" && hasAi} />
 
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
@@ -159,6 +162,11 @@ export class Inventories extends Component {
 					{createPortal(<Modal ref={this.details} identifiant='details-edl' maxWidth={1024} margin={5}
 										 title={element ? `Détails de ${element.uid}` : ""}
 										 content={element ? <InventoryDetails elem={element} key={element.id} /> : null}
+					/>, document.body)}
+
+					{createPortal(<Modal ref={this.aiCompare} identifiant='ai-compare' maxWidth={1024} margin={5}
+										 title={element ? `Comparateur par IA de ${element.uid}` : ""}
+										 content={element ? <span className="icon-chart-3"></span> : null}
 					/>, document.body)}
 				</>
 			}
