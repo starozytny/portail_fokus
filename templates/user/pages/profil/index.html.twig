@@ -33,6 +33,13 @@
                         btn_icon: 'download',
                         btn_text: 'Télécharger le patch'
                     } %}
+                    {% include 'layout/components/tailwind/buttons/button.html.twig' with {
+                        btn_link: path('user_application_documentation'),
+                        btn_type: 'default',
+                        btn_icon: 'file',
+                        btn_text: 'Télécharger la documentation',
+                        btn_target: '_blank'
+                    } %}
                 </div>
             </div>
 

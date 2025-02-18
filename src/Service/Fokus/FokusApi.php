@@ -243,4 +243,11 @@ class FokusApi
     {
         return $this->callApi("GET", "inventories/pdf/" . $uid, [], false);
     }
+
+    // ------- AI
+
+    public function aiComparator($uidEntry, $uidOut)
+    {
+        return $this->callApi("POST", "ai_comparator/" . $uidEntry . "/" . $uidOut, [], false);
+    }
 }

@@ -84,7 +84,7 @@ export class Forget extends Component {
 								 </div>}
 								 showClose={false}
 								 footer={<>
-									 <div className="close-modal"><Button type="default">{success === false ? "Annuler" : "Fermer"}</Button></div>
+									 <div className="close-modal" onClick={() => this.modal.current.handleClose()}><Button type="default">{success === false ? "Annuler" : "Fermer"}</Button></div>
 									 {success === false && <>
 										 <Button type="blue" onClick={this.handleSubmit}>Envoyer un lien de réinitialisation</Button>
 									 </>}

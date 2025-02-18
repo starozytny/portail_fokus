@@ -57,6 +57,7 @@ class InventoryController extends AbstractController
             'tenants' => $tenants,
             'users' => $users,
             'models' => $models,
+            'hasAi' => $client->getHasAi(),
         ]);
     }
 
@@ -170,5 +171,15 @@ class InventoryController extends AbstractController
 
         $this->addFlash('info', 'Données mises à jour.');
         return $apiResponse->apiJsonResponseSuccessful("ok");
+    }
+
+    #[Route('/ai-comparator/{uidEntry}/{uidOut}', name: 'ai_comparator', options: ['expose' => true], methods: 'POST')]
+    public function aiComparator($uidEntry, $uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $result = $fokusApi->aiComparator($uidEntry, $uidOut);
+
+        return $apiResponse->apiJsonResponseCustom([
+            'answer' => nl2br($result)
+        ]);
     }
 }

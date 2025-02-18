@@ -12,7 +12,7 @@ import { ButtonIconDropdown } from "@tailwindComponents/Elements/Button";
 
 const URL_DOCUMENT_ELEMENT = "intern_api_fokus_inventories_document";
 
-export function InventoriesItem ({ elem, highlight, onModal })
+export function InventoriesItem ({ elem, highlight, onModal, hasAi })
 {
     const refItem = useRef(null);
 
@@ -39,6 +39,15 @@ export function InventoriesItem ({ elem, highlight, onModal })
                     <span className="pl-1">Document PDF</span>
                 </a> },
         ]
+
+        if(hasAi && elem.uidEntryForAi){
+            menu = [...menu, ...[{
+                data: <div className={styleItemDropdown} onClick={() => onModal("aiCompare", elem)}>
+                    <span className="icon-magicpen" />
+                    <span className="pl-1">Comparateur par IA</span>
+                </div>
+            }]]
+        }
     }
 
     return <div className={`item${setHighlightClass(nHighlight)} border-t hover:bg-slate-50`} ref={refItem}>
@@ -52,16 +61,16 @@ export function InventoriesItem ({ elem, highlight, onModal })
                 </div>
                 <div className="col-2">
                 {elem.user
-                        ? <>
-                            <Badge type="gray">{elem.user.userTag}</Badge>
-                            <div className="text-sm text-gray-600 mt-1">{elem.user.lastName} {elem.user.firstName}</div>
-                        </>
-                        : <div className="text-sm text-gray-600 mt-1">Inconnu</div>
-                    }
+                    ? <>
+                        <Badge type="gray">{elem.user.userTag}</Badge>
+                        <div className="text-sm text-gray-600 mt-1">{elem.user.lastName} {elem.user.firstName}</div>
+                    </>
+                    : <div className="text-sm text-gray-600 mt-1">Inconnu</div>
+                }
 
                 </div>
                 <div className="col-3 text-sm text-gray-600">
-                <Badge type={elem.type === 0 ? "red" : "yellow"}>
+                    <Badge type={elem.type === 0 ? "red" : "green"}>
                         {elem.type === 0 ? "Sortant" : "Entrant"}
                     </Badge>
                     <div className="mt-1">
