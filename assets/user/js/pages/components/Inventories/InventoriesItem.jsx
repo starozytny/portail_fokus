@@ -52,16 +52,16 @@ export function InventoriesItem ({ elem, highlight, onModal })
                 </div>
                 <div className="col-2">
                 {elem.user
-                        ? <>
-                            <Badge type="gray">{elem.user.userTag}</Badge>
-                            <div className="text-sm text-gray-600 mt-1">{elem.user.lastName} {elem.user.firstName}</div>
-                        </>
-                        : <div className="text-sm text-gray-600 mt-1">Inconnu</div>
-                    }
+                    ? <>
+                        <Badge type="gray">{elem.user.userTag}</Badge>
+                        <div className="text-sm text-gray-600 mt-1">{elem.user.lastName} {elem.user.firstName}</div>
+                    </>
+                    : <div className="text-sm text-gray-600 mt-1">Inconnu</div>
+                }
 
                 </div>
                 <div className="col-3 text-sm text-gray-600">
-                <Badge type={elem.type === 0 ? "red" : "yellow"}>
+                    <Badge type={elem.type === 0 ? "red" : "green"}>
                         {elem.type === 0 ? "Sortant" : "Entrant"}
                     </Badge>
                     <div className="mt-1">
