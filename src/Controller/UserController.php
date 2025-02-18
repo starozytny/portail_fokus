@@ -51,14 +51,7 @@ class UserController extends AbstractController
 
         ftp_close($ftp);
 
-        $response = new Response($fileApk);
-
-        $response->headers->set('Content-Description', 'File Transfer');
-        $response->headers->set('Content-Type', 'application/octet-stream');
-        $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
-        $response->headers->set('Content-Length', filesize($fileApk));
-
-        return $response;
+        return $this->extracted($fileApk, $filename);
     }
 
     #[Route('/application/patch', name: 'application_patch')]
@@ -81,6 +74,20 @@ class UserController extends AbstractController
 
         if (!ftp_get($ftp, $filePatch, $serverFile)) {
             throw $this->createNotFoundException("Fichier version introuvable.");
+        }
+
+        return $this->extracted($filePatch, $filename);
+    }
+
+    /**
+     * @param string $filePatch
+     * @param string $filename
+     * @return Response
+     */
+    public function extracted(string $filePatch, string $filename): Response
+    {
+        if (!file_exists($filePatch)) {
+            throw $this->createNotFoundException("Fichier introuvable.");
         }
 
         $response = new Response($filePatch);
