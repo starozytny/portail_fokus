@@ -92,6 +92,7 @@ class UserController extends AbstractController
     /**
      * @param string $file
      * @param string $filename
+     * @param string $disposition
      * @return Response
      */
     public function extracted(string $file, string $filename, string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT): Response
