@@ -90,13 +90,6 @@ class UserController extends AbstractController
             throw $this->createNotFoundException("Fichier introuvable.");
         }
 
-        $response = new Response($filePatch);
-
-        $response->headers->set('Content-Description', 'File Transfer');
-        $response->headers->set('Content-Type', 'application/octet-stream');
-        $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
-        $response->headers->set('Content-Length', filesize($filePatch));
-
-        return $response;
+        return $this->file($filePatch, $filename);
     }
 }
