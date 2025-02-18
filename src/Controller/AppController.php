@@ -17,8 +17,8 @@ class AppController extends AbstractController
 
         return $this->render('app/pages/index.html.twig', [
             'last_username' => $lastUsername,
-            'error' => $error]
-        );
+            'error' => $error
+        ]);
     }
 
     #[Route('/contact', name: 'app_contact')]

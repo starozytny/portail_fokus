@@ -44,3 +44,9 @@ services:
             $cipheringIv: '%env(CIPHERING_IV)%'
             $cipheringPassphrase: '%env(CIPHERING_PASSPHRASE)%'
             $apiFokusUrl: '%env(API_FOKUS_URL)%'
+
+    App\Service\Fokus\FokusFtp:
+        arguments:
+            $ftpHost: '%env(FTP_FOKUS_UPDATER_HOST)%'
+            $ftpUser: '%env(FTP_FOKUS_UPDATER_USER)%'
+            $ftpPassword: '%env(FTP_FOKUS_UPDATER_PASSWORD)%'

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\Fokus\FokusFtp;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,11 +17,23 @@ class UserController extends AbstractController
     }
 
     #[Route('/application/apk', name: 'application_apk')]
-    public function apk(): Response
+    public function apk(FokusFtp $fokusFtp): Response
     {
-        $fileVersion = $this->getParameter('root_directory') . '/../fokus-web-v2/updater/version.txt';
-        if(!$fileVersion){
-            throw $this->createNotFoundException("[0] Fichier introuvable.");
+        $ftp = $fokusFtp->login();
+        if(!$ftp){
+            throw $this->createNotFoundException("Connexion interrompu.");
+        }
+
+        $localDir = $this->getParameter('private_directory') . 'ftp';
+        if(!is_dir($localDir)){
+            mkdir($localDir, 0777, true);
+        }
+
+        $fileVersion = $localDir . '/version.txt';
+        $serverFile = '/updater/version.txt';
+
+        if (!ftp_get($ftp, $fileVersion, $serverFile)) {
+            throw $this->createNotFoundException("Fichier version introuvable.");
         }
 
         $handleVersion = fopen($fileVersion, 'r');
@@ -28,38 +41,54 @@ class UserController extends AbstractController
         fclose($handleVersion);
 
         $filename = "fokusV2_" . $version . '.apk';
-        $file = $this->getParameter('root_directory') . '/../fokus-web-v2/updater/' . $filename;
 
-        if(!$file){
-            throw $this->createNotFoundException("[1] Fichier introuvable.");
+        $fileApk = $localDir . '/' . $filename;
+        $serverFile = '/updater/' . $filename;
+
+        if (!ftp_get($ftp, $fileApk, $serverFile)) {
+            throw $this->createNotFoundException("Fichier APK introuvable.");
         }
 
-        $response = new Response($file);
+        ftp_close($ftp);
+
+        $response = new Response($fileApk);
 
         $response->headers->set('Content-Description', 'File Transfer');
         $response->headers->set('Content-Type', 'application/octet-stream');
         $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
-        $response->headers->set('Content-Length', filesize($file));
+        $response->headers->set('Content-Length', filesize($fileApk));
 
         return $response;
     }
 
     #[Route('/application/patch', name: 'application_patch')]
-    public function patch(): Response
+    public function patch(FokusFtp $fokusFtp): Response
     {
-        $filename = 'patch.apk';
-        $file = $this->getParameter('root_directory') . '/../fokus-web-v2/updater/' . $filename;
-
-        if(!$file){
-            throw $this->createNotFoundException("Fichier introuvable.");
+        $ftp = $fokusFtp->login();
+        if(!$ftp){
+            throw $this->createNotFoundException("Connexion interrompu.");
         }
 
-        $response = new Response($file);
+        $localDir = $this->getParameter('private_directory') . 'ftp';
+        if(!is_dir($localDir)){
+            mkdir($localDir, 0777, true);
+        }
+
+        $filename = 'patch.apk';
+
+        $filePatch = $localDir . '/' . $filename;
+        $serverFile = '/updater/' . $filename;
+
+        if (!ftp_get($ftp, $filePatch, $serverFile)) {
+            throw $this->createNotFoundException("Fichier version introuvable.");
+        }
+
+        $response = new Response($filePatch);
 
         $response->headers->set('Content-Description', 'File Transfer');
         $response->headers->set('Content-Type', 'application/octet-stream');
         $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
-        $response->headers->set('Content-Length', filesize($file));
+        $response->headers->set('Content-Length', filesize($filePatch));
 
         return $response;
     }
