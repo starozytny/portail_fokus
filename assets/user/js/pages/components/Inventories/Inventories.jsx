@@ -112,25 +112,30 @@ export class Inventories extends Component {
 			if(identifiant === "aiCompare"){
 				this[identifiant].current.handleUpdateContent(<LoaderElements />);
 
-				let self = this;
-				Formulaire.loader(true);
-				axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
-					.then(function (response) {
-						if(response.data.answer){
-							self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
-						}else{
-							self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
-						}
-					})
-					.catch(function (error) {
-						Formulaire.displayErrors(self, error);
-					})
-					.then(function () {
-						Formulaire.loader(false);
-					})
-				;
+				this.handleAiCompare(identifiant, elem, false);
 			}
 		}
+	}
+
+	handleAiCompare = (identifiant, elem, force) => {
+		let self = this;
+		Formulaire.loader(true);
+		axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {force: force} })
+			.then(function (response) {
+				self[identifiant].current.handleUpdateFooter(<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem, true)}>Relancer la comparaison IA</Button>)
+				if(response.data.answer){
+					self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+				}else{
+					self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
+				}
+			})
+			.catch(function (error) {
+				Formulaire.displayErrors(self, error);
+			})
+			.then(function () {
+				Formulaire.loader(false);
+			})
+		;
 	}
 
 	render () {
