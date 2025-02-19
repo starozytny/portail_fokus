@@ -24,7 +24,8 @@ import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pa
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_inventories_delete";
-const URL_AI_COMPARATIVE = "intern_api_fokus_inventories_ai_comparator";
+const URL_AI_COMPARATIVE_FILE = "intern_api_fokus_inventories_ai_comparator_file";
+const URL_AI_COMPARATIVE_RUN = "intern_api_fokus_inventories_ai_comparator_run";
 
 const SESSION_PERPAGE = "project.perpage.fk_inventories";
 
@@ -112,17 +113,33 @@ export class Inventories extends Component {
 			if(identifiant === "aiCompare"){
 				this[identifiant].current.handleUpdateContent(<LoaderElements />);
 
-				this.handleAiCompare(identifiant, elem, false);
+				let self = this;
+				Formulaire.loader(true);
+				axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE_FILE, { uidOut: elem.uid }), data: {} })
+					.then(function (response) {
+						self[identifiant].current.handleUpdateFooter(<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>)
+						if(response.data.answer){
+							self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+							Formulaire.loader(false);
+						}else{
+							self.handleAiCompare(identifiant, elem)
+						}
+					})
+					.catch(function (error) {
+						Formulaire.displayErrors(self, error);
+						Formulaire.loader(false);
+					})
+				;
 			}
 		}
 	}
 
-	handleAiCompare = (identifiant, elem, force) => {
+	handleAiCompare = (identifiant, elem) => {
 		let self = this;
 		Formulaire.loader(true);
-		axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {force: force} })
+		axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE_RUN, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
 			.then(function (response) {
-				self[identifiant].current.handleUpdateFooter(<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem, true)}>Relancer la comparaison IA</Button>)
+				self[identifiant].current.handleUpdateFooter(<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>)
 				if(response.data.answer){
 					self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
 				}else{

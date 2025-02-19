@@ -173,25 +173,23 @@ class InventoryController extends AbstractController
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 
-    #[Route('/ai-comparator/{uidEntry}/{uidOut}', name: 'ai_comparator', options: ['expose' => true], methods: 'POST')]
-    public function aiComparator(Request $request, $uidEntry, $uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    #[Route('/ai-comparator-file/{uidOut}', name: 'ai_comparator_file', options: ['expose' => true], methods: 'POST')]
+    public function aiComparatorFile($uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
     {
-        $data = json_decode($request->getContent());
-
-        if($data->force){
-            $result = $fokusApi->aiComparator($uidEntry, $uidOut);
-        }else{
-            $resultContent = $fokusApi->aiComparatorContent($uidOut);
-
-            if(!$resultContent){
-                $result = $fokusApi->aiComparator($uidEntry, $uidOut);
-            }else{
-                $result = $resultContent;
-            }
-        }
+        $result = $fokusApi->aiComparatorContent($uidOut);
 
         return $apiResponse->apiJsonResponseCustom([
-            'answer' => nl2br($result)
+            'answer' => $result ? nl2br($result) : false
+        ]);
+    }
+
+    #[Route('/ai-comparator-run/{uidEntry}/{uidOut}', name: 'ai_comparator_run', options: ['expose' => true], methods: 'POST')]
+    public function aiComparatorRun($uidEntry, $uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $result = $fokusApi->aiComparator($uidEntry, $uidOut);
+
+        return $apiResponse->apiJsonResponseCustom([
+            'answer' => $result ? nl2br($result) : false
         ]);
     }
 }
