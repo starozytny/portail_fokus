@@ -18,7 +18,6 @@ import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pa
 
 const URL_INDEX_ELEMENTS = "admin_fokus_inventories_list";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
-const URL_AI_COMPARATIVE = "intern_api_fokus_inventories_ai_comparator";
 
 const SESSION_PERPAGE = "project.perpage.fk_inventories";
 
