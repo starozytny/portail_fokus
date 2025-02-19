@@ -25,6 +25,7 @@ const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_inventories_delete";
 const URL_AI_COMPARATIVE_FILE = "intern_api_fokus_inventories_ai_comparator_file";
+const URL_AI_COMPARATIVE_PICTURE = "intern_api_fokus_inventories_ai_comparator_pictures";
 const URL_AI_COMPARATIVE_RUN = "intern_api_fokus_inventories_ai_comparator_run";
 
 const SESSION_PERPAGE = "project.perpage.fk_inventories";
@@ -117,7 +118,10 @@ export class Inventories extends Component {
 				Formulaire.loader(true);
 				axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE_FILE, { uidOut: elem.uid }), data: {} })
 					.then(function (response) {
-						self[identifiant].current.handleUpdateFooter(<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>)
+						self[identifiant].current.handleUpdateFooter(<>
+							<ButtonA type="default" onClick={Routing.generate(URL_AI_COMPARATIVE_PICTURE, { uidOut: elem.uid })} target="_blank">Photos du comparatif</ButtonA>
+							<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
+						</>)
 						if(response.data.answer){
 							self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
 							Formulaire.loader(false);

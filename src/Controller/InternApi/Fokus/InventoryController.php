@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -180,6 +181,17 @@ class InventoryController extends AbstractController
 
         return $apiResponse->apiJsonResponseCustom([
             'answer' => $result ? nl2br($result) : false
+        ]);
+    }
+
+    #[Route('/ai-comparator-pictures/{uidOut}', name: 'ai_comparator_pictures', options: ['expose' => true], methods: 'GET')]
+    public function aiComparatorPicture($uidOut, FokusApi $fokusApi): Response
+    {
+        $result = $fokusApi->aiComparatorPictures($uidOut);
+
+        return new Response($result, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="photos_comparatif.pdf"',
         ]);
     }
 
