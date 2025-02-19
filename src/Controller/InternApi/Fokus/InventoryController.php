@@ -189,6 +189,11 @@ class InventoryController extends AbstractController
     {
         $result = $fokusApi->aiComparatorPictures($uidOut);
 
+        if(!$result){
+            $this->addFlash('info', 'Aucune photos.');
+            return $this->redirectToRoute('user_inventories_index', ['st' => 2]);
+        }
+
         return new Response($result, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="photos_comparatif.pdf"',
