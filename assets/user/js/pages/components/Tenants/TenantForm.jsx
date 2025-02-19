@@ -116,8 +116,6 @@ class Form extends Component {
 					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
 				})
 				.catch(function (error) {
-					console.log(error)
-					console.log(error.response)
 					Formulaire.displayErrors(self, error);
 					Formulaire.loader(false);
 				})

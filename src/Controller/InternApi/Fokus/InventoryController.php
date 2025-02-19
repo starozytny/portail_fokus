@@ -35,9 +35,9 @@ class InventoryController extends AbstractController
         $em = $fokusService->getEntityNameManager($client->getManager());
 
         if(($user instanceof FkUser && $user->getRights() == 1) || ($user instanceof User && $user->getIsAdmin())){
-            $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status], ['date' => 'DESC']);
+            $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status], ['id' => 'DESC']);
         }else{
-            $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status, 'userId' => $user->getId()], ['date' => 'DESC']);
+            $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status, 'userId' => $user->getId()], ['id' => 'DESC']);
         }
 
         $properties = $em->getRepository(FkProperty::class)->findAll();
@@ -174,9 +174,21 @@ class InventoryController extends AbstractController
     }
 
     #[Route('/ai-comparator/{uidEntry}/{uidOut}', name: 'ai_comparator', options: ['expose' => true], methods: 'POST')]
-    public function aiComparator($uidEntry, $uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    public function aiComparator(Request $request, $uidEntry, $uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
     {
-        $result = $fokusApi->aiComparator($uidEntry, $uidOut);
+        $data = json_decode($request->getContent());
+
+        if($data->force){
+            $result = $fokusApi->aiComparator($uidEntry, $uidOut);
+        }else{
+            $resultContent = $fokusApi->aiComparatorContent($uidOut);
+
+            if(!$resultContent){
+                $result = $fokusApi->aiComparator($uidEntry, $uidOut);
+            }else{
+                $result = $resultContent;
+            }
+        }
 
         return $apiResponse->apiJsonResponseCustom([
             'answer' => nl2br($result)

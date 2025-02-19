@@ -58,11 +58,8 @@ export class Inventories extends Component {
 		if(addContext === "1"){
 			Formulaire.loader(true);
 			setTimeout(() => {
-				if(this.form && this.form.current){
-					this.handleModal('form', null);
-					Formulaire.loader(false);
-				}
-			}, 1000)
+				this.handleModal('form', null, null, true);
+			}, 500)
 		}
 	}
 
@@ -99,31 +96,46 @@ export class Inventories extends Component {
 		List.changePerPage(this, this.state.data, perPage, this.state.sorter, SESSION_PERPAGE);
 	}
 
-	handleModal = (identifiant, elem, assign) => {
-		this[identifiant].current.handleClick();
-		this.setState({ element: elem, assign: assign })
+	handleModal = (identifiant, elem, assign, retry = false) => {
+		if(retry && !this[identifiant].current){
+			setTimeout(() => {
+				this.handleModal(identifiant, elem, assign, true);
+			}, 500)
+		}else{
+			if(identifiant === "form") {
+				Formulaire.loader(false);
+			}
 
-		if(identifiant === "aiCompare"){
-			this[identifiant].current.handleUpdateContent(<LoaderElements />);
+			this[identifiant].current.handleClick();
+			this.setState({ element: elem, assign: assign })
 
-			let self = this;
-			Formulaire.loader(true);
-			axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
-				.then(function (response) {
-					if(response.data.answer){
-						self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
-					}else{
-						self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
-					}
-				})
-				.catch(function (error) {
-					Formulaire.displayErrors(self, error);
-				})
-				.then(function () {
-					Formulaire.loader(false);
-				})
-			;
+			if(identifiant === "aiCompare"){
+				this[identifiant].current.handleUpdateContent(<LoaderElements />);
+
+				this.handleAiCompare(identifiant, elem, false);
+			}
 		}
+	}
+
+	handleAiCompare = (identifiant, elem, force) => {
+		let self = this;
+		Formulaire.loader(true);
+		axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {force: force} })
+			.then(function (response) {
+				self[identifiant].current.handleUpdateFooter(<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem, true)}>Relancer la comparaison IA</Button>)
+				if(response.data.answer){
+					self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+				}else{
+					self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
+				}
+			})
+			.catch(function (error) {
+				Formulaire.displayErrors(self, error);
+			})
+			.then(function () {
+				Formulaire.loader(false);
+			})
+		;
 	}
 
 	render () {
