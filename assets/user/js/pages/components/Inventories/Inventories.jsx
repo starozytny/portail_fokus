@@ -58,11 +58,8 @@ export class Inventories extends Component {
 		if(addContext === "1"){
 			Formulaire.loader(true);
 			setTimeout(() => {
-				if(this.form && this.form.current){
-					this.handleModal('form', null, true);
-					Formulaire.loader(false);
-				}
-			}, 1000)
+				this.handleModal('form', null, null, true);
+			}, 500)
 		}
 	}
 
@@ -101,32 +98,38 @@ export class Inventories extends Component {
 
 	handleModal = (identifiant, elem, assign, retry = false) => {
 		if(retry && !this[identifiant].current){
-			this.handleModal(identifiant, elem, assign, true);
-		}
+			setTimeout(() => {
+				this.handleModal(identifiant, elem, assign, true);
+			}, 500)
+		}else{
+			if(identifiant === "form") {
+				Formulaire.loader(false);
+			}
 
-		this[identifiant].current.handleClick();
-		this.setState({ element: elem, assign: assign })
+			this[identifiant].current.handleClick();
+			this.setState({ element: elem, assign: assign })
 
-		if(identifiant === "aiCompare"){
-			this[identifiant].current.handleUpdateContent(<LoaderElements />);
+			if(identifiant === "aiCompare"){
+				this[identifiant].current.handleUpdateContent(<LoaderElements />);
 
-			let self = this;
-			Formulaire.loader(true);
-			axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
-				.then(function (response) {
-					if(response.data.answer){
-						self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
-					}else{
-						self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
-					}
-				})
-				.catch(function (error) {
-					Formulaire.displayErrors(self, error);
-				})
-				.then(function () {
-					Formulaire.loader(false);
-				})
-			;
+				let self = this;
+				Formulaire.loader(true);
+				axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
+					.then(function (response) {
+						if(response.data.answer){
+							self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+						}else{
+							self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
+						}
+					})
+					.catch(function (error) {
+						Formulaire.displayErrors(self, error);
+					})
+					.then(function () {
+						Formulaire.loader(false);
+					})
+				;
+			}
 		}
 	}
 
