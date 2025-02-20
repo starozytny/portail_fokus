@@ -27,9 +27,6 @@ class FkProperty
     #[Groups(['fk_property_list'])]
     private ?string $reference = null;
 
-    #[ORM\Column(length: 64)]
-    private ?string $label = null;
-
     #[ORM\Column(length: 64, nullable: true)]
     #[Groups(['fk_property_list'])]
     private ?string $addr1 = null;
@@ -119,18 +116,6 @@ class FkProperty
     public function setReference(string $reference): static
     {
         $this->reference = $reference;
-
-        return $this;
-    }
-
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    public function setLabel(string $label): static
-    {
-        $this->label = $label;
 
         return $this;
     }
