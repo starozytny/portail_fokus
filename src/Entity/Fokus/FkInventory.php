@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FkInventory
 {
     const LIST = ['fk_inventory_list'];
+    const ENTRY_IA = ['fk_inventory_entry'];
 
     const STATUS_PROCESSING = 0;
     const STATUS_END = 2;
@@ -26,11 +27,11 @@ class FkInventory
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['fk_inventory_list'])]
+    #[Groups(['fk_inventory_list', 'fk_inventory_entry'])]
     private ?float $uid = null;
 
     #[ORM\Column]
-    #[Groups(['fk_inventory_list'])]
+    #[Groups(['fk_inventory_list', 'fk_inventory_entry'])]
     private ?float $propertyUid = null;
 
     #[ORM\Column(nullable: true)]
@@ -38,7 +39,7 @@ class FkInventory
     private ?float $date = 0;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    #[Groups(['fk_inventory_list'])]
+    #[Groups(['fk_inventory_list', 'fk_inventory_entry'])]
     private ?int $type = 0;
 
     #[ORM\Column(length: 126, nullable: true)]

@@ -10,6 +10,8 @@ function getData (self, url, perPage, sorter, highlight = null)
 			let dataImmuable = [];
 
 			let inventories = JSON.parse(response.data.donnees);
+			let entryInventories = JSON.parse(response.data.entryInventories);
+			let v1entryInventories = JSON.parse(response.data.v1entryInventories);
 			let properties = JSON.parse(response.data.properties);
 			let users = JSON.parse(response.data.users);
 			let models = JSON.parse(response.data.models);
@@ -26,9 +28,14 @@ function getData (self, url, perPage, sorter, highlight = null)
 				elem.uidEntryForAi = null;
 
 				if(elem.input !== 0 && elem.type === 0){
-					let entrant = inventories.find(el => el.uid === elem.input && el.type === 1 && el.propertyUid === elem.propertyUid);
+					let entrant = entryInventories.find(el => el.uid === elem.input && el.type === 1 && el.propertyUid === elem.propertyUid);
 					if(entrant){
 						elem.uidEntryForAi = entrant.uid
+					}else{
+						entrant = v1entryInventories.find(el => el.uid === elem.input && el.type === 1 && el.propertyUid === elem.propertyUid);
+						if(entrant){
+							elem.uidEntryForAi = entrant.uid
+						}
 					}
 				}
 
