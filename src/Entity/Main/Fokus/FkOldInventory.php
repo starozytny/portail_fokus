@@ -2,13 +2,16 @@
 
 namespace App\Entity\Main\Fokus;
 
-use App\Repository\Main\Fokus\FkOldInventoriesRepository;
+use App\Repository\Main\Fokus\FkOldInventoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: FkOldInventoriesRepository::class)]
-class FkOldInventories
+#[ORM\Entity(repositoryClass: FkOldInventoryRepository::class)]
+class FkOldInventory
 {
+    const ENTRY_IA = ['fkoldinv_entry'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -18,9 +21,15 @@ class FkOldInventories
     private ?string $codeSociety = null;
 
     #[ORM\Column]
+    #[Groups(['fkoldinv_entry'])]
     private ?float $uid = null;
 
+    #[ORM\Column]
+    #[Groups(['fkoldinv_entry'])]
+    private ?float $propertyUid = null;
+
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['fkoldinv_entry'])]
     private ?int $type = null;
 
     public function getId(): ?int
@@ -48,6 +57,18 @@ class FkOldInventories
     public function setUid(float $uid): static
     {
         $this->uid = $uid;
+
+        return $this;
+    }
+
+    public function getPropertyUid(): ?float
+    {
+        return $this->propertyUid;
+    }
+
+    public function setPropertyUid(float $propertyUid): static
+    {
+        $this->propertyUid = $propertyUid;
 
         return $this;
     }

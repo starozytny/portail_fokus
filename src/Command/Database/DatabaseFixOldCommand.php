@@ -2,7 +2,7 @@
 
 namespace App\Command\Database;
 
-use App\Entity\Main\Fokus\FkOldInventories;
+use App\Entity\Main\Fokus\FkOldInventory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'database:fix:old',
-    description: 'insert codeSociety, uid and type of v1 fokus database',
+    description: 'Insert codeSociety, uid and type of v1 fokus database',
 )]
 class DatabaseFixOldCommand extends Command
 {
@@ -50,6 +50,8 @@ class DatabaseFixOldCommand extends Command
             ['codeSociety' => '101', 'name' => '101_van'],
             ['codeSociety' => '999', 'name' => '999_logilink'],
         ];
+
+        $inventories = $this->em->getRepository(FkOldInventory::class)->findAll();
 
         foreach($databases as $database) {
             $io->title($database['name']);
@@ -91,13 +93,25 @@ class DatabaseFixOldCommand extends Command
 
             foreach($data as $item){
                 if($item['type'] == 1){
-                    $newObj = (new FkOldInventories())
+
+                    $existe = null;
+                    foreach($inventories as $inventory){
+                        if($inventory->getUid() == $item['uid']){
+                            $existe = $inventory;
+                            break;
+                        }
+                    }
+
+                    $obj = $existe ?: new FkOldInventory();
+
+                    $obj = ($obj)
                         ->setCodeSociety($database['codeSociety'])
                         ->setUid($item['uid'])
+                        ->setPropertyUid($item['property_uid'])
                         ->setType($item['type'])
                     ;
 
-                    $this->em->persist($newObj);
+                    $this->em->persist($obj);
 
                     $progressBar->advance();
                 }

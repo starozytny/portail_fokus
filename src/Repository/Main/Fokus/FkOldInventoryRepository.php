@@ -2,18 +2,18 @@
 
 namespace App\Repository\Main\Fokus;
 
-use App\Entity\Main\Fokus\FkOldInventories;
+use App\Entity\Main\Fokus\FkOldInventory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<FkOldInventories>
+ * @extends ServiceEntityRepository<FkOldInventory>
  */
-class FkOldInventoriesRepository extends ServiceEntityRepository
+class FkOldInventoryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, FkOldInventories::class);
+        parent::__construct($registry, FkOldInventory::class);
     }
 
     //    /**

@@ -7,6 +7,7 @@ use App\Entity\Fokus\FkModel;
 use App\Entity\Fokus\FkProperty;
 use App\Entity\Fokus\FkTenant;
 use App\Entity\Fokus\FkUser;
+use App\Entity\Main\Fokus\FkOldInventory;
 use App\Entity\Main\User;
 use App\Service\ApiResponse;
 use App\Service\Data\DataFokus;
@@ -32,6 +33,7 @@ class InventoryController extends AbstractController
 
         $status = $request->query->get('st') ?: 0;
 
+        $emDefault = $fokusService->getEntityNameManager();
         $em = $fokusService->getEntityNameManager($client->getManager());
 
         if(($user instanceof FkUser && $user->getRights() == 1) || ($user instanceof User && $user->getIsAdmin())){
@@ -40,12 +42,21 @@ class InventoryController extends AbstractController
             $data = $em->getRepository(FkInventory::class)->findBy(['state' => $status, 'userId' => $user->getId()], ['id' => 'DESC']);
         }
 
+        $entryInventories = [];
+        $v1entryInventories = [];
+        if($status == 2){
+            $entryInventories = $em->getRepository(FkInventory::class)->findBy(['state' => $status], ['id' => 'DESC']);
+            $v1entryInventories = $emDefault->getRepository(FkOldInventory::class)->findBy(['codeSociety' => $numSociety], ['id' => 'DESC']);
+        }
+
         $properties = $em->getRepository(FkProperty::class)->findAll();
         $tenants = $em->getRepository(FkTenant::class)->findAll();
         $users = $em->getRepository(FkUser::class)->findBy([], ['lastName' => 'ASC']);
         $models = $em->getRepository(FkModel::class)->findBy([], ['name' => 'ASC']);
 
         $data = $serializer->serialize($data, 'json', ['groups' => FkInventory::LIST]);
+        $entryInventories = $serializer->serialize($entryInventories, 'json', ['groups' => FkInventory::ENTRY_IA]);
+        $v1entryInventories = $serializer->serialize($v1entryInventories, 'json', ['groups' => FkOldInventory::ENTRY_IA]);
         $properties = $serializer->serialize($properties, 'json', ['groups' => FkProperty::LIST]);
         $tenants = $serializer->serialize($tenants, 'json', ['groups' => FkTenant::LIST]);
         $users = $serializer->serialize($users, 'json', ['groups' => FkUser::LIST]);
@@ -53,6 +64,8 @@ class InventoryController extends AbstractController
 
         return $apiResponse->apiJsonResponseCustom([
             'donnees' => $data,
+            'entryInventories' => $entryInventories,
+            'v1entryInventories' => $v1entryInventories,
             'properties' => $properties,
             'tenants' => $tenants,
             'users' => $users,
