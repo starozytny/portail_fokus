@@ -35,7 +35,6 @@ winpty.exe.stackdump
 /public/immo/logos/*
 /bin/backup/*
 /documents/data/*
-/documents/database_v1/*
 
 /config/databaseConfig.json
 /config/packages/doctrine.yaml
