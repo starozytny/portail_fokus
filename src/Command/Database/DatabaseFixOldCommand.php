@@ -90,15 +90,17 @@ class DatabaseFixOldCommand extends Command
             $progressBar->start();
 
             foreach($data as $item){
-                $newObj = (new FkOldInventories())
-                    ->setCodeSociety($database['codeSociety'])
-                    ->setUid($item['uid'])
-                    ->setType($item['type'])
-                ;
+                if($item['type'] == 1){
+                    $newObj = (new FkOldInventories())
+                        ->setCodeSociety($database['codeSociety'])
+                        ->setUid($item['uid'])
+                        ->setType($item['type'])
+                    ;
 
-                $this->em->persist($newObj);
+                    $this->em->persist($newObj);
 
-                $progressBar->advance();
+                    $progressBar->advance();
+                }
             }
 
             $progressBar->finish();
