@@ -47,6 +47,8 @@ class ClientController extends AbstractController
 
         $multipleDatabase->createManager($settings, $obj->getNumSociety(), false, true, '_' . $obj->getSociety());
 
+        $obj->setIsActivated(true);
+
         $this->addFlash("info", "Société activée.");
         return $apiResponse->apiJsonResponse($obj, AdClients::LIST);
     }
