@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { createPortal } from "react-dom";
 
 import axios from "axios";
-import parse from "html-react-parser";
+import rehypeRaw from "rehype-raw";
+import ReactMarkdown from "react-markdown";
 import Routing from '@publicFolder/bundles/fosjsrouting/js/router.min.js';
 
 import Sort from "@commonFunctions/sort";
@@ -123,7 +124,11 @@ export class Inventories extends Component {
 							<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 						</>)
 						if(response.data.answer){
-							self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+							self[identifiant].current.handleUpdateContent(<div className="bg-gray-50 p-4 border rounded-md">
+								<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
+									<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+								</div>
+							</div>);
 							Formulaire.loader(false);
 						}else{
 							self.handleAiCompare(identifiant, elem)
@@ -148,7 +153,11 @@ export class Inventories extends Component {
 					<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 				</>)
 				if(response.data.answer){
-					self[identifiant].current.handleUpdateContent(<div>{parse(response.data.answer)}</div>);
+					self[identifiant].current.handleUpdateContent(<div className="bg-gray-50 p-4 border rounded-md">
+						<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
+							<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+						</div>
+					</div>);
 				}else{
 					self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
 				}

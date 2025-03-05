@@ -140,6 +140,8 @@ export class Clients extends Component {
 								   Êtes-vous sûr de vouloir activer la société <b>{element ? element.name : null}</b> ?
 								   <br/><br/>
 								   L'activation permet d'activer la société pour ce portail.
+								   <br/><br/>
+								   <span className="text-red-500">Lancer un <span className="font-semibold">php bin/console ca:cl</span> après l'activation.</span>
 								</p>}
 							   footer={<Button type="blue" onClick={this.handleActivate}>Confirmer</Button>} />,
 						document.body
