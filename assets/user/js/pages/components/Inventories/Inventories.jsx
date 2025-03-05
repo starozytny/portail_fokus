@@ -124,9 +124,10 @@ export class Inventories extends Component {
 							<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 						</>)
 						if(response.data.answer){
-							const formattedMarkdown = response.data.answer.replace(/<br\s*\/?>/g, "\n\n");
-							self[identifiant].current.handleUpdateContent(<div className="prose">
-								<ReactMarkdown rehypePlugins={[rehypeRaw]}>{formattedMarkdown}</ReactMarkdown>
+							self[identifiant].current.handleUpdateContent(<div className="bg-gray-50 p-4 border rounded-md">
+								<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
+									<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+								</div>
 							</div>);
 							Formulaire.loader(false);
 						}else{
@@ -152,9 +153,10 @@ export class Inventories extends Component {
 					<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 				</>)
 				if(response.data.answer){
-					const formattedMarkdown = response.data.answer.replace(/<br\s*\/?>/g, "\n\n");
-					self[identifiant].current.handleUpdateContent(<div className="prose">
-						<ReactMarkdown rehypePlugins={[rehypeRaw]}>{formattedMarkdown}</ReactMarkdown>
+					self[identifiant].current.handleUpdateContent(<div className="bg-gray-50 p-4 border rounded-md">
+						<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
+							<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+						</div>
 					</div>);
 				}else{
 					self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);

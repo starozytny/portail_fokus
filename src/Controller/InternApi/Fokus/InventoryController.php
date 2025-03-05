@@ -192,7 +192,7 @@ class InventoryController extends AbstractController
         $result = $fokusApi->aiComparatorContent($uidOut);
 
         return $apiResponse->apiJsonResponseCustom([
-            'answer' => $result ? nl2br($result) : false
+            'answer' => $result ?: false
         ]);
     }
 
@@ -218,7 +218,7 @@ class InventoryController extends AbstractController
         $result = $fokusApi->aiComparator($uidEntry, $uidOut);
 
         return $apiResponse->apiJsonResponseCustom([
-            'answer' => $result ? nl2br($result) : false
+            'answer' => $result ?: false
         ]);
     }
 }
