@@ -169,7 +169,7 @@ class Form extends Component {
 			Formulaire.loader(true);
 			axios({ method: context === "create" ? "POST" : "PUT", url: url, data: this.state })
 				.then(function (response) {
-					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
+					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data?.id });
 				})
 				.catch(function (error) {
 					Formulaire.displayErrors(self, error);

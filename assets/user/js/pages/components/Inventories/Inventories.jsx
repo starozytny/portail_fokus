@@ -99,10 +99,10 @@ export class Inventories extends Component {
 		List.changePerPage(this, this.state.data, perPage, this.state.sorter, SESSION_PERPAGE);
 	}
 
-	handleModal = (identifiant, elem, assign, retry = false) => {
+	handleModal = (identifiant, elem, retry = false) => {
 		if(retry && !this[identifiant].current){
 			setTimeout(() => {
-				this.handleModal(identifiant, elem, assign, true);
+				this.handleModal(identifiant, elem, true);
 			}, 500)
 		}else{
 			if(identifiant === "form") {
@@ -110,7 +110,7 @@ export class Inventories extends Component {
 			}
 
 			this[identifiant].current.handleClick();
-			this.setState({ element: elem, assign: assign })
+			this.setState({ element: elem })
 
 			if(identifiant === "aiCompare"){
 				this[identifiant].current.handleUpdateContent(<LoaderElements />);
