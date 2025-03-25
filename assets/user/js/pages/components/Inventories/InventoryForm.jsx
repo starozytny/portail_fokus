@@ -16,6 +16,7 @@ import { Checkbox, ErrorContent, Input, InputView, Radiobox, Select } from "@tai
 
 import { Properties } from "@userPages/Properties/Properties";
 import { Tenants } from "@userPages/Tenants/Tenants";
+import { Alert } from "@tailwindComponents/Elements/Alert";
 
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_inventories_create";
@@ -169,7 +170,7 @@ class Form extends Component {
 			Formulaire.loader(true);
 			axios({ method: context === "create" ? "POST" : "PUT", url: url, data: this.state })
 				.then(function (response) {
-					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
+					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data?.id });
 				})
 				.catch(function (error) {
 					Formulaire.displayErrors(self, error);
@@ -333,10 +334,20 @@ class Form extends Component {
 						</div>
 					</div>
 				</div>
+
+				{context === "update"
+					? <div className="mt-4">
+						<Alert type="red" title="Conséquences possibles">
+							Si vous avez déjà commencé l'état des lieux sur la tablette,
+							des conflits peuvent survenir et des données peuvent être perdues.
+						</Alert>
+					</div>
+					: null
+				}
 			</div>
 
 			<div className="bg-gray-50 px-4 py-3 flex flex-row justify-end gap-2 sm:px-6 border-t rounded-b-lg">
-			<CloseModalBtn identifiant={identifiant} />
+				<CloseModalBtn identifiant={identifiant} />
 				<Button type="blue" onClick={this.handleSubmit}>
 					{context === "create" ? "Enregistrer" : "Enregistrer les modifications"}
 				</Button>

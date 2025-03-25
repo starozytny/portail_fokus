@@ -128,6 +128,11 @@ class InventoryController extends AbstractController
         $em = $fokusService->getEntityNameManager($fokusApi->getManagerBySession());
 
         $obj = $em->getRepository(FkInventory::class)->find($id);
+
+        if($obj || $obj->getState() == FkInventory::STATUS_END){
+            return $apiResponse->apiJsonResponseBadRequest("Vous n'êtes pas autorisé à supprimer cet état des lieux.");
+        }
+
         $result = $fokusApi->inventoryDelete($obj->getId());
 
         if($result === false){
