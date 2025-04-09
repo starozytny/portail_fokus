@@ -26,15 +26,7 @@ export function InventoriesItem ({ elem, highlight, onModal })
             { data: <div className={styleItemDropdown} onClick={() => onModal("details", elem)}>
                     <span className="icon-vision" />
                     <span className="pl-1">Détails</span>
-                </div> },
-            { data: <div className={styleItemDropdown} onClick={() => onModal("form", elem)}>
-                    <span className="icon-pencil" />
-                    <span className="pl-1">Modifier</span>
-                </div> },
-            { data: <div className={styleItemDropdown} onClick={() => onModal("delete", elem)}>
-                    <span className="icon-trash" />
-                    <span className="pl-1">Supprimer</span>
-                </div> },
+                </div> }
         ];
     }else{
         menu = [
