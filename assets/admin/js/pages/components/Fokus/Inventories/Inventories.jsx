@@ -29,16 +29,11 @@ export class Inventories extends Component {
 			currentPage: 0,
 			sorter: Sort.compareDateInverse,
 			loadingData: true,
-			element: null,
-			properties: [],
-			users: [],
-			tenants: [],
-			models: []
+			element: null
 		}
 
 		this.pagination = React.createRef();
 		this.details = React.createRef();
-		this.aiCompare = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -85,7 +80,7 @@ export class Inventories extends Component {
 
 	render () {
 		const { numSociety, highlight, status } = this.props;
-		const { data, currentData, element, loadingData, perPage, currentPage, hasAi } = this.state;
+		const { data, currentData, element, loadingData, perPage, currentPage } = this.state;
 
 		return <>
 			{loadingData

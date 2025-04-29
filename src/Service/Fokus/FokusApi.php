@@ -260,4 +260,9 @@ class FokusApi
     {
         return $this->callApi("GET", "ai_comparator_picture_content/" . $uidOut, [], false);
     }
+
+    public function aiExtractor($uidOut)
+    {
+        return $this->callApi("GET", "ai_extractor/" . $uidOut, [], false);
+    }
 }
