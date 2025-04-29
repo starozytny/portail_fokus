@@ -130,7 +130,7 @@ export class Inventories extends Component {
 						if(response.data.answer){
 							self[identifiant].current.handleUpdateContent(<>
 								<div className="mb-2">
-									<Button type="default" onClick={() => self.handleCopyToClipboard(response.data.answer)}>Copier dans le texte</Button>
+									<Button type="default" iconLeft="copy" onClick={() => self.handleCopyToClipboard(response.data.answer)}>Copier dans le texte</Button>
 								</div>
 								<div className="bg-gray-50 p-4 border rounded-md">
 									<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
