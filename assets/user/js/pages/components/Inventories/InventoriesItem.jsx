@@ -48,11 +48,20 @@ export function InventoriesItem ({ elem, highlight, onModal, hasAi })
                 </a> },
         ]
 
-        if(hasAi && (elem.uidEntryForAi || (elem.type === 0 && !elem.uidEntryForAi))){
+        if(hasAi && elem.uidEntryForAi){
             menu = [...menu, ...[{
                 data: <div className={styleItemDropdown} onClick={() => onModal("aiCompare", elem)}>
                     <span className="icon-magicpen" />
                     <span className="pl-1">Comparateur par IA</span>
+                </div>
+            }]]
+        }
+
+        if(hasAi && elem.type === 0 && !elem.uidEntryForAi){
+            menu = [...menu, ...[{
+                data: <div className={styleItemDropdown} onClick={() => onModal("aiCompare", elem)}>
+                    <span className="icon-magicpen" />
+                    <span className="pl-1">Analyser par IA</span>
                 </div>
             }]]
         }
