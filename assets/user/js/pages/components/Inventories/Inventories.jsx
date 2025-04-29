@@ -25,7 +25,8 @@ import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pa
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
 const URL_DELETE_ELEMENT = "intern_api_fokus_inventories_delete";
-const URL_AI_COMPARATIVE_FILE = "intern_api_fokus_inventories_ai_comparator_file";
+const URL_AI_COMPARATIVE_READ_FILE = "intern_api_fokus_inventories_ai_comparator_read_file";
+const URL_AI_COMPARATIVE_DOWNLOAD_FILE = "intern_api_fokus_inventories_ai_comparator_download_file";
 const URL_AI_COMPARATIVE_PICTURE = "intern_api_fokus_inventories_ai_comparator_pictures";
 const URL_AI_COMPARATIVE_RUN = "intern_api_fokus_inventories_ai_comparator_run";
 
@@ -117,10 +118,11 @@ export class Inventories extends Component {
 
 				let self = this;
 				Formulaire.loader(true);
-				axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE_FILE, { uidOut: elem.uid }), data: {} })
+				axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE_READ_FILE, { uidOut: elem.uid }), data: {} })
 					.then(function (response) {
 						self[identifiant].current.handleUpdateFooter(<>
 							<ButtonA type="default" onClick={Routing.generate(URL_AI_COMPARATIVE_PICTURE, { uidOut: elem.uid })} target="_blank">Photos du comparatif</ButtonA>
+							<ButtonA type="default" onClick={Routing.generate(URL_AI_COMPARATIVE_DOWNLOAD_FILE, { uidOut: elem.uid })} target="_blank">Télécharger le fichier</ButtonA>
 							<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 						</>)
 						if(response.data.answer){

@@ -191,14 +191,36 @@ class InventoryController extends AbstractController
         return $apiResponse->apiJsonResponseSuccessful("ok");
     }
 
-    #[Route('/ai-comparator-file/{uidOut}', name: 'ai_comparator_file', options: ['expose' => true], methods: 'POST')]
-    public function aiComparatorFile($uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    #[Route('/ai-comparator-read-file/{uidOut}', name: 'ai_comparator_read_file', options: ['expose' => true], methods: 'POST')]
+    public function aiComparatorReadFile($uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
     {
         $result = $fokusApi->aiComparatorContent($uidOut);
 
         return $apiResponse->apiJsonResponseCustom([
             'answer' => $result ?: false
         ]);
+    }
+
+    #[Route('/ai-comparator-download-file/{uidOut}', name: 'ai_comparator_download_file', options: ['expose' => true], methods: 'GET')]
+    public function aiComparatorDownloadFile($uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $result = $fokusApi->aiComparatorContent($uidOut);
+
+        if(!$result){
+            return $apiResponse->apiJsonResponseCustom([
+                'answer' => false
+            ]);
+        }
+        $nomFichier = $uidOut . '.txt';
+
+        return new Response(
+            $result,
+            200,
+            [
+                'Content-Type' => 'text/plain',
+                'Content-Disposition' => 'attachment; filename="' . $nomFichier . '"',
+            ]
+        );
     }
 
     #[Route('/ai-comparator-pictures/{uidOut}', name: 'ai_comparator_pictures', options: ['expose' => true], methods: 'GET')]
@@ -226,4 +248,14 @@ class InventoryController extends AbstractController
             'answer' => $result ?: false
         ]);
     }
+
+//    #[Route('/ai-extractor-run/{uidOut}', name: 'ai_extractor_run', options: ['expose' => true], methods: 'POST')]
+//    public function aiExtractorRun($uidEntry, $uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+//    {
+//        $result = $fokusApi->aiComparator($uidEntry, $uidOut);
+//
+//        return $apiResponse->apiJsonResponseCustom([
+//            'answer' => $result ?: false
+//        ]);
+//    }
 }
