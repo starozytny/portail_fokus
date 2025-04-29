@@ -66,7 +66,6 @@ export function InventoriesItem ({ elem, highlight, onModal, hasAi })
                         {elem.date === 0 ? "Indéfinie" : Sanitaze.timestampToDateForm(elem.date)}
                     </div>
                     <div className="mt-1 text-sm text-gray-600">UID : {elem.uid}</div>
-                    <div className="mt-1 text-sm text-gray-600">Entrant UID : {elem.uidEntryForAi}</div>
                 </div>
                 <div className="col-2">
                 {elem.user
