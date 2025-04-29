@@ -21,6 +21,7 @@ import { ModalDelete } from "@tailwindComponents/Shortcut/Modal";
 import { LoaderElements } from "@tailwindComponents/Elements/Loader";
 import { Button, ButtonA } from "@tailwindComponents/Elements/Button";
 import { Pagination, TopSorterPagination } from "@tailwindComponents/Elements/Pagination";
+import Toastr from "@tailwindFunctions/toastr";
 
 const URL_INDEX_ELEMENTS = "user_inventories_index";
 const URL_GET_DATA = "intern_api_fokus_inventories_list";
@@ -127,11 +128,16 @@ export class Inventories extends Component {
 							<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 						</>)
 						if(response.data.answer){
-							self[identifiant].current.handleUpdateContent(<div className="bg-gray-50 p-4 border rounded-md">
-								<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
-									<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+							self[identifiant].current.handleUpdateContent(<>
+								<div className="mb-2">
+									<Button type="default" onClick={() => self.handleCopyToClipboard(response.data.answer)}>Copier dans le texte</Button>
 								</div>
-							</div>);
+								<div className="bg-gray-50 p-4 border rounded-md">
+									<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
+										<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+									</div>
+								</div>
+							</>);
 							Formulaire.loader(false);
 						}else{
 							self.handleAiCompare(identifiant, elem)
@@ -144,6 +150,11 @@ export class Inventories extends Component {
 				;
 			}
 		}
+	}
+
+	handleCopyToClipboard = (text) => {
+		navigator.clipboard.writeText(text);
+		Toastr.toast('info', 'Texte copié dans le presse papier.')
 	}
 
 	handleAiCompare = (identifiant, elem) => {
@@ -161,12 +172,18 @@ export class Inventories extends Component {
 					<ButtonA type="default" onClick={Routing.generate(URL_AI_COMPARATIVE_DOWNLOAD_FILE, { uidOut: elem.uid })} target="_blank">Télécharger le fichier</ButtonA>
 					<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 				</>)
+
 				if(response.data.answer){
-					self[identifiant].current.handleUpdateContent(<div className="bg-gray-50 p-4 border rounded-md">
-						<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
-							<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+					self[identifiant].current.handleUpdateContent(<>
+						<div className="mb-2">
+							<Button type="default" onClick={() => self.handleCopyToClipboard(response.data.answer)}>Copier dans le texte</Button>
 						</div>
-					</div>);
+						<div className="bg-gray-50 p-4 border rounded-md">
+							<div className="prose" style={{ width: "100%", maxWidth: "100%" }}>
+								<ReactMarkdown rehypePlugins={[rehypeRaw]}>{response.data.answer}</ReactMarkdown>
+							</div>
+						</div>
+					</>);
 				}else{
 					self[identifiant].current.handleUpdateContent(<div className="text-red-500">Erreur durant la génération de la réponse AI.</div>);
 				}
