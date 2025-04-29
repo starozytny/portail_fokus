@@ -249,13 +249,13 @@ class InventoryController extends AbstractController
         ]);
     }
 
-//    #[Route('/ai-extractor-run/{uidOut}', name: 'ai_extractor_run', options: ['expose' => true], methods: 'POST')]
-//    public function aiExtractorRun($uidEntry, $uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
-//    {
-//        $result = $fokusApi->aiComparator($uidEntry, $uidOut);
-//
-//        return $apiResponse->apiJsonResponseCustom([
-//            'answer' => $result ?: false
-//        ]);
-//    }
+    #[Route('/ai-extractor-run/{uidOut}', name: 'ai_extractor_run', options: ['expose' => true], methods: 'POST')]
+    public function aiExtractorRun($uidOut, FokusApi $fokusApi, ApiResponse $apiResponse): Response
+    {
+        $result = $fokusApi->aiExtractor($uidOut);
+
+        return $apiResponse->apiJsonResponseCustom([
+            'answer' => $result ?: false
+        ]);
+    }
 }

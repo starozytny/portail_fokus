@@ -29,6 +29,7 @@ const URL_AI_COMPARATIVE_READ_FILE = "intern_api_fokus_inventories_ai_comparator
 const URL_AI_COMPARATIVE_DOWNLOAD_FILE = "intern_api_fokus_inventories_ai_comparator_download_file";
 const URL_AI_COMPARATIVE_PICTURE = "intern_api_fokus_inventories_ai_comparator_pictures";
 const URL_AI_COMPARATIVE_RUN = "intern_api_fokus_inventories_ai_comparator_run";
+const URL_AI_EXTRACTOR_RUN = "intern_api_fokus_inventories_ai_extractor_run";
 
 const SESSION_PERPAGE = "project.perpage.fk_inventories";
 
@@ -146,12 +147,18 @@ export class Inventories extends Component {
 	}
 
 	handleAiCompare = (identifiant, elem) => {
+
+		let url = elem.type === 0 && !elem.uidEntryForAi
+			? Routing.generate(URL_AI_EXTRACTOR_RUN, { uidOut: elem.uid })
+			: Routing.generate(URL_AI_COMPARATIVE_RUN, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid })
+
 		let self = this;
 		Formulaire.loader(true);
-		axios({ method: "POST", url: Routing.generate(URL_AI_COMPARATIVE_RUN, { uidEntry: elem.uidEntryForAi, uidOut: elem.uid }), data: {} })
+		axios({ method: "POST", url: url, data: {} })
 			.then(function (response) {
 				self[identifiant].current.handleUpdateFooter(<>
 					<ButtonA type="default" onClick={Routing.generate(URL_AI_COMPARATIVE_PICTURE, { uidOut: elem.uid })} target="_blank">Photos du comparatif</ButtonA>
+					<ButtonA type="default" onClick={Routing.generate(URL_AI_COMPARATIVE_DOWNLOAD_FILE, { uidOut: elem.uid })} target="_blank">Télécharger le fichier</ButtonA>
 					<Button type="blue" onClick={() => self.handleAiCompare(identifiant, elem)}>Relancer la comparaison IA</Button>
 				</>)
 				if(response.data.answer){
@@ -161,7 +168,7 @@ export class Inventories extends Component {
 						</div>
 					</div>);
 				}else{
-					self[identifiant].current.handleUpdateContent(<div>Erreur durant la génération de la réponse AI.</div>);
+					self[identifiant].current.handleUpdateContent(<div className="text-red-500">Erreur durant la génération de la réponse AI.</div>);
 				}
 			})
 			.catch(function (error) {
