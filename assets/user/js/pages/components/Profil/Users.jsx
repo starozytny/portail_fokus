@@ -102,7 +102,7 @@ export class Users extends Component {
 	}
 
 	render () {
-		const { highlight } = this.props;
+		const { highlight, codeSociety } = this.props;
 		const { data, currentData, element, loadingData, perPage, currentPage, filters, nbSorter } = this.state;
 
 		let filtersItems = [
@@ -151,6 +151,7 @@ export class Users extends Component {
 										 title={element ? `Modifier ${element.username}` : "Ajouter un utilisateur"}
 										 isForm={true}
 										 content={<ProfilFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	prefixUsername={codeSociety}
 																	withModal={true} identifiant="form-user" key={element ? element.id : 0} />}
 					/>, document.body)}
 				</>
