@@ -16,7 +16,7 @@ const URL_INDEX_ELEMENTS = "user_profil_index";
 const URL_CREATE_ELEMENT = "intern_api_fokus_users_create";
 const URL_UPDATE_ELEMENT = "intern_api_fokus_users_update";
 
-export function ProfilFormulaire ({ context, element, withModal, identifiant }) {
+export function ProfilFormulaire ({ context, element, withModal, identifiant, prefixUsername = "" }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {
@@ -26,7 +26,7 @@ export function ProfilFormulaire ({ context, element, withModal, identifiant }) 
 	return  <Form
         context={context}
         url={url}
-        username={element ? Formulaire.setValue(element.username) : "998"}
+        username={element ? Formulaire.setValue(element.username) : prefixUsername}
 		firstname={element ? Formulaire.setValue(element.firstName) : ""}
         lastname={element ? Formulaire.setValue(element.lastName) : ""}
         email={element ? Formulaire.setValue(element.email) : ""}

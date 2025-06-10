@@ -44,7 +44,7 @@
             </div>
 
             {% if app.user.rights == 1 %}
-                <div id="profil_users" class="bg-white p-4 rounded-md shadow" data-highlight="{{ app.request.query.get('h') }}">
+                <div id="profil_users" class="bg-white p-4 rounded-md shadow" data-highlight="{{ app.request.query.get('h') }}" data-code-society="{{ codeSociety }}">
                     <div class="text-xl font-semibold mb-4 border-b pb-4">
                         Liste des utilisateurs
                     </div>
