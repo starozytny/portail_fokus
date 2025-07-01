@@ -95,7 +95,7 @@ class FokusApi
 
             return $decodeResponseToJson ? json_decode($response->getContent()) : $response->getContent();
         } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
-            return false;
+            throw new \Exception($e);
         }
     }
 

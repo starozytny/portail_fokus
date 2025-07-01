@@ -93,6 +93,11 @@ class Form extends Component {
 			value = e.currentTarget.checked ? [parseInt(value)] : [0];
 		}
 
+
+		if (name === "surface") {
+			value = value !== "" ? value.replace(',', '.') : value;
+		}
+
 		this.setState({ [name]: value, openCities: "" })
 	}
 
@@ -168,7 +173,7 @@ class Form extends Component {
 				<div className="flex flex-col gap-4">
 					<div>
 						{context === "create"
-							? <Input valeur={reference} identifiant="reference" {...params0}>Référence <span className="text-xs">(10 carac. max)</span> *</Input>
+							? <Input valeur={reference} identifiant="reference" {...params0}>Référence <span className="text-xs">(10 carac.)</span> *</Input>
 							: <InputView valeur={reference} identifiant="reference" {...params0}>Référence *</InputView>
 						}
 					</div>
