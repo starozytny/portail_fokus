@@ -44,5 +44,4 @@ class AppController extends AbstractController
     {
         return $this->render('app/pages/legales/cookies.html.twig');
     }
-
 }
