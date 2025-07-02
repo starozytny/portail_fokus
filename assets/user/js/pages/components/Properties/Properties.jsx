@@ -126,6 +126,7 @@ export class Properties extends Component {
 										 isForm={true}
 										 content={<PropertyFormulaire context={element ? "update" : "create"} element={element ? element : null}
 																	  onUpdateList={onSelector ? this.handleUpdateList : null}
+																	  refModal={onSelector ? this.form : null}
 																	  identifiant="form-property" key={element ? element.id : 0} />}
 					/>, document.body)}
 
