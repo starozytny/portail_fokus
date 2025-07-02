@@ -156,6 +156,7 @@ class Form extends Component {
 					}
 				})
 				.catch(function (error) {
+					console.log(error)
 					Formulaire.displayErrors(self, error);
 					Formulaire.loader(false);
 				})
