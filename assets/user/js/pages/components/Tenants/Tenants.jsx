@@ -168,6 +168,13 @@ export class Tenants extends Component {
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
+					{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5}
+										 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}
+										 isForm={true}
+										 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	identifiant="form-tenant" key={element ? element.id : 0} />}
+					/>, document.body)}
+
 					{onSelector
 						? null
 						: <>
@@ -176,13 +183,6 @@ export class Tenants extends Component {
 													   onUpdateList={this.handleUpdateList}>
 								Êtes-vous sûr de vouloir supprimer définitivement ce locataire : <b>{element ? element.name : ""}</b> ?
 							</ModalDelete>, document.body)}
-
-							{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5}
-												 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}
-												 isForm={true}
-												 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																			identifiant="form-tenant" key={element ? element.id : 0} />}
-							/>, document.body)}
 
 							{createPortal(<Modal ref={this.details} identifiant='details-tenant' maxWidth={1024} margin={1}
 												 title={element ? `Détails de ${element.lastName} ${element.firstName}` : ""}

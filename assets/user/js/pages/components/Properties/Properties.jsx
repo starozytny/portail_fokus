@@ -85,6 +85,7 @@ export class Properties extends Component {
 	}
 
 	handleModal = (identifiant, elem, assign) => {
+		console.log(this[identifiant])
 		this[identifiant].current.handleClick();
 		this.setState({ element: elem, assign: assign })
 	}
@@ -121,6 +122,13 @@ export class Properties extends Component {
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
+					{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5} zIndex={42}
+										 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
+										 isForm={true}
+										 content={<PropertyFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	  identifiant="form-property" key={element ? element.id : 0} />}
+					/>, document.body)}
+
 					{onSelector
 						? null
 						: <>
@@ -129,13 +137,6 @@ export class Properties extends Component {
 													   onUpdateList={this.handleUpdateList}>
 								Êtes-vous sûr de vouloir supprimer définitivement ce bien : <b>{element ? element.addr1 : ""}</b> ?
 							</ModalDelete>, document.body)}
-
-							{createPortal(<Modal ref={this.form} identifiant='form-property' maxWidth={568} margin={5} zIndex={42}
-												 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
-												 isForm={true}
-												 content={<PropertyFormulaire context={element ? "update" : "create"} element={element ? element : null}
-																			  identifiant="form-property" key={element ? element.id : 0} />}
-							/>, document.body)}
 
 							{createPortal(<Modal ref={this.details} identifiant='details-property' maxWidth={1024} margin={1}
 												 title={element ? `Détails de ${element.addr1}` : ""}
