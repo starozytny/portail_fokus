@@ -13,7 +13,7 @@ function getData (self, url, perPage, sorter, highlight = null)
 				let elemInventories = [];
 				let canActions = true;
 				JSON.parse(response.data.inventories).forEach(inventory => {
-					if(inventory.propertyUid === elem.uid || elem.isImported !== 0
+					if(inventory.propertyUid === elem.uid
 						|| elem.lastInventoryUid !== 0 || elem.lastInventoryUid === ""
 					){
 						canActions = false;
