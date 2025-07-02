@@ -173,6 +173,7 @@ export class Tenants extends Component {
 										 isForm={true}
 										 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
 																	onUpdateList={onSelector ? this.handleUpdateList : null}
+																	refModal={onSelector ? this.form : null}
 																	identifiant="form-tenant" key={element ? element.id : 0} />}
 					/>, document.body)}
 

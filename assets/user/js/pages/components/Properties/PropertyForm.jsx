@@ -18,7 +18,7 @@ const URL_UPDATE_ELEMENT = "intern_api_fokus_properties_update";
 
 let saveZipcodes = [];
 
-export function PropertyFormulaire ({ context, element, identifiant, onUpdateList }) {
+export function PropertyFormulaire ({ context, element, identifiant, onUpdateList, refModal }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {
@@ -29,6 +29,7 @@ export function PropertyFormulaire ({ context, element, identifiant, onUpdateLis
         context={context}
         url={url}
 		onUpdateList={onUpdateList}
+		refModal={refModal}
 
 		reference={element ? Formulaire.setValue(element.reference) : ""}
         addr1={element ? Formulaire.setValue(element.addr1) : ""}
@@ -114,7 +115,7 @@ class Form extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 
-		const { context, url, onUpdateList } = this.props;
+		const { context, url, onUpdateList, refModal } = this.props;
 		const { reference, addr1, addr2, addr3, zipcode, city, type, floor, door, building, owner } = this.state;
 
 		this.setState({ errors: [] });
@@ -151,12 +152,13 @@ class Form extends Component {
 				.then(function (response) {
 					if(onUpdateList){
 						onUpdateList(response.data, context);
+						refModal.current.handleClose();
+						Formulaire.loader(false);
 					}else{
 						location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
 					}
 				})
 				.catch(function (error) {
-					console.log(error)
 					Formulaire.displayErrors(self, error);
 					Formulaire.loader(false);
 				})
