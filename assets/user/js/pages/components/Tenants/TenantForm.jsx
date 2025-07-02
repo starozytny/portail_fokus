@@ -18,7 +18,7 @@ const URL_UPDATE_ELEMENT = "intern_api_fokus_tenants_update";
 
 let saveZipcodes = [];
 
-export function TenantFormulaire ({ context, element, identifiant }) {
+export function TenantFormulaire ({ context, element, identifiant, onUpdateList }) {
 	let url = Routing.generate(URL_CREATE_ELEMENT);
 
 	if (context === "update") {
@@ -28,6 +28,8 @@ export function TenantFormulaire ({ context, element, identifiant }) {
 	return  <Form
         context={context}
         url={url}
+		onUpdateList={onUpdateList}
+
 		reference={element ? Formulaire.setValue(element.reference) : ""}
         lastName={element ? Formulaire.setValue(element.lastName) : ""}
         firstName={element ? Formulaire.setValue(element.firstName) : ""}
@@ -82,7 +84,7 @@ class Form extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 
-		const { context, url } = this.props;
+		const { context, url, onUpdateList } = this.props;
 		const { lastName, reference, firstName, phone, email, addr1, addr2, addr3, zipcode, city } = this.state;
 
 		this.setState({ errors: [] });
@@ -113,7 +115,12 @@ class Form extends Component {
 
 			axios({ method: context === "create" ? "POST" : "PUT", url: url, data: this.state })
 				.then(function (response) {
-					location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
+					if(onUpdateList){
+						onUpdateList(response.data, context);
+					}else{
+						location.href = Routing.generate(URL_INDEX_ELEMENTS, { h: response.data.id });
+					}
+
 				})
 				.catch(function (error) {
 					Formulaire.displayErrors(self, error);

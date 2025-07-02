@@ -172,6 +172,7 @@ export class Tenants extends Component {
 										 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}
 										 isForm={true}
 										 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	onUpdateList={onSelector ? this.handleUpdateList : null}
 																	identifiant="form-tenant" key={element ? element.id : 0} />}
 					/>, document.body)}
 

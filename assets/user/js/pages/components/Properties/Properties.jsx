@@ -85,7 +85,6 @@ export class Properties extends Component {
 	}
 
 	handleModal = (identifiant, elem, assign) => {
-		console.log(this[identifiant])
 		this[identifiant].current.handleClick();
 		this.setState({ element: elem, assign: assign })
 	}
@@ -126,6 +125,7 @@ export class Properties extends Component {
 										 title={element ? `Modifier ${element.addr1}` : "Ajouter un bien"}
 										 isForm={true}
 										 content={<PropertyFormulaire context={element ? "update" : "create"} element={element ? element : null}
+																	  onUpdateList={onSelector ? this.handleUpdateList : null}
 																	  identifiant="form-property" key={element ? element.id : 0} />}
 					/>, document.body)}
 
