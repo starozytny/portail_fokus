@@ -129,7 +129,7 @@ class InventoryController extends AbstractController
 
         $obj = $em->getRepository(FkInventory::class)->find($id);
 
-        if($obj || $obj->getState() == FkInventory::STATUS_END){
+        if($obj && $obj->getState() == FkInventory::STATUS_END){
             return $apiResponse->apiJsonResponseBadRequest("Vous n'êtes pas autorisé à supprimer cet état des lieux.");
         }
 
