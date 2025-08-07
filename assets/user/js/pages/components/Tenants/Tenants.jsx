@@ -168,7 +168,7 @@ export class Tenants extends Component {
 					<Pagination ref={this.pagination} items={data} taille={data.length} currentPage={currentPage}
 								perPage={perPage} onUpdate={this.handleUpdateData} onChangeCurrentPage={this.handleChangeCurrentPage} />
 
-					{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5}
+					{createPortal(<Modal ref={this.form} identifiant='form-tenant' maxWidth={568} margin={5} zIndex={42}
 										 title={element ? `Modifier ${element.lastName} ${element.firstName}` : "Ajouter un locataire"}
 										 isForm={true}
 										 content={<TenantFormulaire context={element ? "update" : "create"} element={element ? element : null}
