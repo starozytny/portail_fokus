@@ -126,7 +126,6 @@ class UserController extends AbstractController
 
         $user = $repository->findOneBy(['username' => $sanitizeData->trimData($data->fUsername)]);
         if (!$user) {
-
             $emA = $fokusService->getAdministrationEntityManager();
 
             $clients = $emA->getRepository(AdClients::class)->findAll();
@@ -145,15 +144,16 @@ class UserController extends AbstractController
                     'name' => 'fUsername',
                     'message' => "Cet utilisateur n'existe pas."
                 ]]);
-            }else{
+            }
+//            else{
                 //
                 // TODO create table in Main for password FkUser
                 //
-                return $apiResponse->apiJsonResponseValidationFailed([[
-                    'name' => 'fUsername',
-                    'message' => "Cet utilisateur n'existe pas."
-                ]]);
-            }
+//                return $apiResponse->apiJsonResponseValidationFailed([[
+//                    'name' => 'fUsername',
+//                    'message' => "Cet utilisateur n'existe pas."
+//                ]]);
+//            }
         }
 
         if ($user->getLostAt()) {
