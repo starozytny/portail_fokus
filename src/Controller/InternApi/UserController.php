@@ -145,23 +145,13 @@ class UserController extends AbstractController
                     'message' => "Cet utilisateur n'existe pas."
                 ]]);
             }
-//            else{
+            else{
                 //
                 // TODO create table in Main for password FkUser
                 //
-//                return $apiResponse->apiJsonResponseValidationFailed([[
-//                    'name' => 'fUsername',
-//                    'message' => "Cet utilisateur n'existe pas."
-//                ]]);
-//            }
-        }
-
-        if ($user->getLostAt()) {
-            $interval = date_diff($user->getLostAt(), new DateTime());
-            if ($interval->y == 0 && $interval->m == 0 && $interval->d == 0 && $interval->h == 0 && $interval->i < 30) {
                 return $apiResponse->apiJsonResponseValidationFailed([[
                     'name' => 'fUsername',
-                    'message' => "Un lien a déjà été envoyé. Veuillez réessayer ultérieurement."
+                    'message' => "Utilisateur tablette : Modifiez votre mot de passe depuis la tablette."
                 ]]);
             }
         }
