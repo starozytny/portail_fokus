@@ -58,6 +58,22 @@ function switchFunction(type, search, v) {
             ){
                 return v;
             }
+
+            let findT = false;
+            if(v.tenantsData){
+                v.tenantsData.forEach(t => {
+                    if(t.lastName && searchStartWith(t.lastName, search)
+                        || t.firstName && searchStartWith(t.firstName, search)
+                    ){
+                        findT = true;
+                    }
+                })
+            }
+
+            if(findT){
+                return v;
+            }
+
             break;
         case "fokus_property":
             if((v.addr1 &&searchContainsWith(v.addr1, search))
